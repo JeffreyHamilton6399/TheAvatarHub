@@ -446,18 +446,45 @@
 
 <script>
 /* ══════════════════════════════════════════════
-   Intro audio — try immediately, fall back to
-   first real user gesture if browser blocks it.
+   Intro audio — Web Audio API unlock for instant
+   playback on first gesture; no perceptible delay.
 ══════════════════════════════════════════════ */
 const sfx = new Audio('intro.mp3');
 sfx.preload = 'auto';
 sfx.volume  = 1.0;
 
+// Pre-fetch + decode into AudioContext so buffer is warm
+// and plays with zero latency on the first user gesture.
+let _actx = null;
+let _sfxBuf = null;
 let audioStarted = false;
+
+(function warmAudio() {
+  try {
+    _actx = new (window.AudioContext || window.webkitAudioContext)();
+    fetch('intro.mp3')
+      .then(r => r.arrayBuffer())
+      .then(ab => _actx.decodeAudioData(ab))
+      .then(buf => { _sfxBuf = buf; })
+      .catch(() => {});
+  } catch(e) {}
+})();
+
 function startAudio() {
   if (audioStarted) return;
   audioStarted = true;
-  sfx.play().catch(() => {});
+  // If buffer is decoded, play via Web Audio (instant, no buffering delay)
+  if (_actx && _sfxBuf) {
+    _actx.resume().then(() => {
+      const src = _actx.createBufferSource();
+      src.buffer = _sfxBuf;
+      src.connect(_actx.destination);
+      src.start(0);
+    });
+  } else {
+    // Fallback to HTMLAudio
+    sfx.play().catch(() => {});
+  }
 }
 
 // Try right away (works if browser permits autoplay)
@@ -469,6 +496,16 @@ startAudio();
 );
 
 function stopIntroAudio() {
+  // Fade & close Web Audio context if it was used
+  if (_actx && _actx.state === 'running') {
+    try {
+      const gain = _actx.createGain();
+      gain.gain.setValueAtTime(1, _actx.currentTime);
+      gain.gain.linearRampToValueAtTime(0, _actx.currentTime + 0.4);
+      setTimeout(() => { try { _actx.close(); } catch(e) {} }, 450);
+    } catch(e) {}
+  }
+  // Also fade HTMLAudio fallback (no-op if not playing)
   const fadeStep = 0.05;
   const fade = setInterval(() => {
     if (sfx.volume > fadeStep) {
@@ -534,7 +571,7 @@ let idleTimer;
 function resetIdle() {
   shell.classList.remove('idle');
   clearTimeout(idleTimer);
-  if (!vid.paused) idleTimer = setTimeout(() => shell.classList.add('idle'), 2500);
+  if (!vid.paused) idleTimer = setTimeout(() => shell.classList.add('idle'), 1250);
 }
 document.addEventListener('mousemove', resetIdle);
 document.addEventListener('keydown',   resetIdle);
