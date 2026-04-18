@@ -715,7 +715,7 @@
       <span class="hcd-platform">Paramount+</span>
     </div>
     <div style="display:flex;align-items:center;gap:12px;">
-      <a href="episodes.html" style="font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;color:var(--blue);text-decoration:none;border:1px solid rgba(77,184,255,.4);padding:.4em 1.4em;border-radius:30px;transition:color .2s,border-color .2s,background .2s;background:rgba(77,184,255,.06);display:flex;align-items:center;gap:.5em;" onmouseover="this.style.background='rgba(77,184,255,.14)';this.style.borderColor='rgba(77,184,255,.7)';this.style.color='#fff'" onmouseout="this.style.background='rgba(77,184,255,.06)';this.style.borderColor='rgba(77,184,255,.4)';this.style.color='var(--blue)'">
+      <a href="episodes.html" style="font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;color:var(--blue);text-decoration:none;border:1px solid rgba(77,184,255,.4);padding:.4em 1.4em;border-radius:30px;background:rgba(77,184,255,.06);display:flex;align-items:center;gap:.5em;" onmouseover="this.style.background='rgba(77,184,255,.14)';this.style.borderColor='rgba(77,184,255,.7)';this.style.color='#fff'" onmouseout="this.style.background='rgba(77,184,255,.06)';this.style.borderColor='rgba(77,184,255,.4)';this.style.color='var(--blue)'">
         <svg viewBox="0 0 24 24" fill="currentColor" style="width:11px;height:11px;flex-shrink:0"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z"/></svg>
         Watch the Series
       </a>
@@ -1217,7 +1217,6 @@ const captionBox = document.getElementById('captionBox');
 let captionsOn   = false;
 let srtCues      = [];
 let lastCueText  = null;
-const CAPTION_OFFSET = 0; // Adjust if captions are early (+) or late (-)
 
 function parseSRT(text) {
   return text.replace(/\r/g, '').trim().split(/\n\n+/).reduce((cues, block) => {
@@ -1252,8 +1251,7 @@ function hideCaption() {
 
 function renderCaption() {
   if (!captionsOn || !srtCues.length) { hideCaption(); return; }
-  const t = vid.currentTime - CAPTION_OFFSET;
-  const cue = srtCues.find(c => t >= c.start && t <= c.end);
+  const cue = srtCues.find(c => vid.currentTime >= c.start && vid.currentTime <= c.end);
   const text = cue?.text ?? null;
   if (text === lastCueText) return;
   lastCueText = text;
