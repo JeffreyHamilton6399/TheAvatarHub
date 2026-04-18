@@ -63,7 +63,7 @@
     body.page-ready .anim-sub    {animation:slideUp .8s cubic-bezier(.22,1,.36,1) .30s both;}
     body.page-ready .anim-player {animation:slideUp .9s cubic-bezier(.22,1,.36,1) .42s both;}
 
-    header{padding:1.4rem 4rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
+    header{padding:1.4rem 4rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;border-bottom:1px solid var(--border);}
     .back-link{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--dim);padding:.4em 1.2em;border-radius:30px;transition:color .2s,border-color .2s;display:flex;align-items:center;gap:.5em;}
     .back-link:hover{color:var(--gold);border-color:rgba(201,168,76,.4);}
     .movie-link{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);text-decoration:none;border:1px solid rgba(201,168,76,.4);padding:.4em 1.4em;border-radius:30px;transition:color .2s,border-color .2s,background .2s;background:rgba(201,168,76,.06);display:flex;align-items:center;gap:.5em;}
@@ -298,8 +298,11 @@
 
 <div class="page">
   <header class="anim-header">
-
-    <a href="index.html" class="movie-link">
+    <a href="index.html" style="font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--dim);padding:.4em 1.4em;border-radius:30px;background:transparent;display:flex;align-items:center;gap:.5em;transition:color .2s,border-color .2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='rgba(201,168,76,.4)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--dim)'">
+      <svg viewBox="0 0 24 24" fill="currentColor" style="width:11px;height:11px;flex-shrink:0"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      Hub
+    </a>
+    <a href="movie.html" class="movie-link">
       <svg viewBox="0 0 24 24" fill="currentColor" style="width:11px;height:11px;flex-shrink:0"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
       Watch the Movie
     </a>
