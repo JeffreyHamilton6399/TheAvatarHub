@@ -829,7 +829,7 @@
       <div class="player-shell idle" id="playerShell">
         <video id="mainVideo" preload="none" playsinline
                poster="images/liveshowpreview.png">
-          <source src="https://github.com/JeffreyHamilton6399/Legend-of-Aang-The-Last-Airbender/releases/download/Movie/aang.mp4#t=0.001" type="video/mp4">
+          <source src="https://github.com/JeffreyHamilton6399/Legend-of-Aang-The-Last-Airbender/releases/download/liveshow/liveshow.mp4#t=0.001" type="video/mp4">
           <track kind="subtitles" src="captions.srt" srclang="en" label="English" default>
         </video>
 
@@ -866,7 +866,7 @@
             </div>
             <button class="cbtn" id="ccBtn" aria-label="Toggle captions">CC</button>
             <div class="speed-wrap">
-              <button class="speed-btn active" id="speedBtn" aria-label="Playback speed">1×</button>
+              <button class="speed-btn" id="speedBtn" aria-label="Playback speed">1×</button>
               <div class="speed-menu" id="speedMenu">
                 <div class="speed-opt" data-s="0.25">0.25×</div>
                 <div class="speed-opt" data-s="0.5">0.5×</div>
@@ -1156,6 +1156,7 @@ function resetIdle() {
 }
 document.addEventListener('mousemove', resetIdle);
 document.addEventListener('keydown',   resetIdle);
+document.addEventListener('touchstart', resetIdle, {passive:true});
 
 /* ── OSD toast ── */
 const osdToast = document.getElementById('osdToast');
@@ -1281,9 +1282,14 @@ function togglePlay() {
 }
 
 function toggleFullscreen() {
-  document.fullscreenElement
-    ? document.exitFullscreen()
-    : shell.requestFullscreen().catch(() => {});
+  const inFS = document.fullscreenElement || document.webkitFullscreenElement;
+  if (inFS) {
+    (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+  } else {
+    if (shell.requestFullscreen) shell.requestFullscreen().catch(() => {});
+    else if (shell.webkitRequestFullscreen) shell.webkitRequestFullscreen();
+    else if (vid.webkitEnterFullscreen) vid.webkitEnterFullscreen();
+  }
 }
 
 /* ── Play / pause state ── */
@@ -1322,7 +1328,7 @@ vid.addEventListener('timeupdate', () => {
   progFill.style.width  = pct + '%';
   progThumb.style.left  = pct + '%';
   curEl.textContent     = fmt(vid.currentTime);
-  localStorage.setItem('aang_position', vid.currentTime);
+  localStorage.setItem('liveshow_position', vid.currentTime);
   // Buffered range
   if (vid.buffered.length) {
     const bufPct = (vid.buffered.end(vid.buffered.length - 1) / vid.duration) * 100 || 0;
@@ -1441,15 +1447,15 @@ vid.addEventListener('playing', () => { bufferSpinner.style.display = 'none'; })
 vid.addEventListener('canplay', () => { bufferSpinner.style.display = 'none'; });
 
 /* ── Persist volume ── */
-const savedVol = localStorage.getItem('aang_volume');
-const savedMuted = localStorage.getItem('aang_muted');
+const savedVol = localStorage.getItem('liveshow_volume');
+const savedMuted = localStorage.getItem('liveshow_muted');
 if (savedVol !== null) { vid.volume = parseFloat(savedVol); volSlider.value = savedVol; }
 if (savedMuted === 'true') { vid.muted = true; volSlider.value = 0; }
 updateVolUI();
 
 vid.addEventListener('volumechange', () => {
-  localStorage.setItem('aang_volume', vid.volume);
-  localStorage.setItem('aang_muted', vid.muted);
+  localStorage.setItem('liveshow_volume', vid.volume);
+  localStorage.setItem('liveshow_muted', vid.muted);
 });
 
 /* ── Persist playback position ── */
@@ -1463,7 +1469,7 @@ vid.addEventListener('loadedmetadata', () => {
       ? Math.floor(totalMin/60) + 'h ' + (totalMin%60) + 'm'
       : totalMin + ' min';
   }
-  const saved = parseFloat(localStorage.getItem('aang_position') || 0);
+  const saved = parseFloat(localStorage.getItem('liveshow_position') || 0);
   if (saved > 5 && saved < vid.duration - 10) vid.currentTime = saved;
 });
 
