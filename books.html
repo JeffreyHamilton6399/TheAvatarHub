@@ -66,7 +66,7 @@
     .back-link:hover { color:var(--gold); border-color:rgba(201,168,76,.4); }
 
     .hero { text-align:center; padding:4rem 2rem 2.5rem; }
-    .hero-main { font-family:'Cinzel Decorative',serif; font-weight:900; font-size:clamp(2rem,5vw,4rem); letter-spacing:.1em; background:linear-gradient(135deg,#fff 0%,#e8d4ff 35%,#c89df5 65%,#a87ccc 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:.4rem; }
+    .hero-main { font-family:'Cinzel Decorative',serif; font-weight:900; font-size:clamp(2rem,5vw,4rem); letter-spacing:.1em; background:linear-gradient(135deg,#fff 0%,#d4b8ff 50%,#a87ccc 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:.4rem; }
     .hero-sub { font-family:'Philosopher',serif; font-style:italic; font-size:clamp(.9rem,2.5vw,1.4rem); color:var(--muted); letter-spacing:.25em; margin-bottom:.6rem; }
     .hero-badge { display:inline-block; font-family:'Cinzel',serif; font-size:.5rem; letter-spacing:.3em; text-transform:uppercase; color:var(--books); border:1px solid rgba(var(--books-rgb),.35); padding:.35em 1.2em; border-radius:20px; background:rgba(var(--books-rgb),.06); }
 
@@ -101,9 +101,9 @@
 
     /* Book grid */
     .book-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:.75rem; padding:.5rem 0 2rem; }
-    .book-card { background:rgba(8,14,26,.7); border:1px solid rgba(255,255,255,.07); border-radius:12px; padding:1.1rem 1.2rem; cursor:pointer; transition:border-color .25s,background .25s,transform .2s,box-shadow .25s; animation:cardIn .3s ease both; display:flex; flex-direction:column; gap:.45rem; position:relative; backdrop-filter:blur(4px); }
-    .book-card:hover { background:rgba(14,22,40,.92); transform:translateY(-3px); box-shadow:0 10px 28px rgba(0,0,0,.4),0 0 0 1px rgba(168,124,204,.12); border-color:rgba(168,124,204,.22); }
-    .book-card.active { border-color:rgba(var(--books-rgb),.55); background:rgba(var(--books-rgb),.09); box-shadow:0 0 22px rgba(var(--books-rgb),.12),0 0 0 1px rgba(var(--books-rgb),.2); }
+    .book-card { background:rgba(10,17,28,.65); border:1px solid var(--border); border-radius:10px; padding:1rem 1.1rem; cursor:pointer; transition:border-color .2s,background .2s,transform .15s,box-shadow .2s; animation:cardIn .3s ease both; display:flex; flex-direction:column; gap:.45rem; position:relative; }
+    .book-card:hover { background:rgba(15,25,40,.9); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.35); }
+    .book-card.active { border-color:rgba(var(--books-rgb),.5); background:rgba(var(--books-rgb),.07); box-shadow:0 0 18px rgba(var(--books-rgb),.1); }
     .book-card-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:.1rem; }
     .book-num { font-family:'Cinzel',serif; font-size:.43rem; letter-spacing:.3em; text-transform:uppercase; color:var(--muted); }
     .book-now-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; margin-top:3px; display:none; background:var(--books); animation:pulseGlowBooks 2s ease-in-out infinite; }
@@ -135,6 +135,13 @@
     .viewer-placeholder { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.2rem; padding:4rem 2rem; }
     .placeholder-icon { opacity:.18; }
     .placeholder-text { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.4em; text-transform:uppercase; color:var(--muted); text-align:center; line-height:1.8; }
+
+    /* Loading spinner shown while Google Docs Viewer fetches */
+    .viewer-loading { position:absolute; inset:0; background:rgba(4,7,13,.75); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem; z-index:10; border-radius:16px; opacity:0; pointer-events:none; transition:opacity .3s; }
+    .viewer-loading.active { opacity:1; pointer-events:all; }
+    .viewer-loading-spinner { width:36px; height:36px; border:2px solid rgba(168,124,204,.2); border-top-color:rgba(168,124,204,.8); border-radius:50%; animation:spin .8s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .viewer-loading-text { font-family:'Cinzel',serif; font-size:.48rem; letter-spacing:.3em; text-transform:uppercase; color:var(--muted); }
 
     /* Controls bar below viewer */
     .viewer-controls { display:flex; align-items:center; justify-content:center; gap:1rem; padding:1rem 1.5rem; background:rgba(8,12,22,.78); backdrop-filter:blur(28px); border-top:1px solid rgba(255,255,255,.07); border-radius:0 0 16px 16px; }
@@ -227,6 +234,10 @@
           <p class="placeholder-text">Select a book from the list below<br>to begin reading</p>
         </div>
         <iframe id="pdfFrame" style="display:none;" title="Book Viewer"></iframe>
+        <div class="viewer-loading" id="viewerLoading">
+          <div class="viewer-loading-spinner"></div>
+          <span class="viewer-loading-text">Loading Book…</span>
+        </div>
         <div class="viewer-controls" id="viewerControls" style="display:none;">
           <button class="vcbtn" id="prevBookBtn">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
@@ -331,6 +342,7 @@
 <script>
 /* ─── CONFIG ─── */
 const GH    = 'https://github.com/JeffreyHamilton6399/Legend-of-Aang-The-Last-Airbender/releases/download';
+const GDOCS = 'https://docs.google.com/viewer?embedded=true&url=';
 const ASSETS= 'images';
 
 const SERIES = [
@@ -341,24 +353,24 @@ const SERIES = [
     symAnim: 'pulseGlowWater',
     symColor: 'var(--water)',
     books: [
-      { title: 'The Promise, Part 1',       tag: 'books-atla', file: 'thepromise1.pdf' },
-      { title: 'The Promise, Part 2',       tag: 'books-atla', file: 'thepromise2.pdf' },
-      { title: 'The Promise, Part 3',       tag: 'books-atla', file: 'thepromise3.pdf' },
-      { title: 'The Search, Part 1',        tag: 'books-atla', file: 'thesearch1.pdf' },
-      { title: 'The Search, Part 2',        tag: 'books-atla', file: 'thesearch2.pdf' },
-      { title: 'The Search, Part 3',        tag: 'books-atla', file: 'thesearch3.pdf' },
-      { title: 'The Rift, Part 1',          tag: 'books-atla', file: 'therift1.pdf' },
-      { title: 'The Rift, Part 2',          tag: 'books-atla', file: 'therift2.pdf' },
-      { title: 'The Rift, Part 3',          tag: 'books-atla', file: 'therift3.pdf' },
-      { title: 'Smoke and Shadow, Part 1',  tag: 'books-atla', file: 'smokeandshadow1.pdf' },
-      { title: 'Smoke and Shadow, Part 2',  tag: 'books-atla', file: 'smokeandshadow2.pdf' },
-      { title: 'Smoke and Shadow, Part 3',  tag: 'books-atla', file: 'smokeandshadow3.pdf' },
-      { title: 'North and South, Part 1',   tag: 'books-atla', file: 'northandsouth1.pdf' },
-      { title: 'North and South, Part 2',   tag: 'books-atla', file: 'northandsouth2.pdf' },
-      { title: 'North and South, Part 3',   tag: 'books-atla', file: 'northandsouth3.pdf' },
-      { title: 'Imbalance, Part 1',         tag: 'books-atla', file: 'imbalance1.pdf' },
-      { title: 'Imbalance, Part 2',         tag: 'books-atla', file: 'imbalance2.pdf' },
-      { title: 'Imbalance, Part 3',         tag: 'books-atla', file: 'imbalance3.pdf' },
+      { title: 'The Promise, Part 1',       tag: 'books', file: 'thepromise1.pdf' },
+      { title: 'The Promise, Part 2',       tag: 'books', file: 'thepromise2.pdf' },
+      { title: 'The Promise, Part 3',       tag: 'books', file: 'thepromise3.pdf' },
+      { title: 'The Search, Part 1',        tag: 'books', file: 'thesearch1.pdf' },
+      { title: 'The Search, Part 2',        tag: 'books', file: 'thesearch2.pdf' },
+      { title: 'The Search, Part 3',        tag: 'books', file: 'thesearch3.pdf' },
+      { title: 'The Rift, Part 1',          tag: 'books', file: 'therift1.pdf' },
+      { title: 'The Rift, Part 2',          tag: 'books', file: 'therift2.pdf' },
+      { title: 'The Rift, Part 3',          tag: 'books', file: 'therift3.pdf' },
+      { title: 'Smoke and Shadow, Part 1',  tag: 'books', file: 'smokeandshadow1.pdf' },
+      { title: 'Smoke and Shadow, Part 2',  tag: 'books', file: 'smokeandshadow2.pdf' },
+      { title: 'Smoke and Shadow, Part 3',  tag: 'books', file: 'smokeandshadow3.pdf' },
+      { title: 'North and South, Part 1',   tag: 'books', file: 'northandsouth1.pdf' },
+      { title: 'North and South, Part 2',   tag: 'books', file: 'northandsouth2.pdf' },
+      { title: 'North and South, Part 3',   tag: 'books', file: 'northandsouth3.pdf' },
+      { title: 'Imbalance, Part 1',         tag: 'books', file: 'imbalance1.pdf' },
+      { title: 'Imbalance, Part 2',         tag: 'books', file: 'imbalance2.pdf' },
+      { title: 'Imbalance, Part 3',         tag: 'books', file: 'imbalance3.pdf' },
     ]
   },
   {
@@ -368,12 +380,12 @@ const SERIES = [
     symAnim: 'pulseGlowEarth',
     symColor: 'var(--earth)',
     books: [
-      { title: 'Turf Wars, Part 1',         tag: 'books-korra', file: 'turfwars1.pdf' },
-      { title: 'Turf Wars, Part 2',         tag: 'books-korra', file: 'turfwars2.pdf' },
-      { title: 'Turf Wars, Part 3',         tag: 'books-korra', file: 'turfwars3.pdf' },
-      { title: 'Ruins of the Empire, Part 1', tag: 'books-korra', file: 'ruinsoftheempire1.pdf' },
-      { title: 'Ruins of the Empire, Part 2', tag: 'books-korra', file: 'ruinsoftheempire2.pdf' },
-      { title: 'Ruins of the Empire, Part 3', tag: 'books-korra', file: 'ruinsoftheempire3.pdf' },
+      { title: 'Turf Wars, Part 1',         tag: 'books', file: 'turfwars1.pdf' },
+      { title: 'Turf Wars, Part 2',         tag: 'books', file: 'turfwars2.pdf' },
+      { title: 'Turf Wars, Part 3',         tag: 'books', file: 'turfwars3.pdf' },
+      { title: 'Ruins of the Empire, Part 1', tag: 'books', file: 'ruinsoftheempire1.pdf' },
+      { title: 'Ruins of the Empire, Part 2', tag: 'books', file: 'ruinsoftheempire2.pdf' },
+      { title: 'Ruins of the Empire, Part 3', tag: 'books', file: 'ruinsoftheempire3.pdf' },
     ]
   }
 ];
@@ -407,6 +419,7 @@ const nrBar       = document.getElementById('nowReadingBar');
 const nrTitle     = document.getElementById('nrTitle');
 const nrSeries    = document.getElementById('nrSeries');
 const openPdfBtn  = document.getElementById('openPdfBtn');
+const loadingEl   = document.getElementById('viewerLoading');
 
 /* Build dropdown */
 document.body.appendChild(dropdown);
@@ -454,12 +467,18 @@ function bookUrl(seriesIdx, bookIdx) {
   return `${GH}/${b.tag}/${b.file}`;
 }
 
+function viewerUrl(seriesIdx, bookIdx) {
+  // Wrap raw GitHub URL in Google Docs Viewer to bypass X-Frame-Options
+  return GDOCS + encodeURIComponent(bookUrl(seriesIdx, bookIdx));
+}
+
 function loadBook(seriesIdx, bookIdx) {
   currentSeries  = seriesIdx;
   currentBookIdx = bookIdx;
   const s = SERIES[seriesIdx];
   const b = s.books[bookIdx];
-  const url = bookUrl(seriesIdx, bookIdx);
+  const url    = bookUrl(seriesIdx, bookIdx);
+  const viewer = viewerUrl(seriesIdx, bookIdx);
 
   // Update now-reading bar
   nrTitle.textContent  = b.title;
@@ -470,8 +489,12 @@ function loadBook(seriesIdx, bookIdx) {
   placeholder.style.display = 'none';
   pdfFrame.style.display    = 'block';
   viewerCtrl.style.display  = 'flex';
-  pdfFrame.src = url;
-  openPdfBtn.href = url;
+  pdfFrame.src = viewer;      // Google Docs Viewer — no X-Frame-Options block
+  openPdfBtn.href = url;      // Raw GitHub link for direct download / new tab
+
+  // Show loading spinner; hide when iframe content arrives
+  if (loadingEl) loadingEl.classList.add('active');
+  pdfFrame.onload = () => { if (loadingEl) loadingEl.classList.remove('active'); };
 
   // Save last-read
   localStorage.setItem('avatarbooks_last', JSON.stringify({ seriesIdx, bookIdx }));
