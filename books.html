@@ -12,6 +12,7 @@
   <link rel="icon" type="image/jpeg" href="images/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cinzel+Decorative:wght@400;700;900&family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -27,7 +28,8 @@
     @keyframes pulseGlowEarth { 0%,100%{filter:drop-shadow(0 0 4px #6abf69)} 50%{filter:drop-shadow(0 0 14px #6abf69)} }
     @keyframes pulseGlowFire  { 0%,100%{filter:drop-shadow(0 0 4px #f97316)} 50%{filter:drop-shadow(0 0 14px #f97316)} }
     @keyframes pulseGlowBooks { 0%,100%{filter:drop-shadow(0 0 4px #a87ccc)} 50%{filter:drop-shadow(0 0 14px #a87ccc)} }
-    @keyframes cardIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes cardIn  { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes spin    { to { transform:rotate(360deg); } }
 
     body { background:var(--deep); color:var(--white); font-family:'Philosopher',Georgia,serif; min-height:100vh; overflow-x:hidden; }
     .bg-layer { position:fixed; inset:0; background-image:url('images/booksbg.png'); background-size:cover; background-position:center top; filter:blur(8px) brightness(.22) saturate(1.4); transform:scale(1.04); z-index:0; }
@@ -53,7 +55,7 @@
     .sym-item.earth .sym-label { color:var(--earth); }
     .sym-item.fire  .sym-label { color:var(--fire); }
 
-    /* Page */
+    /* Page layout */
     .page { position:relative; z-index:1; min-height:100vh; display:flex; flex-direction:column; }
     .anim-header,.anim-title,.anim-sub,.anim-content { opacity:0; }
     body.page-ready .anim-header  { animation:slideUp .7s cubic-bezier(.22,1,.36,1) .05s both; }
@@ -70,7 +72,6 @@
     .hero-sub { font-family:'Philosopher',serif; font-style:italic; font-size:clamp(.9rem,2.5vw,1.4rem); color:var(--muted); letter-spacing:.25em; margin-bottom:.6rem; }
     .hero-badge { display:inline-block; font-family:'Cinzel',serif; font-size:.5rem; letter-spacing:.3em; text-transform:uppercase; color:var(--books); border:1px solid rgba(var(--books-rgb),.35); padding:.35em 1.2em; border-radius:20px; background:rgba(var(--books-rgb),.06); }
 
-    /* Series selector */
     .below-content { width:100%; max-width:1400px; margin:0 auto; padding:2rem clamp(1.5rem,5vw,4rem) 6rem; display:flex; flex-direction:column; gap:0; }
     .section-divider { display:flex; align-items:center; gap:1rem; margin-bottom:2.5rem; }
     .section-divider-line { flex:1; height:1px; background:var(--border); }
@@ -78,7 +79,6 @@
     .section-divider-title { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.35em; text-transform:uppercase; color:var(--muted); }
     .divider-sym { width:14px; height:14px; object-fit:contain; opacity:.55; animation:pulseGlowBooks 2.6s ease-in-out infinite; }
 
-    /* Series pill selector */
     .season-bar { display:flex; align-items:center; gap:1.2rem; margin-bottom:2rem; position:relative; }
     .season-label { font-family:'Cinzel',serif; font-size:.5rem; letter-spacing:.3em; text-transform:uppercase; color:var(--muted); white-space:nowrap; }
     .season-pill-wrap { position:relative; }
@@ -93,13 +93,11 @@
     .season-opt:hover { background:rgba(255,255,255,.07); }
     .season-opt.active { background:rgba(255,255,255,.06); }
     .season-opt-sym { width:22px; height:22px; object-fit:contain; flex-shrink:0; }
-    .season-opt-info {}
     .season-opt-name { font-family:'Cinzel Decorative',serif; font-size:.78rem; letter-spacing:.04em; }
     .season-opt-count { font-family:'Philosopher',serif; font-size:.72rem; color:var(--muted); font-style:italic; margin-top:.1rem; }
     .season-opt-check { margin-left:auto; width:14px; height:14px; opacity:0; flex-shrink:0; }
     .season-opt.active .season-opt-check { opacity:1; }
 
-    /* Book grid */
     .book-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:.75rem; padding:.5rem 0 2rem; }
     .book-card { background:rgba(10,17,28,.65); border:1px solid var(--border); border-radius:10px; padding:1rem 1.1rem; cursor:pointer; transition:border-color .2s,background .2s,transform .15s,box-shadow .2s; animation:cardIn .3s ease both; display:flex; flex-direction:column; gap:.45rem; position:relative; }
     .book-card:hover { background:rgba(15,25,40,.9); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.35); }
@@ -110,10 +108,8 @@
     .book-card.active .book-now-dot { display:block; }
     .book-title-text { font-family:'Philosopher',serif; font-size:.88rem; color:var(--white); line-height:1.4; }
     .book-series-label { font-family:'Cinzel',serif; font-size:.4rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-top:.1rem; }
-    .book-open-icon { position:absolute; bottom:.7rem; right:.8rem; opacity:0; transition:opacity .2s; }
-    .book-card:hover .book-open-icon { opacity:.5; }
 
-    /* PDF viewer shell */
+    /* Viewer frame */
     .viewer-section { width:100%; max-width:1400px; margin:0 auto; padding:0 clamp(1.5rem,5vw,4rem); }
     .now-reading-bar { display:flex; align-items:center; gap:1rem; padding:.8rem 1.2rem .8rem 0; margin-bottom:.5rem; opacity:0; transition:opacity .4s; }
     .nr-dot { width:6px; height:6px; border-radius:50%; background:var(--books); flex-shrink:0; animation:pulseGlowBooks 2s ease-in-out infinite; }
@@ -130,26 +126,196 @@
     .corner-fire  { animation:pulseGlowFire  2.6s ease-in-out infinite 1.2s; }
     .corner-air   { animation:pulseGlowAir   2.6s ease-in-out infinite 0s; }
 
-    .viewer-shell { background:#111; border-radius:16px; overflow:hidden; position:relative; min-height:600px; display:flex; flex-direction:column; }
-    #pdfFrame { width:100%; height:80vh; min-height:500px; border:none; background:#111; display:block; }
+    .viewer-shell { background:#0d0d12; border-radius:16px; overflow:hidden; position:relative; min-height:500px; display:flex; flex-direction:column; }
+
     .viewer-placeholder { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.2rem; padding:4rem 2rem; }
-    .placeholder-icon { opacity:.18; }
     .placeholder-text { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.4em; text-transform:uppercase; color:var(--muted); text-align:center; line-height:1.8; }
 
-    /* Loading spinner shown while Google Docs Viewer fetches */
-    .viewer-loading { position:absolute; inset:0; background:rgba(4,7,13,.75); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem; z-index:10; border-radius:16px; opacity:0; pointer-events:none; transition:opacity .3s; }
+    .viewer-loading { position:absolute; inset:0; background:rgba(4,7,13,.88); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem; z-index:50; border-radius:16px; opacity:0; pointer-events:none; transition:opacity .3s; }
     .viewer-loading.active { opacity:1; pointer-events:all; }
     .viewer-loading-spinner { width:36px; height:36px; border:2px solid rgba(168,124,204,.2); border-top-color:rgba(168,124,204,.8); border-radius:50%; animation:spin .8s linear infinite; }
-    @keyframes spin { to { transform:rotate(360deg); } }
     .viewer-loading-text { font-family:'Cinzel',serif; font-size:.48rem; letter-spacing:.3em; text-transform:uppercase; color:var(--muted); }
 
-    /* Controls bar below viewer */
-    .viewer-controls { display:flex; align-items:center; justify-content:center; gap:1rem; padding:1rem 1.5rem; background:rgba(8,12,22,.78); backdrop-filter:blur(28px); border-top:1px solid rgba(255,255,255,.07); border-radius:0 0 16px 16px; }
-    .vcbtn { font-family:'Cinzel',serif; font-size:.48rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); background:none; border:1px solid var(--dim); padding:.45em 1.2em; border-radius:20px; cursor:pointer; transition:color .2s,border-color .2s,background .2s; text-decoration:none; display:flex; align-items:center; gap:.4em; }
-    .vcbtn:hover { color:var(--books); border-color:rgba(var(--books-rgb),.5); background:rgba(var(--books-rgb),.06); }
-    .vcbtn svg { width:12px; height:12px; flex-shrink:0; }
-    .vcbtn-primary { color:var(--books); border-color:rgba(var(--books-rgb),.4); background:rgba(var(--books-rgb),.08); }
-    .vcbtn-primary:hover { background:rgba(var(--books-rgb),.18); border-color:rgba(var(--books-rgb),.7); }
+    /* ═══════════════════════════════════════════
+       BOOK READER
+    ═══════════════════════════════════════════ */
+    #bookReader {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: radial-gradient(ellipse at center top, #1a1510 0%, #0d0d12 60%);
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      user-select: none;
+    }
+
+    .spread-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 2rem 0.75rem;
+      overflow: hidden;
+      position: relative;
+      perspective: 2200px;
+    }
+
+    /* Open book */
+    .book-spread {
+      display: flex;
+      align-items: stretch;
+      position: relative;
+      /* Multi-layer shadow for realistic book depth */
+      filter:
+        drop-shadow(0 28px 56px rgba(0,0,0,.75))
+        drop-shadow(0 8px 16px rgba(0,0,0,.5))
+        drop-shadow(0 2px 4px rgba(0,0,0,.4));
+    }
+
+    .book-page {
+      position: relative;
+      overflow: hidden;
+      background: #f4efe6;
+      display: flex;
+      align-items: stretch;
+      min-width: 0;
+    }
+    .book-page canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 70vh;
+    }
+    /* Left page — spine shadow casts inward from right */
+    .left-page {
+      border-radius: 3px 0 0 3px;
+      box-shadow:
+        inset -14px 0 28px rgba(0,0,0,.28),
+        inset  -4px 0  8px rgba(0,0,0,.18);
+    }
+    /* Right page — spine shadow casts inward from left */
+    .right-page {
+      border-radius: 0 3px 3px 0;
+      box-shadow:
+        inset 14px 0 28px rgba(0,0,0,.28),
+        inset  4px 0  8px rgba(0,0,0,.18);
+    }
+    /* Centre binding */
+    .book-spine {
+      width: 16px;
+      flex-shrink: 0;
+      background: linear-gradient(to right,
+        rgba(0,0,0,.60)  0%,
+        rgba(35,20,8,.5) 25%,
+        rgba(70,45,18,.35) 50%,
+        rgba(35,20,8,.5) 75%,
+        rgba(0,0,0,.60)  100%
+      );
+      position: relative;
+      z-index: 5;
+    }
+    .book-spine::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right,
+        transparent 15%,
+        rgba(255,255,255,.10) 50%,
+        transparent 85%
+      );
+    }
+
+    /* ── 3-D flip card ─────────────────────── */
+    .flip-card {
+      position: absolute;
+      /* left/top/width/height set by JS */
+      transform-style: preserve-3d;
+      transform-origin: left center;
+      transform: rotateY(0deg);
+      z-index: 20;
+      pointer-events: none;
+      display: none;
+    }
+    .flip-face {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .flip-face canvas { display:block; width:100%; height:100%; object-fit:fill; }
+    /* Darkening gradient that sweeps across the folding page */
+    .flip-face.flip-front::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to left, rgba(0,0,0,.55) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .flip-face.flip-back {
+      transform: rotateY(180deg);
+      box-shadow: inset 14px 0 28px rgba(0,0,0,.28), inset 4px 0 8px rgba(0,0,0,.18);
+    }
+    .flip-face.flip-back::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(0,0,0,.55) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ── Click zones ───────────────────────── */
+    .click-zone {
+      position: absolute;
+      top: 0; bottom: 44px; /* above reader-bar */
+      width: 48%;
+      z-index: 10;
+      cursor: pointer;
+      display: none; /* shown when reader is active */
+    }
+    #bookReader.active .click-zone { display: block; }
+    .click-zone-left  { left: 0; }
+    .click-zone-right { right: 0; }
+
+    /* ── Reader bar ────────────────────────── */
+    .reader-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      padding: .85rem 1.5rem;
+      background: rgba(5,8,16,.88);
+      backdrop-filter: blur(24px);
+      border-top: 1px solid rgba(255,255,255,.07);
+      flex-shrink: 0;
+      height: 44px;
+    }
+    .rb-btn {
+      font-family: 'Cinzel', serif;
+      font-size: .44rem;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: none;
+      border: 1px solid var(--dim);
+      padding: .42em 1.2em;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: color .2s, border-color .2s, background .2s;
+      display: flex; align-items: center; gap: .4em;
+    }
+    .rb-btn:hover:not(:disabled) { color: var(--books); border-color: rgba(var(--books-rgb),.5); background: rgba(var(--books-rgb),.07); }
+    .rb-btn:disabled { opacity: .28; cursor: not-allowed; }
+    .rb-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
+    .rb-info {
+      font-family: 'Philosopher', serif;
+      font-size: .8rem;
+      color: rgba(var(--books-rgb),.72);
+      min-width: 130px;
+      text-align: center;
+      font-style: italic;
+    }
 
     /* Info panel */
     .info-panel { display:flex; gap:3rem; flex-wrap:wrap; margin-bottom:3.5rem; margin-top:3rem; }
@@ -169,37 +335,13 @@
     [data-reveal] { opacity:0; transform:translateY(32px); transition:opacity .75s cubic-bezier(.22,1,.36,1),transform .75s cubic-bezier(.22,1,.36,1); }
     [data-reveal].revealed { opacity:1; transform:translateY(0); }
 
-    /* ── Swipe / drag page-turn ── */
-    #pdfFrame { transform:translateX(0); transition:transform .38s cubic-bezier(.4,0,.2,1), opacity .38s ease; will-change:transform; }
-    #pdfFrame.dragging { transition:none; }
-    #pdfFrame.slide-exit-left  { transform:translateX(-105%); opacity:0; transition:transform .32s cubic-bezier(.4,0,.2,1),opacity .32s ease; }
-    #pdfFrame.slide-exit-right { transform:translateX(105%);  opacity:0; transition:transform .32s cubic-bezier(.4,0,.2,1),opacity .32s ease; }
-    #pdfFrame.slide-enter-left  { transform:translateX(105%);  opacity:0; transition:none; }
-    #pdfFrame.slide-enter-right { transform:translateX(-105%); opacity:0; transition:none; }
-    #pdfFrame.slide-settle { transform:translateX(0); opacity:1; transition:transform .34s cubic-bezier(.22,1,.36,1),opacity .3s ease; }
-
-    /* Edge nav zones */
-    .nav-edge { position:absolute; top:0; bottom:0; width:52px; z-index:22; display:none; align-items:center; justify-content:center; cursor:pointer; transition:background .2s; }
-    .nav-edge:hover .nav-edge-icon { opacity:.85; transform:translateX(0) scale(1.1); }
-    #pdfFrame[style*="block"] ~ .nav-edge,
-    .viewer-shell.has-book .nav-edge { display:flex; }
-    .nav-edge-left  { left:0;  background:linear-gradient(to right, rgba(10,17,28,.55) 0%, transparent 100%); }
-    .nav-edge-right { right:0; background:linear-gradient(to left,  rgba(10,17,28,.55) 0%, transparent 100%); }
-    .nav-edge-icon  { width:28px; height:28px; border-radius:50%; background:rgba(168,124,204,.18); border:1px solid rgba(168,124,204,.35); display:flex; align-items:center; justify-content:center; opacity:0; transform:translateX(-4px); transition:opacity .2s,transform .2s,background .2s; }
-    .nav-edge-right .nav-edge-icon { transform:translateX(4px); }
-    .nav-edge:active .nav-edge-icon { background:rgba(168,124,204,.38); }
-
-    /* Swipe indicator ripple */
-    @keyframes swipeHint { 0%{opacity:.7;transform:translateY(-50%) scale(.8)} 60%{opacity:.5;transform:translateY(-50%) scale(1.15)} 100%{opacity:0;transform:translateY(-50%) scale(1.3)} }
-    .swipe-ripple { position:absolute; top:50%; z-index:25; width:56px; height:56px; border-radius:50%; border:2px solid rgba(168,124,204,.7); pointer-events:none; animation:swipeHint .5s ease-out forwards; }
-    .swipe-ripple-left  { left:26px;  }
-    .swipe-ripple-right { right:26px; }
-
     .jeffrey-watermark { position:fixed; bottom:14px; right:18px; z-index:50; display:inline-flex; align-items:center; gap:5px; text-decoration:none; font-family:'Cinzel',serif; font-size:.42rem; letter-spacing:.2em; text-transform:uppercase; color:rgba(107,138,171,.45); transition:color .2s,opacity .2s; opacity:.6; }
     .jeffrey-watermark:hover { color:rgba(240,244,255,.7); opacity:1; }
 
-    @media(max-width:768px) {
-      header { padding:1.5rem 2rem; }
+    @media(max-width:600px) {
+      header { padding:1.5rem 1.5rem; }
+      .left-page, .book-spine { display:none; }
+      .right-page { border-radius:3px; box-shadow:inset 0 0 20px rgba(0,0,0,.18); }
       .info-panel { flex-direction:column; }
       .info-divider { display:none; }
       .book-grid { grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); }
@@ -213,8 +355,8 @@
   <div class="symbols-grid">
     <div class="sym-item water"><img src="images/water.png" alt="Water" class="sym-img"><span class="sym-label">Water</span></div>
     <div class="sym-item earth"><img src="images/earth.png" alt="Earth" class="sym-img"><span class="sym-label">Earth</span></div>
-    <div class="sym-item fire"><img src="images/fire.png" alt="Fire" class="sym-img"><span class="sym-label">Fire</span></div>
-    <div class="sym-item air"><img src="images/air.png" alt="Air" class="sym-img"><span class="sym-label">Air</span></div>
+    <div class="sym-item fire" ><img src="images/fire.png"  alt="Fire"  class="sym-img"><span class="sym-label">Fire</span></div>
+    <div class="sym-item air"  ><img src="images/air.png"   alt="Air"   class="sym-img"><span class="sym-label">Air</span></div>
   </div>
 </div>
 
@@ -234,64 +376,80 @@
     <span class="hero-badge anim-sub" style="animation-delay:.38s">Dark Horse Comics</span>
   </section>
 
-  <!-- PDF Viewer -->
   <section class="viewer-section anim-content">
     <div class="now-reading-bar" id="nowReadingBar">
       <div class="nr-dot"></div>
       <span class="nr-label">Now Reading</span>
       <span class="nr-title" id="nrTitle">Select a book below</span>
-      <span class="nr-ep" id="nrSeries"></span>
+      <span class="nr-ep"    id="nrSeries"></span>
     </div>
+
     <div class="viewer-frame" id="viewerFrame">
       <div class="corner corner-tl"><img src="images/water.png" alt="" class="corner-img corner-water"></div>
       <div class="corner corner-tr"><img src="images/earth.png" alt="" class="corner-img corner-earth"></div>
-      <div class="corner corner-bl"><img src="images/fire.png" alt="" class="corner-img corner-fire"></div>
-      <div class="corner corner-br"><img src="images/air.png" alt="" class="corner-img corner-air"></div>
+      <div class="corner corner-bl"><img src="images/fire.png"  alt="" class="corner-img corner-fire"></div>
+      <div class="corner corner-br"><img src="images/air.png"   alt="" class="corner-img corner-air"></div>
+
       <div class="viewer-shell" id="viewerShell">
+
+        <!-- Placeholder -->
         <div class="viewer-placeholder" id="viewerPlaceholder">
-          <svg class="placeholder-icon" viewBox="0 0 64 64" width="80" height="80" fill="rgba(168,124,204,.6)">
-            <path d="M10 8h28l16 16v32H10V8zm26 0v16h16M22 28h20M22 36h20M22 44h12"/>
-            <rect x="10" y="8" width="44" height="48" rx="2" fill="none" stroke="rgba(168,124,204,.6)" stroke-width="2.5"/>
-            <path d="M38 8v16h16" fill="none" stroke="rgba(168,124,204,.6)" stroke-width="2.5"/>
-            <line x1="22" y1="28" x2="42" y2="28" stroke="rgba(168,124,204,.4)" stroke-width="2" stroke-linecap="round"/>
-            <line x1="22" y1="36" x2="42" y2="36" stroke="rgba(168,124,204,.4)" stroke-width="2" stroke-linecap="round"/>
-            <line x1="22" y1="44" x2="34" y2="44" stroke="rgba(168,124,204,.4)" stroke-width="2" stroke-linecap="round"/>
+          <svg viewBox="0 0 72 64" width="90" height="80" fill="none" style="opacity:.18">
+            <rect x="2"  y="6" width="30" height="52" rx="2" fill="rgba(168,124,204,.5)" stroke="rgba(168,124,204,.7)" stroke-width="1.5"/>
+            <rect x="40" y="6" width="30" height="52" rx="2" fill="rgba(168,124,204,.35)" stroke="rgba(168,124,204,.7)" stroke-width="1.5"/>
+            <path d="M32 6 Q36 32 32 58" stroke="rgba(168,124,204,.5)" stroke-width="2.5" fill="none"/>
+            <path d="M40 6 Q36 32 40 58" stroke="rgba(168,124,204,.5)" stroke-width="2.5" fill="none"/>
+            <line x1="10" y1="22" x2="26" y2="22" stroke="rgba(168,124,204,.4)" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="10" y1="30" x2="26" y2="30" stroke="rgba(168,124,204,.4)" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="10" y1="38" x2="20" y2="38" stroke="rgba(168,124,204,.4)" stroke-width="1.5" stroke-linecap="round"/>
           </svg>
           <p class="placeholder-text">Select a book from the list below<br>to begin reading</p>
         </div>
-        <iframe id="pdfFrame" style="display:none;" title="Book Viewer"></iframe>
-        <!-- Swipe edge zones (mouse users) -->
-        <div class="nav-edge nav-edge-left"  id="edgePrev" title="Previous book">
-          <div class="nav-edge-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="rgba(168,124,204,.9)"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg></div>
+
+        <!-- Book Reader -->
+        <div id="bookReader">
+          <div class="spread-container" id="spreadContainer">
+            <div class="book-spread" id="bookSpread">
+              <div class="book-page left-page"  id="leftPage" ><canvas id="canvasLeft"></canvas></div>
+              <div class="book-spine"></div>
+              <div class="book-page right-page" id="rightPage"><canvas id="canvasRight"></canvas></div>
+            </div>
+            <!-- 3-D flip overlay — positioned dynamically -->
+            <div class="flip-card" id="flipCard">
+              <div class="flip-face flip-front"><canvas id="canvasFlipFront"></canvas></div>
+              <div class="flip-face flip-back" ><canvas id="canvasFlipBack"></canvas></div>
+            </div>
+          </div>
+
+          <!-- Click-to-turn zones -->
+          <div class="click-zone click-zone-left"  id="clickPrev"></div>
+          <div class="click-zone click-zone-right" id="clickNext"></div>
+
+          <!-- Bottom navigation -->
+          <div class="reader-bar">
+            <button class="rb-btn" id="rbPrev" disabled>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
+              Prev
+            </button>
+            <span class="rb-info" id="rbInfo">—</span>
+            <button class="rb-btn" id="rbNext" disabled>
+              Next
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+            </button>
+          </div>
         </div>
-        <div class="nav-edge nav-edge-right" id="edgeNext" title="Next book">
-          <div class="nav-edge-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="rgba(168,124,204,.9)"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
-        </div>
+
+        <!-- Loading overlay -->
         <div class="viewer-loading" id="viewerLoading">
           <div class="viewer-loading-spinner"></div>
-          <span class="viewer-loading-text">Loading Book…</span>
+          <span class="viewer-loading-text" id="loadingText">Loading Book…</span>
         </div>
-        <div class="viewer-controls" id="viewerControls" style="display:none;">
-          <button class="vcbtn" id="prevBookBtn">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
-            Previous
-          </button>
-          <a class="vcbtn vcbtn-primary" id="openPdfBtn" href="#" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
-            Open in New Tab
-          </a>
-          <button class="vcbtn" id="nextBookBtn">
-            Next
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
-          </button>
-        </div>
+
       </div>
     </div>
   </section>
 
   <div class="below-content anim-content" style="animation-delay:.55s">
-
-    <!-- Book picker -->
     <div data-reveal style="margin-top:3rem;">
       <div class="section-divider">
         <div class="section-divider-line"></div>
@@ -304,7 +462,6 @@
       </div>
     </div>
 
-    <!-- Series pill selector -->
     <div class="season-bar">
       <span class="season-label">Series</span>
       <div class="season-pill-wrap">
@@ -319,7 +476,6 @@
 
     <div class="book-grid" id="bookGrid"></div>
 
-    <!-- Info -->
     <div class="info-panel" data-reveal>
       <div class="info-main">
         <h2 class="info-title">Avatar Graphic Novels</h2>
@@ -344,25 +500,12 @@
       </div>
       <div class="info-divider"></div>
       <div class="info-stats">
-        <div class="stat-item" data-reveal data-reveal-delay="0.05">
-          <span class="stat-label">Publisher</span>
-          <span class="stat-value">Dark Horse Comics</span>
-        </div>
-        <div class="stat-item" data-reveal data-reveal-delay="0.12">
-          <span class="stat-label">Format</span>
-          <span class="stat-value">Graphic Novel · PDF</span>
-        </div>
-        <div class="stat-item" data-reveal data-reveal-delay="0.19">
-          <span class="stat-label">Canon Status</span>
-          <span class="stat-value">Official — approved by DiMartino &amp; Konietzko</span>
-        </div>
-        <div class="stat-item" data-reveal data-reveal-delay="0.26">
-          <span class="stat-label">Series</span>
-          <span class="stat-value">The Last Airbender · The Legend of Korra</span>
-        </div>
+        <div class="stat-item" data-reveal data-reveal-delay="0.05"><span class="stat-label">Publisher</span><span class="stat-value">Dark Horse Comics</span></div>
+        <div class="stat-item" data-reveal data-reveal-delay="0.12"><span class="stat-label">Format</span><span class="stat-value">Graphic Novel · PDF</span></div>
+        <div class="stat-item" data-reveal data-reveal-delay="0.19"><span class="stat-label">Canon Status</span><span class="stat-value">Official — approved by DiMartino &amp; Konietzko</span></div>
+        <div class="stat-item" data-reveal data-reveal-delay="0.26"><span class="stat-label">Series</span><span class="stat-value">The Last Airbender · The Legend of Korra</span></div>
       </div>
     </div>
-
   </div>
   <footer style="height:2rem"></footer>
 </div>
@@ -373,93 +516,104 @@
 </a>
 
 <script>
-/* ─── CONFIG ─── */
+/* ═══ PDF.js worker ═══ */
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+/* ═══ Series data ═══ */
 const GH    = 'https://github.com/JeffreyHamilton6399/Legend-of-Aang-The-Last-Airbender/releases/download';
-const GDOCS = 'https://docs.google.com/viewer?embedded=true&url=';
 const ASSETS= 'images';
 
 const SERIES = [
   {
-    id: 'atla',
-    label: 'The Last Airbender',
-    symFile: 'water.png',
-    symAnim: 'pulseGlowWater',
-    symColor: 'var(--water)',
-    books: [
-      { title: 'The Promise, Part 1',       tag: 'books', file: 'thepromise1.pdf' },
-      { title: 'The Promise, Part 2',       tag: 'books', file: 'thepromise2.pdf' },
-      { title: 'The Promise, Part 3',       tag: 'books', file: 'thepromise3.pdf' },
-      { title: 'The Search, Part 1',        tag: 'books', file: 'thesearch1.pdf' },
-      { title: 'The Search, Part 2',        tag: 'books', file: 'thesearch2.pdf' },
-      { title: 'The Search, Part 3',        tag: 'books', file: 'thesearch3.pdf' },
-      { title: 'The Rift, Part 1',          tag: 'books', file: 'therift1.pdf' },
-      { title: 'The Rift, Part 2',          tag: 'books', file: 'therift2.pdf' },
-      { title: 'The Rift, Part 3',          tag: 'books', file: 'therift3.pdf' },
-      { title: 'Smoke and Shadow, Part 1',  tag: 'books', file: 'smokeandshadow1.pdf' },
-      { title: 'Smoke and Shadow, Part 2',  tag: 'books', file: 'smokeandshadow2.pdf' },
-      { title: 'Smoke and Shadow, Part 3',  tag: 'books', file: 'smokeandshadow3.pdf' },
-      { title: 'North and South, Part 1',   tag: 'books', file: 'northandsouth1.pdf' },
-      { title: 'North and South, Part 2',   tag: 'books', file: 'northandsouth2.pdf' },
-      { title: 'North and South, Part 3',   tag: 'books', file: 'northandsouth3.pdf' },
-      { title: 'Imbalance, Part 1',         tag: 'books', file: 'imbalance1.pdf' },
-      { title: 'Imbalance, Part 2',         tag: 'books', file: 'imbalance2.pdf' },
-      { title: 'Imbalance, Part 3',         tag: 'books', file: 'imbalance3.pdf' },
+    id:'atla', label:'The Last Airbender', symFile:'water.png',
+    symAnim:'pulseGlowWater', symColor:'var(--water)',
+    books:[
+      {title:'The Promise, Part 1',      tag:'books',file:'thepromise1.pdf'},
+      {title:'The Promise, Part 2',      tag:'books',file:'thepromise2.pdf'},
+      {title:'The Promise, Part 3',      tag:'books',file:'thepromise3.pdf'},
+      {title:'The Search, Part 1',       tag:'books',file:'thesearch1.pdf'},
+      {title:'The Search, Part 2',       tag:'books',file:'thesearch2.pdf'},
+      {title:'The Search, Part 3',       tag:'books',file:'thesearch3.pdf'},
+      {title:'The Rift, Part 1',         tag:'books',file:'therift1.pdf'},
+      {title:'The Rift, Part 2',         tag:'books',file:'therift2.pdf'},
+      {title:'The Rift, Part 3',         tag:'books',file:'therift3.pdf'},
+      {title:'Smoke and Shadow, Part 1', tag:'books',file:'smokeandshadow1.pdf'},
+      {title:'Smoke and Shadow, Part 2', tag:'books',file:'smokeandshadow2.pdf'},
+      {title:'Smoke and Shadow, Part 3', tag:'books',file:'smokeandshadow3.pdf'},
+      {title:'North and South, Part 1',  tag:'books',file:'northandsouth1.pdf'},
+      {title:'North and South, Part 2',  tag:'books',file:'northandsouth2.pdf'},
+      {title:'North and South, Part 3',  tag:'books',file:'northandsouth3.pdf'},
+      {title:'Imbalance, Part 1',        tag:'books',file:'imbalance1.pdf'},
+      {title:'Imbalance, Part 2',        tag:'books',file:'imbalance2.pdf'},
+      {title:'Imbalance, Part 3',        tag:'books',file:'imbalance3.pdf'},
     ]
   },
   {
-    id: 'korra',
-    label: 'The Legend of Korra',
-    symFile: 'earth.png',
-    symAnim: 'pulseGlowEarth',
-    symColor: 'var(--earth)',
-    books: [
-      { title: 'Turf Wars, Part 1',         tag: 'books', file: 'turfwars1.pdf' },
-      { title: 'Turf Wars, Part 2',         tag: 'books', file: 'turfwars2.pdf' },
-      { title: 'Turf Wars, Part 3',         tag: 'books', file: 'turfwars3.pdf' },
-      { title: 'Ruins of the Empire, Part 1', tag: 'books', file: 'ruinsoftheempire1.pdf' },
-      { title: 'Ruins of the Empire, Part 2', tag: 'books', file: 'ruinsoftheempire2.pdf' },
-      { title: 'Ruins of the Empire, Part 3', tag: 'books', file: 'ruinsoftheempire3.pdf' },
+    id:'korra', label:'The Legend of Korra', symFile:'earth.png',
+    symAnim:'pulseGlowEarth', symColor:'var(--earth)',
+    books:[
+      {title:'Turf Wars, Part 1',           tag:'books',file:'turfwars1.pdf'},
+      {title:'Turf Wars, Part 2',           tag:'books',file:'turfwars2.pdf'},
+      {title:'Turf Wars, Part 3',           tag:'books',file:'turfwars3.pdf'},
+      {title:'Ruins of the Empire, Part 1', tag:'books',file:'ruinsoftheempire1.pdf'},
+      {title:'Ruins of the Empire, Part 2', tag:'books',file:'ruinsoftheempire2.pdf'},
+      {title:'Ruins of the Empire, Part 3', tag:'books',file:'ruinsoftheempire3.pdf'},
     ]
   }
 ];
 
-/* State */
-let currentSeries = 0;
+/* ═══ Global state ═══ */
+let currentSeries  = 0;
 let currentBookIdx = null;
+let pdfDoc         = null;
+let currentSpread  = 0;   // 0-indexed; spread 0 → pages 1+2
+let totalPages     = 0;
+let isAnimating    = false;
 
-/* Intro overlay */
+/* ═══ DOM refs ═══ */
+const placeholder   = document.getElementById('viewerPlaceholder');
+const bookReader    = document.getElementById('bookReader');
+const loadingEl     = document.getElementById('viewerLoading');
+const loadingText   = document.getElementById('loadingText');
+const nrBar         = document.getElementById('nowReadingBar');
+const nrTitle       = document.getElementById('nrTitle');
+const nrSeries      = document.getElementById('nrSeries');
+const bookGrid      = document.getElementById('bookGrid');
+const spreadContainer = document.getElementById('spreadContainer');
+const bookSpread    = document.getElementById('bookSpread');
+const leftPage      = document.getElementById('leftPage');
+const rightPage     = document.getElementById('rightPage');
+const canvasLeft    = document.getElementById('canvasLeft');
+const canvasRight   = document.getElementById('canvasRight');
+const flipCard      = document.getElementById('flipCard');
+const canvasFlipFront = document.getElementById('canvasFlipFront');
+const canvasFlipBack  = document.getElementById('canvasFlipBack');
+const rbPrev        = document.getElementById('rbPrev');
+const rbNext        = document.getElementById('rbNext');
+const rbInfo        = document.getElementById('rbInfo');
+const pill          = document.getElementById('seriesPill');
+const pillSym       = document.getElementById('pillSym');
+const pillLabel     = document.getElementById('pillLabel');
+const dropdown      = document.getElementById('seriesDropdown');
+
+/* ═══ Intro overlay ═══ */
 const overlay = document.getElementById('introOverlay');
 let dismissed = false;
 requestAnimationFrame(() => setTimeout(() => overlay.classList.add('symbols-in'), 80));
 function dismissOverlay(){
   if(dismissed) return; dismissed = true;
   overlay.classList.add('fade-out');
-  setTimeout(() => { overlay.style.display = 'none'; document.body.classList.add('page-ready'); }, 650);
+  setTimeout(() => { overlay.style.display='none'; document.body.classList.add('page-ready'); }, 650);
 }
-overlay.addEventListener('click', dismissOverlay, { once: true });
+overlay.addEventListener('click', dismissOverlay, {once:true});
 setTimeout(dismissOverlay, 2800);
 
-/* Refs */
-const pill        = document.getElementById('seriesPill');
-const pillSym     = document.getElementById('pillSym');
-const pillLabel   = document.getElementById('pillLabel');
-const dropdown    = document.getElementById('seriesDropdown');
-const bookGrid    = document.getElementById('bookGrid');
-const pdfFrame    = document.getElementById('pdfFrame');
-const placeholder = document.getElementById('viewerPlaceholder');
-const viewerCtrl  = document.getElementById('viewerControls');
-const nrBar       = document.getElementById('nowReadingBar');
-const nrTitle     = document.getElementById('nrTitle');
-const nrSeries    = document.getElementById('nrSeries');
-const openPdfBtn  = document.getElementById('openPdfBtn');
-const loadingEl   = document.getElementById('viewerLoading');
-const viewerShell = document.getElementById('viewerShell');
-
-/* Build dropdown */
+/* ═══ Series dropdown ═══ */
 document.body.appendChild(dropdown);
 SERIES.forEach((s, i) => {
   const opt = document.createElement('div');
-  opt.className = 'season-opt' + (i === 0 ? ' active' : '');
+  opt.className = 'season-opt' + (i===0?' active':'');
   opt.dataset.idx = i;
   opt.innerHTML = `
     <img class="season-opt-sym" src="${ASSETS}/${s.symFile}" alt="" style="animation:${s.symAnim} 2.4s ease-in-out infinite;">
@@ -471,261 +625,296 @@ SERIES.forEach((s, i) => {
   opt.addEventListener('click', () => { selectSeries(i); closePill(); });
   dropdown.appendChild(opt);
 });
-
-function setPill(idx) {
+function setPill(idx){
   const s = SERIES[idx];
   pillSym.src = `${ASSETS}/${s.symFile}`;
   pillSym.style.animation = `${s.symAnim} 2.4s ease-in-out infinite`;
   pillLabel.textContent = s.label;
   pillLabel.style.color = s.symColor;
-  dropdown.querySelectorAll('.season-opt').forEach(o => {
-    o.classList.toggle('active', parseInt(o.dataset.idx) === idx);
-  });
+  dropdown.querySelectorAll('.season-opt').forEach(o=>o.classList.toggle('active',+o.dataset.idx===idx));
 }
+function openPill(){ const r=pill.getBoundingClientRect(); dropdown.style.top=(r.bottom+8)+'px'; dropdown.style.left=r.left+'px'; pill.classList.add('open'); dropdown.classList.add('open'); }
+function closePill(){ pill.classList.remove('open'); dropdown.classList.remove('open'); }
+pill.addEventListener('click', e=>{ e.stopPropagation(); pill.classList.contains('open')?closePill():openPill(); });
+document.addEventListener('click', ()=>closePill());
+dropdown.addEventListener('click', e=>e.stopPropagation());
 
-function openPill() {
-  const rect = pill.getBoundingClientRect();
-  dropdown.style.top  = (rect.bottom + 8) + 'px';
-  dropdown.style.left = rect.left + 'px';
-  pill.classList.add('open');
-  dropdown.classList.add('open');
-}
-function closePill() { pill.classList.remove('open'); dropdown.classList.remove('open'); }
-pill.addEventListener('click', e => { e.stopPropagation(); pill.classList.contains('open') ? closePill() : openPill(); });
-document.addEventListener('click', () => closePill());
-dropdown.addEventListener('click', e => e.stopPropagation());
-
-function bookUrl(seriesIdx, bookIdx) {
-  const s = SERIES[seriesIdx];
-  const b = s.books[bookIdx];
-  return `${GH}/${b.tag}/${b.file}`;
-}
-
-function viewerUrl(seriesIdx, bookIdx) {
-  // Wrap raw GitHub URL in Google Docs Viewer to bypass X-Frame-Options
-  return GDOCS + encodeURIComponent(bookUrl(seriesIdx, bookIdx));
-}
-
-function loadBook(seriesIdx, bookIdx) {
-  currentSeries  = seriesIdx;
-  currentBookIdx = bookIdx;
-  const s = SERIES[seriesIdx];
-  const b = s.books[bookIdx];
-  const url    = bookUrl(seriesIdx, bookIdx);
-  const viewer = viewerUrl(seriesIdx, bookIdx);
-
-  // Update now-reading bar
-  nrTitle.textContent  = b.title;
-  nrSeries.textContent = s.label;
-  nrBar.style.opacity  = '1';
-
-  // Show iframe, hide placeholder
-  placeholder.style.display = 'none';
-  pdfFrame.style.display    = 'block';
-  viewerCtrl.style.display  = 'flex';
-  pdfFrame.src = viewer;      // Google Docs Viewer — no X-Frame-Options block
-  openPdfBtn.href = url;      // Raw GitHub link for direct download / new tab
-
-  // Show loading spinner; hide when iframe content arrives
-  if (loadingEl) loadingEl.classList.add('active');
-  pdfFrame.onload = () => { if (loadingEl) loadingEl.classList.remove('active'); };
-  showEdgeZones();
-
-  // Save last-read
-  localStorage.setItem('avatarbooks_last', JSON.stringify({ seriesIdx, bookIdx }));
-
-  // Highlight card
-  renderBooks(seriesIdx);
-  document.querySelector('.viewer-section').scrollIntoView({ behavior:'smooth', block:'start' });
-}
-
-function renderBooks(seriesIdx) {
-  const s = SERIES[seriesIdx];
+/* ═══ Book grid ═══ */
+function renderBooks(sidx){
+  const s = SERIES[sidx];
   bookGrid.innerHTML = '';
-  s.books.forEach((b, i) => {
+  s.books.forEach((b,i)=>{
     const card = document.createElement('div');
-    card.className = 'book-card' + (seriesIdx === currentSeries && i === currentBookIdx ? ' active' : '');
-    card.dataset.sidx = seriesIdx;
-    card.dataset.bidx = i;
-    card.style.animationDelay = (i * 0.025) + 's';
+    card.className = 'book-card'+(sidx===currentSeries&&i===currentBookIdx?' active':'');
+    card.style.animationDelay = (i*0.025)+'s';
     card.innerHTML = `
       <div class="book-card-top">
         <span class="book-num">${(i+1).toString().padStart(2,'0')}</span>
         <div class="book-now-dot"></div>
       </div>
       <div class="book-title-text">${b.title}</div>
-      <div class="book-series-label">${s.label}</div>
-      <svg class="book-open-icon" viewBox="0 0 24 24" width="14" height="14" fill="rgba(168,124,204,.8)"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>`;
-    card.addEventListener('click', () => loadBook(seriesIdx, i));
+      <div class="book-series-label">${s.label}</div>`;
+    card.addEventListener('click', ()=>loadBook(sidx,i));
     bookGrid.appendChild(card);
   });
 }
+function selectSeries(idx){ currentSeries=idx; setPill(idx); renderBooks(idx); }
 
-function selectSeries(idx) {
-  currentSeries = idx;
-  setPill(idx);
-  renderBooks(idx);
+/* ═══ PDF rendering helpers ═══ */
+function isMobile(){ return window.innerWidth<=600; }
+
+async function renderPageToCanvas(pageNum, canvas){
+  const ctx = canvas.getContext('2d');
+  if(!pdfDoc || pageNum<1 || pageNum>totalPages){
+    // Blank page — match the other canvas's size if possible
+    const other = (canvas===canvasLeft)?canvasRight:canvasLeft;
+    canvas.width  = other.width  || 400;
+    canvas.height = other.height || 560;
+    ctx.fillStyle = '#ede8df';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    return;
+  }
+  const page   = await pdfDoc.getPage(pageNum);
+  const baseVp = page.getViewport({scale:1});
+  const targetH = window.innerHeight * 0.70;
+  const scale  = targetH / baseVp.height;
+  const vp     = page.getViewport({scale});
+  canvas.width  = Math.round(vp.width);
+  canvas.height = Math.round(vp.height);
+  await page.render({canvasContext:ctx, viewport:vp}).promise;
 }
 
-/* ─── Page-turn navigation with slide animation ─── */
-function navigateBook(dir) {
-  if (currentBookIdx === null) return;
-  let ts = currentSeries, tb = currentBookIdx;
-  if (dir === 'next') {
-    const s = SERIES[ts];
-    if (tb < s.books.length - 1) tb++;
-    else if (ts < SERIES.length - 1) { ts++; tb = 0; }
-    else return;
-  } else {
-    if (tb > 0) tb--;
-    else if (ts > 0) { ts--; tb = SERIES[ts].books.length - 1; }
-    else return;
-  }
-  const isNext = dir === 'next';
-  // Slide current frame out
-  pdfFrame.classList.remove('dragging');
-  pdfFrame.style.transform = '';
-  pdfFrame.classList.add(isNext ? 'slide-exit-left' : 'slide-exit-right');
-  // Ripple feedback
-  spawnRipple(isNext ? 'right' : 'left');
-  setTimeout(() => {
-    loadBook(ts, tb);
-    pdfFrame.classList.remove('slide-exit-left','slide-exit-right');
-    pdfFrame.classList.add(isNext ? 'slide-enter-left' : 'slide-enter-right');
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      pdfFrame.classList.remove('slide-enter-left','slide-enter-right');
-      pdfFrame.classList.add('slide-settle');
-      pdfFrame.addEventListener('transitionend', () => pdfFrame.classList.remove('slide-settle'), { once:true });
-    }));
-  }, 320);
+function updateBar(){
+  const mobile = isMobile();
+  const L = mobile ? currentSpread+1 : currentSpread*2+1;
+  const R = mobile ? currentSpread+1 : Math.min(currentSpread*2+2, totalPages);
+  rbInfo.textContent = (L===R || mobile)
+    ? `Page ${L} of ${totalPages}`
+    : `Pages ${L}–${R} of ${totalPages}`;
+  const maxSp = mobile ? totalPages-1 : Math.ceil(totalPages/2)-1;
+  rbPrev.disabled = currentSpread<=0;
+  rbNext.disabled = currentSpread>=maxSp;
 }
 
-function spawnRipple(side) {
-  const r = document.createElement('div');
-  r.className = 'swipe-ripple swipe-ripple-' + side;
-  viewerShell.appendChild(r);
-  r.addEventListener('animationend', () => r.remove());
+async function renderSpread(idx){
+  const mobile = isMobile();
+  if(mobile){
+    await renderPageToCanvas(idx+1, canvasRight);
+    canvasLeft.width=0; canvasLeft.height=0;
+  } else {
+    await Promise.all([
+      renderPageToCanvas(idx*2+1, canvasLeft),
+      renderPageToCanvas(idx*2+2, canvasRight)
+    ]);
+  }
+  updateBar();
 }
 
-/* Prev / Next buttons */
-document.getElementById('prevBookBtn').addEventListener('click', () => navigateBook('prev'));
-document.getElementById('nextBookBtn').addEventListener('click', () => navigateBook('next'));
+/* ═══ 3-D Page-flip animation ═══ */
+function doFlip(direction, afterRender){
+  return new Promise(resolve=>{
+    if(isMobile()){
+      // Simple opacity fade on mobile
+      bookSpread.style.transition = 'opacity .2s ease';
+      bookSpread.style.opacity = '0';
+      afterRender().then(()=>{
+        requestAnimationFrame(()=>requestAnimationFrame(()=>{
+          bookSpread.style.opacity = '1';
+          bookSpread.addEventListener('transitionend',()=>{
+            bookSpread.style.transition='';
+            resolve();
+          },{once:true});
+        }));
+      });
+      return;
+    }
 
-/* Edge zone buttons */
-document.getElementById('edgePrev').addEventListener('click', () => navigateBook('prev'));
-document.getElementById('edgeNext').addEventListener('click', () => navigateBook('next'));
+    const isForward = direction==='next';
 
-/* Show edge zones once a book is loaded */
-function showEdgeZones() { viewerShell.classList.add('has-book'); }
+    // ── Snapshot the turning page ──
+    const srcCanvas = isForward ? canvasRight : canvasLeft;
+    canvasFlipFront.width  = srcCanvas.width;
+    canvasFlipFront.height = srcCanvas.height;
+    canvasFlipFront.getContext('2d').drawImage(srcCanvas,0,0);
 
-/* ─── Touch swipe (mobile / tablet) ─── */
-let tStartX = 0, tStartY = 0, tTracking = false, tHorizontal = null;
-const SWIPE_MIN = 55;
+    // ── Position flip card precisely over the turning page ──
+    const contRect  = spreadContainer.getBoundingClientRect();
+    const spreadRect= bookSpread.getBoundingClientRect();
+    const pageRect  = (isForward?rightPage:leftPage).getBoundingClientRect();
 
-viewerShell.addEventListener('touchstart', e => {
-  if (pdfFrame.style.display === 'none') return;
-  tStartX = e.touches[0].clientX;
-  tStartY = e.touches[0].clientY;
-  tTracking = true;
-  tHorizontal = null;
-  pdfFrame.classList.add('dragging');
-}, { passive: true });
+    flipCard.style.cssText = `
+      display: block;
+      left:   ${pageRect.left - contRect.left}px;
+      top:    ${spreadRect.top - contRect.top}px;
+      width:  ${pageRect.width}px;
+      height: ${spreadRect.height}px;
+      transform-origin: ${isForward?'left':'right'} center;
+      transform: rotateY(0deg);
+      transition: none;
+    `;
 
-viewerShell.addEventListener('touchmove', e => {
-  if (!tTracking) return;
-  const dx = e.touches[0].clientX - tStartX;
-  const dy = e.touches[0].clientY - tStartY;
-  if (tHorizontal === null && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) {
-    tHorizontal = Math.abs(dx) >= Math.abs(dy);
+    // ── Pre-render the back face (peek of next/prev spread) ──
+    const backPageNum = isForward
+      ? currentSpread*2+3   // next spread's left page
+      : currentSpread*2-1;  // prev spread's right page
+    renderPageToCanvas(backPageNum, canvasFlipBack).then(()=>{
+      // ── Render new spread under the flip card ──
+      afterRender().then(()=>{
+        // ── Trigger the 3D rotation ──
+        requestAnimationFrame(()=>{
+          flipCard.style.transition = 'transform 0.60s cubic-bezier(.645,.045,.355,1.000)';
+          flipCard.style.transform  = isForward ? 'rotateY(-180deg)' : 'rotateY(180deg)';
+        });
+
+        flipCard.addEventListener('transitionend', ()=>{
+          flipCard.style.display = 'none';
+          flipCard.style.transition = '';
+          // Briefly flash the revealed canvas in
+          const revealed = isForward ? canvasRight : canvasLeft;
+          revealed.style.opacity = '0';
+          requestAnimationFrame(()=>{
+            revealed.style.transition = 'opacity .15s ease';
+            revealed.style.opacity    = '1';
+            revealed.addEventListener('transitionend', ()=>{
+              revealed.style.transition='';
+              resolve();
+            },{once:true});
+          });
+        },{once:true});
+      });
+    });
+  });
+}
+
+/* ═══ Navigate ═══ */
+async function navigate(dir){
+  if(isAnimating || !pdfDoc) return;
+  const mobile = isMobile();
+  const maxSp  = mobile ? totalPages-1 : Math.ceil(totalPages/2)-1;
+  const newSp  = currentSpread + (dir==='next'?1:-1);
+  if(newSp<0||newSp>maxSp) return;
+
+  isAnimating = true;
+  currentSpread = newSp;
+
+  await doFlip(dir, ()=>renderSpread(newSp));
+  updateBar();
+  isAnimating = false;
+}
+
+/* ═══ loadBook ═══ */
+async function loadBook(sidx, bidx){
+  currentSeries  = sidx;
+  currentBookIdx = bidx;
+  const s = SERIES[sidx];
+  const b = s.books[bidx];
+
+  nrTitle.textContent  = b.title;
+  nrSeries.textContent = s.label;
+  nrBar.style.opacity  = '1';
+
+  loadingText.textContent = 'Loading Book…';
+  loadingEl.classList.add('active');
+  placeholder.style.display = 'none';
+  bookReader.style.display   = 'none';
+
+  renderBooks(sidx);
+  localStorage.setItem('avatarbooks_last', JSON.stringify({sidx,bidx}));
+
+  try {
+    pdfDoc = await pdfjsLib.getDocument({
+      url: `${GH}/${b.tag}/${b.file}`,
+      cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
+      cMapPacked: true,
+    }).promise;
+
+    totalPages    = pdfDoc.numPages;
+    currentSpread = 0;
+    isAnimating   = false;
+
+    await renderSpread(0);
+
+    loadingEl.classList.remove('active');
+    bookReader.style.display = 'flex';
+    bookReader.style.flexDirection = 'column';
+    bookReader.classList.add('active');
+
+    document.querySelector('.viewer-section').scrollIntoView({behavior:'smooth',block:'start'});
+  } catch(err){
+    console.error('PDF error:', err);
+    loadingText.textContent = 'Could not load — check connection.';
+    setTimeout(()=>{
+      loadingEl.classList.remove('active');
+      placeholder.style.display='';
+      loadingText.textContent='Loading Book…';
+    }, 3500);
   }
-  if (tHorizontal) {
-    e.preventDefault();
-    const clamped = Math.max(-180, Math.min(180, dx));
-    pdfFrame.style.transform = `translateX(${clamped * 0.75}px)`;
-  }
-}, { passive: false });
+}
 
-viewerShell.addEventListener('touchend', e => {
-  if (!tTracking) return;
-  tTracking = false;
-  const dx = e.changedTouches[0].clientX - tStartX;
-  const dy = e.changedTouches[0].clientY - tStartY;
-  pdfFrame.classList.remove('dragging');
-  if (tHorizontal && Math.abs(dx) > SWIPE_MIN) {
-    navigateBook(dx < 0 ? 'next' : 'prev');
-  } else {
-    pdfFrame.style.transform = '';
-  }
+/* ═══ Controls ═══ */
+rbPrev.addEventListener('click', ()=>navigate('prev'));
+rbNext.addEventListener('click', ()=>navigate('next'));
+document.getElementById('clickPrev').addEventListener('click', ()=>navigate('prev'));
+document.getElementById('clickNext').addEventListener('click', ()=>navigate('next'));
+
+/* Keyboard */
+document.addEventListener('keydown', e=>{
+  if(!pdfDoc) return;
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') navigate('next');
+  if(e.key==='ArrowLeft' ||e.key==='ArrowUp')   navigate('prev');
 });
 
-/* ─── Mouse drag (desktop — full viewer drag) ─── */
-let mDown = false, mStartX = 0, mDragged = false;
-
-viewerShell.addEventListener('mousedown', e => {
-  if (pdfFrame.style.display === 'none') return;
-  // Only initiate on the shell itself or edge zones (not controls bar)
-  if (e.target.closest('.viewer-controls')) return;
-  mDown   = true;
-  mDragged = false;
-  mStartX = e.clientX;
-  pdfFrame.classList.add('dragging');
-  e.preventDefault();
-}, { passive: false });
-
-window.addEventListener('mousemove', e => {
-  if (!mDown) return;
-  const dx = e.clientX - mStartX;
-  if (Math.abs(dx) > 6) mDragged = true;
-  if (mDragged) {
-    const clamped = Math.max(-200, Math.min(200, dx));
-    pdfFrame.style.transform = `translateX(${clamped * 0.7}px)`;
-  }
+/* Touch / swipe */
+let tX=0,tY=0,tAxis=null;
+spreadContainer.addEventListener('touchstart', e=>{ tX=e.touches[0].clientX; tY=e.touches[0].clientY; tAxis=null; },{passive:true});
+spreadContainer.addEventListener('touchmove',  e=>{
+  const dx=e.touches[0].clientX-tX, dy=e.touches[0].clientY-tY;
+  if(!tAxis&&(Math.abs(dx)>8||Math.abs(dy)>8)) tAxis=Math.abs(dx)>=Math.abs(dy)?'h':'v';
+  if(tAxis==='h') e.preventDefault();
+},{passive:false});
+spreadContainer.addEventListener('touchend', e=>{
+  if(tAxis!=='h') return;
+  const dx=e.changedTouches[0].clientX-tX, dy=e.changedTouches[0].clientY-tY;
+  if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){ if(dx<0) navigate('next'); else navigate('prev'); }
 });
 
-window.addEventListener('mouseup', e => {
-  if (!mDown) return;
-  mDown = false;
-  pdfFrame.classList.remove('dragging');
-  const dx = e.clientX - mStartX;
-  if (mDragged && Math.abs(dx) > SWIPE_MIN) {
-    navigateBook(dx < 0 ? 'next' : 'prev');
-  } else {
-    pdfFrame.style.transform = '';
-  }
-});
-
-/* Init */
+/* ═══ Init ═══ */
 setPill(0);
 renderBooks(0);
 
-/* Auto-load last-read book */
-document.body.addEventListener('animationend', function onReady(e) {
-  if (e.target.classList.contains('anim-content')) {
-    document.body.removeEventListener('animationend', onReady);
-    try {
-      const saved = JSON.parse(localStorage.getItem('avatarbooks_last') || 'null');
-      if (saved && SERIES[saved.seriesIdx] && SERIES[saved.seriesIdx].books[saved.bookIdx]) {
-        selectSeries(saved.seriesIdx);
-        loadBook(saved.seriesIdx, saved.bookIdx);
+/* Show reader hidden until a book loads */
+bookReader.style.display = 'none';
+
+document.body.addEventListener('animationend', function onReady(e){
+  if(e.target.classList.contains('anim-content')){
+    document.body.removeEventListener('animationend',onReady);
+    try{
+      const saved=JSON.parse(localStorage.getItem('avatarbooks_last')||'null');
+      // Support both old key shapes
+      const sidx = saved?.sidx ?? saved?.seriesIdx;
+      const bidx = saved?.bidx ?? saved?.bookIdx;
+      if(saved&&SERIES[sidx]&&SERIES[sidx].books[bidx]){
+        selectSeries(sidx);
+        loadBook(sidx,bidx);
       }
-    } catch(e) {}
+    }catch(e){}
   }
 });
 
 /* Scroll reveal */
 (function(){
-  const els = document.querySelectorAll('[data-reveal]');
-  if (!els.length) return;
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.style.transitionDelay = (e.target.dataset.revealDelay || 0) + 's';
+  const els=document.querySelectorAll('[data-reveal]');
+  if(!els.length) return;
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.style.transitionDelay=(e.target.dataset.revealDelay||0)+'s';
         e.target.classList.add('revealed');
         io.unobserve(e.target);
       }
     });
-  }, { threshold: .08 });
-  els.forEach(el => io.observe(el));
+  },{threshold:.08});
+  els.forEach(el=>io.observe(el));
 })();
 </script>
 </body>
