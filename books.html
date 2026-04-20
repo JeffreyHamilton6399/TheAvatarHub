@@ -370,7 +370,7 @@ const PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min
 const PDFJS_WORKER = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs';
 
 /* ─── CONFIG ─── */
-const GH    = 'https://github.com/JeffreyHamilton6399/Legend-of-Aang-The-Last-Airbender/releases/download';
+const GH    = 'https://jeffreyhamilton6399.github.io/TheAvatarHub';
 const ASSETS= 'images';
 
 const SERIES = [
@@ -569,7 +569,7 @@ function setupScrollObserver() {
 /* ─── Load book ─── */
 function bookUrl(sIdx, bIdx) {
   const b = SERIES[sIdx].books[bIdx];
-  return `${GH}/${b.tag}/${b.file}`;
+  return `${GH}/books/${b.file}`;
 }
 
 async function loadBook(seriesIdx, bookIdx) {
