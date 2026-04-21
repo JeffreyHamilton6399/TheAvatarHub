@@ -401,7 +401,7 @@
       <div class="corner corner-br"><img src="images/air.png" alt="" class="corner-img corner-air"></div>
       <div class="player-shell idle" id="playerShell">
         <video id="mainVideo" preload="none" playsinline poster="images/previewKorra.png">
-          <source src="" type="video/x-matroska" id="videoSource">
+          <source src="" type="video/mp4" id="videoSource">
         </video>
         <div class="big-play" id="bigPlay"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         <div id="bufferSpinner"></div>
@@ -648,17 +648,17 @@ const NEXT_EP_BEFORE_END    = 30;
 const AUTO_PLAY_SECS        = 10;
 
 const BOOKS = [
-  { book:1, tag:'koraepisodes-book1', label:'Book One', sublabel:'Air', symFile:'air.png',
+  { book:1, tag:'kora-season1', label:'Book One', sublabel:'Air', symFile:'air.png',
     episodes:['Welcome to Republic City','A Leaf in the Wind','The Revelation','The Voice in the Night','The Spirit of Competition','And the Winner Is...','The Aftermath','When Extremes Meet','Out of the Past','Turning the Tides','Skeletons in the Closet','Endgame'] },
-  { book:2, tag:'koraepisodes-book2', label:'Book Two', sublabel:'Spirits', symFile:'water.png',
+  { book:2, tag:'kora-season2', label:'Book Two', sublabel:'Spirits', symFile:'water.png',
     episodes:['Rebel Spirit','The Southern Lights','Civil Wars, Part 1','Civil Wars, Part 2','Peacekeepers','The Sting','Beginnings, Part 1','Beginnings, Part 2','The Guide','A New Spiritual Age','Night of a Thousand Stars','Harmonic Convergence','Darkness Falls','Light in the Dark'] },
-  { book:3, tag:'koraepisodes-book3', label:'Book Three', sublabel:'Change', symFile:'earth.png',
+  { book:3, tag:'kora-season3', label:'Book Three', sublabel:'Change', symFile:'earth.png',
     episodes:['A Breath of Fresh Air','Rebirth','The Earth Queen','In Harm\'s Way','The Metal Clan','Old Wounds','Original Airbenders','The Terror Within','The Stakeout','Long Live the Queen','The Ultimatum','Enter the Void','Venom of the Red Lotus'] },
-  { book:4, tag:'koraepisodes-book4', label:'Book Four', sublabel:'Balance', symFile:'fire.png',
+  { book:4, tag:'kora-season4', label:'Book Four', sublabel:'Balance', symFile:'fire.png',
     episodes:['After All These Years','Korra Alone','The Coronation','The Calling','Enemy at the Gates','The Battle of Zaofu','Reunion','Remembrances','Beyond the Wilds','Operation Beifong','Kuvira\'s Gambit','Day of the Colossus','The Last Stand'] }
 ];
 
-function epUrl(b,n){ return `${GH}/${BOOKS[b-1].tag}/S${b}E${n}.mkv`; }
+function epUrl(b,n){ return `${GH}/${BOOKS[b-1].tag}/S${b}E${n}.mp4`; }
 function subUrl(b,n){ return `s${b}e${String(n).padStart(2,'0')}.srt`; }
 function getNext(b,n){ const bd=BOOKS[b-1]; if(n<bd.episodes.length) return{book:b,num:n+1,title:bd.episodes[n]}; if(b<4) return{book:b+1,num:1,title:BOOKS[b].episodes[0]}; return null; }
 
