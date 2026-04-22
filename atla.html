@@ -355,9 +355,56 @@
     [data-reveal]{opacity:0;transform:translateY(32px);transition:opacity .75s cubic-bezier(.22,1,.36,1),transform .75s cubic-bezier(.22,1,.36,1);}
     [data-reveal].revealed{opacity:1;transform:translateY(0);}
     @media(max-width:768px){header{padding:1.5rem 2rem;}.episode-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));}}
-  </style>
+  
+    /* ── Cross-page theme variables ── */
+    body.theme-parchment {
+      --deep:#f5efe0; --panel:#ede4ce; --white:#1a1008; --muted:#7a6040;
+      --dim:#b8a880; --border:rgba(0,0,0,0.10); --gold:#9a6820;
+      --card-bg: linear-gradient(160deg,rgba(255,250,235,.97) 0%,rgba(245,238,215,.99) 100%);
+    }
+    body.theme-water {
+      --deep:#dff0f8; --panel:#c8e4f2; --white:#0a1a2e; --muted:#3a6080;
+      --dim:#7ab0cc; --border:rgba(0,0,0,0.09);
+      --card-bg: linear-gradient(160deg,rgba(220,240,252,.97) 0%,rgba(200,228,245,.99) 100%);
+    }
+    body.theme-earth {
+      --deep:#f0f4e8; --panel:#e2ead0; --white:#1a2008; --muted:#5a7040;
+      --dim:#a0b878; --border:rgba(0,0,0,0.09);
+      --card-bg: linear-gradient(160deg,rgba(238,245,220,.97) 0%,rgba(224,235,200,.99) 100%);
+    }
+    body.theme-parchment .bg-layer { filter: blur(8px) brightness(0.45) saturate(.7); }
+    body.theme-water    .bg-layer  { filter: blur(8px) brightness(0.4) saturate(1.2) hue-rotate(190deg); }
+    body.theme-earth    .bg-layer  { filter: blur(8px) brightness(0.4) saturate(1.1) hue-rotate(55deg); }
+    body.theme-parchment,body.theme-water,body.theme-earth { background: var(--deep); color: var(--white); }
+    body.theme-parchment header,body.theme-water header,body.theme-earth header { border-color: rgba(0,0,0,.1); }
+    body.theme-parchment .back-link,body.theme-water .back-link,body.theme-earth .back-link { color: var(--muted); border-color: var(--dim); }
+    body.theme-parchment .header-tag,body.theme-water .header-tag,body.theme-earth .header-tag { color: var(--muted); border-color: var(--dim); }
+    body.theme-parchment .ep-card,body.theme-water .ep-card,body.theme-earth .ep-card { background: rgba(255,255,255,.6); border-color: rgba(0,0,0,.1); }
+    body.theme-parchment .ep-title-text,body.theme-water .ep-title-text,body.theme-earth .ep-title-text { color: var(--white); }
+    body.theme-parchment .ep-num,body.theme-water .ep-num,body.theme-earth .ep-num { color: var(--muted); }
+    body.theme-parchment .section-divider-line,body.theme-water .section-divider-line,body.theme-earth .section-divider-line { background: rgba(0,0,0,.1); }
+    body.theme-parchment .info-title,body.theme-water .info-title,body.theme-earth .info-title { -webkit-text-fill-color: var(--white); color: var(--white); }
+    body.theme-parchment .info-synopsis,body.theme-water .info-synopsis,body.theme-earth .info-synopsis { color: var(--white); }
+    body.theme-parchment .genre-tag,body.theme-water .genre-tag,body.theme-earth .genre-tag { color: var(--muted); border-color: var(--dim); }
+    body.theme-parchment .stat-value,body.theme-water .stat-value,body.theme-earth .stat-value { color: var(--white); }
+    body.theme-parchment .viewer-controls,body.theme-water .viewer-controls,body.theme-earth .viewer-controls { background: rgba(255,255,255,.88); }
+    body.theme-parchment .vcbtn,body.theme-water .vcbtn,body.theme-earth .vcbtn { color: var(--muted); border-color: var(--dim); }
+    body.theme-parchment .book-card,body.theme-water .book-card,body.theme-earth .book-card { background: rgba(255,255,255,.65); border-color: rgba(0,0,0,.1); }
+    body.theme-parchment .book-title-text,body.theme-water .book-title-text,body.theme-earth .book-title-text { color: var(--white); }
+    body.theme-parchment .game-card,body.theme-water .game-card,body.theme-earth .game-card { background: rgba(255,255,255,.65); border-color: rgba(0,0,0,.1); }
+    body.theme-parchment .game-title,body.theme-water .game-title,body.theme-earth .game-title { color: var(--white); }
+    body.theme-parchment .game-desc,body.theme-water .game-desc,body.theme-earth .game-desc { color: var(--muted); }
+    body.theme-parchment .game-tag,body.theme-water .game-tag,body.theme-earth .game-tag { color: var(--muted); border-color: var(--dim); }
+</style>
 </head>
 <body>
+<script>
+/* Apply saved theme immediately */
+(function(){
+  var t=localStorage.getItem("avatarhub_theme");
+  if(t&&t!=="dark") document.body.classList.add(t);
+})();
+</script>
 
 <div id="introOverlay" title="Click to enter">
   <p class="intro-tagline">Four elements. One destiny.</p>
@@ -662,7 +709,11 @@ const BOOKS = [
 ];
 
 // epUrl defined below in renderEpisodes block
-function subUrl(b,n){ if(b===1&&n===0) return `s1e00.srt`; return `s${b}e${String(n).padStart(2,'0')}.srt`; }
+function subUrl(b,n){
+  const tag = BOOKS[b-1].tag;
+  const file = (b===1&&n===0) ? 's1e00.srt' : `s${b}e${String(n).padStart(2,'0')}.srt`;
+  return `${GH}/${tag}/${file}`;
+}
 function getNext(b,n){ const bd=BOOKS[b-1]; if(n===0) return{book:b,num:1,title:bd.episodes[0]}; if(n<bd.episodes.length) return{book:b,num:n+1,title:bd.episodes[n]}; if(b<3) return{book:b+1,num:1,title:BOOKS[b].episodes[0]}; return null; }
 
 /* State */
