@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Avatar Hub</title>
+  <title>AvatarArchive</title>
   <meta name="theme-color" content="#04070d">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Avatar Hub">
+  <meta name="apple-mobile-web-app-title" content="AvatarArchive">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="images/favicon.png">
   <link rel="icon" type="image/jpeg" href="images/favicon.png">
@@ -610,7 +610,7 @@
       '<img class="gate-sym" src="images/earth.png" alt="Earth" style="animation:gatePulseEarth 2.8s ease-in-out infinite 1s">' +
       '<img class="gate-sym" src="images/fire.png"  alt="Fire"  style="animation:gatePulseFire  2.8s ease-in-out infinite 1.5s">' +
     '</div>' +
-    '<div class="gate-title">Avatar Hub</div>' +
+    '<div class="gate-title">AvatarArchive</div>' +
     '<div class="gate-sub">Members Only</div>' +
     '<div class="gate-divider"></div>' +
     '<div class="gate-form" id="gateForm">' +
@@ -702,7 +702,7 @@
   <!-- Hero -->
   <div class="hero">
     <p class="hero-eyebrow">The Avatar Universe</p>
-    <h1 class="hero-main">Avatar Hub</h1>
+    <h1 class="hero-main">AvatarArchive</h1>
     <p class="hero-sub">Choose your adventure</p>
     <div class="hero-divider"></div>
     <!-- Search -->
@@ -948,7 +948,7 @@
   <div class="sp-divider"></div>
   <!-- Install -->
   <div class="sp-section">
-    <button class="sp-install-row" id="installBtn" title="Download Avatar Hub App">
+    <button class="sp-install-row" id="installBtn" title="Download AvatarArchive App">
       <svg viewBox="0 0 24 24" fill="currentColor" style="width:11px;height:11px;flex-shrink:0;opacity:.6"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5v-2z"/></svg>
       Download App
     </button>
@@ -964,7 +964,7 @@
 <!-- Install instructions modal -->
 <div id="installModal">
   <div class="install-box">
-    <h3>Download Avatar Hub</h3>
+    <h3>Download AvatarArchive</h3>
     <p>Install this app to your device for a native, offline-ready experience — no browser chrome.</p>
     <ul class="install-steps">
       <li><span class="step-num">1</span><span><strong>iPhone / iPad:</strong> tap the Share icon in Safari, then "Add to Home Screen".</span></li>
@@ -1342,8 +1342,8 @@ searchInput.addEventListener('focus', () => { if (searchInput.value.trim()) runS
 (function(){
   // Inline manifest via blob
   const manifest = {
-    name: 'Avatar Hub',
-    short_name: 'Avatar Hub',
+    name: 'AvatarArchive',
+    short_name: 'AvatarArchive',
     description: 'Watch Avatar: The Last Airbender, The Legend of Korra, the 2010 live action film, the Netflix live action series, and the 2026 animated film.',
     start_url: './index.html',
     display: 'standalone',
@@ -1364,7 +1364,7 @@ searchInput.addEventListener('focus', () => { if (searchInput.value.trim()) runS
   // Minimal service worker for offline shell caching
   if ('serviceWorker' in navigator) {
     const swCode = `
-const CACHE='avatar-hub-v3';
+const CACHE='avatar-archive-v3';
 const SHELL=['./index.html','./atla.html','./kora.html','./movie2026.html','./movie2010.html','./liveshow.html','./books.html','./games.html'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL).catch(()=>{})));self.skipWaiting();});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim();});

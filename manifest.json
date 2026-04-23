@@ -1,6 +1,6 @@
 {
-  "name": "Avatar Hub",
-  "short_name": "Avatar Hub",
+  "name": "AvatarArchive",
+  "short_name": "AvatarArchive",
   "description": "Watch Avatar: The Last Airbender, The Legend of Korra, the 2010 live action film, the Netflix live action series, and the 2026 animated film.",
   "start_url": "./index.html",
   "display": "standalone",
