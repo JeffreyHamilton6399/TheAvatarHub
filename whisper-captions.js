@@ -1,9 +1,17 @@
 /* ═══════════════════════════════════════════════════════════════════
-   AVATARARCHIVE  —  whisper-captions.js  v2.0
+   AVATARARCHIVE  —  whisper-captions.js  v2.1
    Real-time AI caption engine using Transformers.js + Whisper Tiny.
    Works like YouTube auto-captions: captures live audio from the
    playing video, processes 30-second chunks, and injects timed cues
    into the player as the video plays — no video download required.
+
+   v2.1 fixes:
+   · AudioContext now runs at the browser's native sample rate
+     (44100 or 48000 Hz) so video audio plays back at full quality.
+   · PCM chunks are downsampled to 16 kHz in software before being
+     sent to Whisper — keeps ASR quality without touching playback.
+   · injectButton() accepts ep as a string OR a zero-argument function
+     so the cache key always reflects the currently-playing episode.
 ═══════════════════════════════════════════════════════════════════ */
 (function (global) {
   'use strict';
@@ -12,7 +20,7 @@
   const TRANSFORMERS_CDN = 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1/dist/transformers.min.js';
   const MODEL_NAME       = 'Xenova/whisper-tiny.en';
   const CHUNK_SECS       = 30;
-  const SAMPLE_RATE      = 16000;
+  const WHISPER_RATE     = 16000;   // Whisper's required input sample rate
   const BUFFER_SIZE      = 4096;
   const CACHE_KEY_PFX    = 'avatarachive_srt_';
 
@@ -42,7 +50,12 @@
       btn.style.cssText = 'border:1px solid rgba(77,184,255,.35);border-radius:4px;padding:.2em .5em;color:rgba(77,184,255,.65);background:none;cursor:pointer;transition:color .2s,border-color .2s';
 
       ccBtn.parentNode.insertBefore(btn, ccBtn.nextSibling);
-      btn.addEventListener('click', () => WC.toggle(btn, vid, captionBox, prefix, ep));
+      /* ep can be a static string or a zero-arg function — evaluated at click time
+         so the cache key always matches the currently-playing episode. */
+      btn.addEventListener('click', () => {
+        const epKey = typeof ep === 'function' ? ep() : ep;
+        WC.toggle(btn, vid, captionBox, prefix, epKey);
+      });
       return btn;
     },
 
@@ -104,12 +117,15 @@
     },
 
     async _startCapture(pipe, btn, vid, captionBox, cacheKey) {
-      /* Build AudioContext only once per video element */
+      /* Build AudioContext at the browser's native sample rate (44100 or 48000 Hz).
+         Using 16 kHz here would route ALL video audio through a degraded 16 kHz
+         graph, silencing or distorting playback.  We downsample to 16 kHz in
+         software (see _downsample) only when handing data off to Whisper. */
       if (_activeVid !== vid) {
         WC._stopCapture();
-        _audioCtx   = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: SAMPLE_RATE });
+        _audioCtx   = new (window.AudioContext || window.webkitAudioContext)();
         _sourceNode = _audioCtx.createMediaElementSource(vid);
-        _sourceNode.connect(_audioCtx.destination);
+        _sourceNode.connect(_audioCtx.destination);   // keep audio audible
         _activeVid  = vid;
       }
 
@@ -124,14 +140,17 @@
       _isCapturing  = true;
       _isProcessing = false;
 
-      const allCues = [];
+      const allCues  = [];
+      /* How many native-rate samples equal CHUNK_SECS of audio */
+      const nativeSamplesPerChunk = CHUNK_SECS * _audioCtx.sampleRate;
 
       _procNode.onaudioprocess = async (e) => {
         if (!_isCapturing) return;
 
         _pcmBuffer.push(new Float32Array(e.inputBuffer.getChannelData(0)));
         const totalSamples = _pcmBuffer.reduce((n, c) => n + c.length, 0);
-        if (totalSamples < CHUNK_SECS * SAMPLE_RATE || _isProcessing) return;
+        /* Compare against native-rate sample count, not WHISPER_RATE */
+        if (totalSamples < nativeSamplesPerChunk || _isProcessing) return;
 
         const frozen      = _pcmBuffer.slice();
         const frozenStart = _chunkStart;
@@ -140,7 +159,10 @@
         _isProcessing = true;
 
         try {
-          const result = await pipe(WC._merge(frozen), {
+          /* Merge native-rate frames, then downsample to 16 kHz for Whisper */
+          const merged     = WC._merge(frozen);
+          const resampled  = WC._downsample(merged, _audioCtx.sampleRate, WHISPER_RATE);
+          const result = await pipe(resampled, {
             task:              'transcribe',
             language:          'en',
             return_timestamps: true,
@@ -204,6 +226,24 @@
       let off = 0;
       for (const c of chunks) { result.set(c, off); off += c.length; }
       return result;
+    },
+
+    /* Linear downsampler — averages source samples into each output sample.
+       fromRate: native AudioContext rate (e.g. 44100 / 48000)
+       toRate  : Whisper's required input rate (16000) */
+    _downsample(buffer, fromRate, toRate) {
+      if (fromRate === toRate) return buffer;
+      const ratio     = fromRate / toRate;
+      const outLength = Math.floor(buffer.length / ratio);
+      const out       = new Float32Array(outLength);
+      for (let i = 0; i < outLength; i++) {
+        const start = Math.floor(i * ratio);
+        const end   = Math.min(Math.floor((i + 1) * ratio), buffer.length);
+        let sum = 0;
+        for (let j = start; j < end; j++) sum += buffer[j];
+        out[i] = sum / (end - start);
+      }
+      return out;
     },
 
     _applyCues(cues, vid, captionBox) {

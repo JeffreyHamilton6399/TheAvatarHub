@@ -1006,6 +1006,8 @@ ccBtn.addEventListener('click',()=>{captionsOn=!captionsOn;ccBtn.classList.toggl
 
 /* Load episode */
 function loadEpisode(book,epNum){
+  /* Stop any active Whisper capture before changing the video source */
+  if(typeof WhisperCaptions!=='undefined') try{WhisperCaptions._stopCapture();}catch(_){}
   const bData=BOOKS[book-1],title=bData.episodes[epNum-1];
   currentEp={book,num:epNum,title}; hideNextPanel(); panelShown=false; skipBtn.style.display='none';
   srtCues=[];lastCueText=null;hideCaption();
@@ -1216,6 +1218,19 @@ ccBtn.addEventListener('click',()=>{
       .catch(()=>{});
   }
 });
+</script>
+
+<!-- ── Whisper AI Captions ── -->
+<script src="whisper-captions.js"></script>
+<script>
+(function(){
+  if (typeof WhisperCaptions === 'undefined') return;
+  WhisperCaptions.injectButton(
+    ccBtn, vid, captionBox,
+    'korra',
+    () => currentEp ? `b${currentEp.book}_e${currentEp.num}` : 'preview'
+  );
+})();
 </script>
 </body>
 </html>

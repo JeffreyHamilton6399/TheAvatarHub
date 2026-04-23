@@ -1012,6 +1012,8 @@ ccBtn.addEventListener('click',()=>{captionsOn=!captionsOn;ccBtn.classList.toggl
 
 /* Load episode */
 function loadEpisode(book,epNum){
+  /* Stop any active Whisper capture before changing the video source */
+  if(typeof WhisperCaptions!=='undefined') try{WhisperCaptions._stopCapture();}catch(_){}
   const bData=BOOKS[book-1];
   const title = epNum===0 ? (bData.pilot||'Unaired Pilot') : bData.episodes[epNum-1];
   currentEp={book,num:epNum,title}; hideNextPanel(); panelShown=false; skipBtn.style.display='none';
@@ -1262,5 +1264,22 @@ ccBtn.addEventListener('click',()=>{
   }
 });
 </script>
+
+<!-- ── Whisper AI Captions ── -->
+<script src="whisper-captions.js"></script>
+<script>
+/* Inject the AI CC button once the player markup exists.
+   The ep getter is evaluated at click time so the cache key always
+   matches the episode that is currently loaded in the player. */
+(function(){
+  if (typeof WhisperCaptions === 'undefined') return;
+  WhisperCaptions.injectButton(
+    ccBtn, vid, captionBox,
+    'atla',
+    () => currentEp ? `b${currentEp.book}_e${currentEp.num}` : 'preview'
+  );
+})();
+</script>
+</body></script>
 </body>
 </html>

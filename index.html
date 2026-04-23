@@ -294,6 +294,14 @@
       .card-label { font-size: .48rem; }
       .card-tag   { font-size: .44rem; padding: .3em .9em; }
       .card-cta   { font-size: .52rem; padding-top: .85rem; }
+      /* Prevent "AvatarArchive" from wrapping and stretching the hero vertically */
+      .hero { padding-top: clamp(2.5rem,6vh,4rem); }
+      .hero-main {
+        font-size: clamp(1.45rem, 8.5vw, 2.4rem);
+        letter-spacing: .04em;
+        white-space: nowrap;
+      }
+      .hero-sub { font-size: .88rem; }
     }
 
     .hub-card {

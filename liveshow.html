@@ -1872,5 +1872,13 @@ window.addEventListener('pagehide', () => {
 
 
 </script>
+<!-- ── Whisper AI Captions ── -->
+<script src="whisper-captions.js"></script>
+<script>
+(function(){
+  if (typeof WhisperCaptions === 'undefined') return;
+  WhisperCaptions.injectButton(ccBtn, vid, captionBox, 'liveshow', 'main');
+})();
+</script>
 </body>
 </html>
