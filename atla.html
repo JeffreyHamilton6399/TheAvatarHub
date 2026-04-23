@@ -860,8 +860,9 @@ function subUrl(b,n){
   const bd=BOOKS[b-1];
   const title=bd.episodes[n-1];
   const nn=String(n).padStart(2,'0');
-  const folder=`captions/Avatar The Last Airbender - season ${b}.en`;
-  const file=`Avatar The Last Airbender - ${b}x${nn} - ${title}.en`;
+  const folder=`captions/Avatar_The_Last_Airbender_-_season_${b}.en`;
+  const raw=`Avatar The Last Airbender - ${b}x${nn} - ${title}`;
+  const file=raw.replace(/'/g,'_').replace(/\s+/g,'_').replace(/[,:]/g,'').replace(/__+/g,'_')+'_en.srt';
   return `${folder}/${file}`;
 }
 function getNext(b,n){ const bd=BOOKS[b-1]; if(n===0) return{book:b,num:1,title:bd.episodes[0]}; if(n<bd.episodes.length) return{book:b,num:n+1,title:bd.episodes[n]}; if(b<3) return{book:b+1,num:1,title:BOOKS[b].episodes[0]}; return null; }
