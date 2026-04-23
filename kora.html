@@ -1215,7 +1215,7 @@ window.addEventListener('pagehide', () => {
     if(window.WhisperCaptions && typeof ccBtn!=='undefined'){
       WhisperCaptions.injectButton(
         ccBtn, vid, captionBox,
-         + series_label + ,
+        'korra',
         (currentEp ? `b${currentEp.book}_e${currentEp.num}` : 'unknown')
       );
       /* Update button episode ref when episode changes */
@@ -1224,7 +1224,7 @@ window.addEventListener('pagehide', () => {
         origLoad(b,n,...args);
         const aiBtn=document.getElementById('aiCCBtn');
         if(aiBtn) aiBtn.onclick = ()=>WhisperCaptions.run(
-          aiBtn,vid,captionBox, + series_label + ,`b${b}_e${n}`
+          aiBtn,vid,captionBox, 'korra' ,`b${b}_e${n}`
         );
       };
     }
