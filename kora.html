@@ -854,8 +854,9 @@ function subUrl(b,n){
   const bd=BOOKS[b-1];
   const title=bd.episodes[n-1];
   const nn=String(n).padStart(2,'0');
-  const folder=`captions/The_Legend_of_Korra - season ${b}.en`;
-  const file=`The Legend of Korra - ${b}x${nn} - ${title}.en`;
+  const folder=`captions/The_Legend_of_Korra_-_season_${b}.en`;
+  const raw=`The Legend of Korra - ${b}x${nn} - ${title}`;
+  const file=raw.replace(/'/g,'_').replace(/\s+/g,'_').replace(/[,:]/g,'').replace(/__+/g,'_')+'_en.srt';
   return `${folder}/${file}`;
 }
 function getNext(b,n){ const bd=BOOKS[b-1]; if(n<bd.episodes.length) return{book:b,num:n+1,title:bd.episodes[n]}; if(b<4) return{book:b+1,num:1,title:BOOKS[b].episodes[0]}; return null; }
