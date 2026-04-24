@@ -1882,9 +1882,3 @@ i'll be happy to help.
 425
 00:23:31,845 --> 00:23:34,079
 sokka: hey, where'd hawky go?
-
-
-
-0
-00:00:0,500 --> 00:00:2,00
-<font color="#ffff00" size=14>www.tvsubtitles.net</font>

@@ -90,7 +90,7 @@ Today's the day!
 
 22
 00:01:31,890 --> 00:01:33,160
- Can you believe it? 
+ Can you believe it?
 
 23
 00:01:33,160 --> 00:01:35,400
@@ -98,11 +98,11 @@ After all that time searching for a teacher,
 
 24
 00:01:35,400 --> 00:01:37,580
- I'm finally starting earthbending! 
+ I'm finally starting earthbending!
 
 25
 00:01:37,580 --> 00:01:41,960
-And this place...i-it's perfect! Don't you think? 
+And this place...i-it's perfect! Don't you think?
 
 26
 00:01:41,960 --> 00:01:42,800
@@ -110,7 +110,7 @@ Sokka
 
 27
 00:01:44,600 --> 00:01:46,530
- Oh, you're still sleeping, huh? 
+ Oh, you're still sleeping, huh?
 
 28
 00:01:48,360 --> 00:01:49,770
@@ -118,11 +118,11 @@ Sorry!
 
 29
 00:01:52,280 --> 00:01:55,840
-Good morning earthbending student! 
+Good morning earthbending student!
 
 30
 00:01:55,840 --> 00:01:57,850
-Good morning sifu Toph. 
+Good morning sifu Toph.
 
 31
 00:01:57,850 --> 00:02:00,730
@@ -134,7 +134,7 @@ Well, if you think I should
 
 33
 00:02:04,480 --> 00:02:09,010
-Sorry, snoozles. We'll do our earthbending as quietly as we can. 
+Sorry, snoozles. We'll do our earthbending as quietly as we can.
 
 34
 00:02:21,700 --> 00:02:24,040
@@ -142,15 +142,15 @@ So what move are you going to teach me first?
 
 35
 00:02:24,040 --> 00:02:29,700
- Rockalanche? The trembler? Oh! Maybe I can learn to make a whirlpool out of land! 
+ Rockalanche? The trembler? Oh! Maybe I can learn to make a whirlpool out of land!
 
 36
 00:02:29,910 --> 00:02:33,260
-Let's start with move a rock. 
+Let's start with move a rock.
 
 37
 00:02:33,870 --> 00:02:35,540
-Sounds good! Sounds good! 
+Sounds good! Sounds good!
 
 38
 00:02:37,000 --> 00:02:39,350
@@ -158,7 +158,7 @@ The key to earthbending is your stance.
 
 39
 00:02:40,100 --> 00:02:41,910
- You've got to be steady and strong. 
+ You've got to be steady and strong.
 
 40
 00:02:42,570 --> 00:02:43,910
@@ -166,11 +166,11 @@ Rock is a stubborn element.
 
 41
 00:02:44,320 --> 00:02:47,700
-If you're going to move it, you've got to be like a rock yourself. 
+If you're going to move it, you've got to be like a rock yourself.
 
 42
 00:02:48,060 --> 00:02:49,810
-Like a rock. Got it. 
+Like a rock. Got it.
 
 43
 00:02:49,810 --> 00:02:53,490
@@ -178,23 +178,23 @@ Good. Now the actual motion of this one is pretty simple.
 
 44
 00:02:57,350 --> 00:03:00,300
-Okay, you ready to give it a try? 
+Okay, you ready to give it a try?
 
 45
 00:03:00,350 --> 00:03:01,630
-I'm ready. 
+I'm ready.
 
 46
 00:03:06,400 --> 00:03:08,000
-Rock beats airbender! 
+Rock beats airbender!
 
 47
 00:03:12,240 --> 00:03:14,850
- I got you, dad! 
+ I got you, dad!
 
 48
 00:03:23,590 --> 00:03:28,160
-My beloved Lu Ten, I will see you again. 
+My beloved Lu Ten, I will see you again.
 
 49
 00:03:30,500 --> 00:03:32,830
@@ -202,19 +202,19 @@ Uncle! You were unconscious.
 
 50
 00:03:34,410 --> 00:03:35,680
-Azula did this to you. 
+Azula did this to you.
 
 51
 00:03:36,340 --> 00:03:37,460
- It was a surprise attack. 
+ It was a surprise attack.
 
 52
 00:03:38,260 --> 00:03:40,830
-Somehow, that's not so surprising. 
+Somehow, that's not so surprising.
 
 53
 00:03:43,860 --> 00:03:46,020
-I hope I made it the way you like it. 
+I hope I made it the way you like it.
 
 54
 00:03:48,760 --> 00:03:50,120
@@ -230,7 +230,7 @@ So uncle, I've been thinking.
 
 57
 00:04:00,060 --> 00:04:03,370
- It's only a matter of time before I run into Azula again. 
+ It's only a matter of time before I run into Azula again.
 
 58
 00:04:03,410 --> 00:04:08,030
@@ -238,7 +238,7 @@ I'm going to need to know more advanced firebending if I want to stand a chance 
 
 59
 00:04:08,060 --> 00:04:11,510
- I know what you're going to say: she's my sister and I should be trying to get along with her. 
+ I know what you're going to say: she's my sister and I should be trying to get along with her.
 
 60
 00:04:11,610 --> 00:04:15,880
@@ -246,23 +246,23 @@ I'm going to need to know more advanced firebending if I want to stand a chance 
 
 61
 00:04:22,800 --> 00:04:25,490
- It's time to resume your training. 
+ It's time to resume your training.
 
 62
 00:04:26,000 --> 00:04:29,480
-I don't understand what went wrong. He did it exactly the way you did. 
+I don't understand what went wrong. He did it exactly the way you did.
 
 63
 00:04:29,840 --> 00:04:33,330
-Maybe there's another way.  What if I came at the boulder from a different angle? 
+Maybe there's another way.  What if I came at the boulder from a different angle?
 
 64
 00:04:33,370 --> 00:04:35,510
-No, that's the problem. 
+No, that's the problem.
 
 65
 00:04:35,550 --> 00:04:37,720
-You've got to stop thinking like an airbender. 
+You've got to stop thinking like an airbender.
 
 66
 00:04:37,770 --> 00:04:43,170
@@ -270,11 +270,11 @@ There's no different angle, no clever solution, no trickity trick that's going t
 
 67
 00:04:43,470 --> 00:04:45,380
-You've got to face it head on. 
+You've got to face it head on.
 
 68
 00:04:45,420 --> 00:04:48,670
-And when I say head on, I mean like this! 
+And when I say head on, I mean like this!
 
 69
 00:04:54,420 --> 00:04:56,380
@@ -282,15 +282,15 @@ I've been training Aang for a while now.
 
 70
 00:04:56,500 --> 00:05:00,080
- He really responds well to a positive teaching experience. 
+ He really responds well to a positive teaching experience.
 
 71
 00:05:00,100 --> 00:05:03,890
-Lots of encouragement and praise. Kind words. 
+Lots of encouragement and praise. Kind words.
 
 72
 00:05:03,930 --> 00:05:07,750
-If he's doing something wrong, maybe a gentle nudge in the right direction. 
+If he's doing something wrong, maybe a gentle nudge in the right direction.
 
 73
 00:05:08,270 --> 00:05:11,970
@@ -298,11 +298,11 @@ Thanks Katara. A gentle nudge. I'll try that.
 
 74
 00:05:12,620 --> 00:05:14,460
-Keep your knees high, twinkletoes! 
+Keep your knees high, twinkletoes!
 
 75
 00:05:34,780 --> 00:05:36,200
-Rocklike! 
+Rocklike!
 
 76
 00:06:21,637 --> 00:06:22,884
@@ -310,7 +310,7 @@ Rocklike!
 
 77
 00:06:34,940 --> 00:06:39,840
-You're awfully cute, but unfortunately for you, you're made of meat. 
+You're awfully cute, but unfortunately for you, you're made of meat.
 
 78
 00:06:40,540 --> 00:06:42,480
@@ -318,15 +318,15 @@ Just a bit closer...
 
 79
 00:06:50,360 --> 00:06:51,650
-Gotcha! 
+Gotcha!
 
 80
 00:06:55,050 --> 00:06:58,510
- You are one lucky little meat creature. 
+ You are one lucky little meat creature.
 
 81
 00:07:01,040 --> 00:07:04,230
-Lightning is a pure expression of firebending, 
+Lightning is a pure expression of firebending,
 
 82
 00:07:04,260 --> 00:07:05,290
@@ -346,15 +346,15 @@ without aggression.
 
 86
 00:07:17,020 --> 00:07:20,500
-To perform the technique requires peace of mind. 
+To perform the technique requires peace of mind.
 
 87
 00:07:21,390 --> 00:07:24,870
-I see. That's why we're drinking tea: 
+I see. That's why we're drinking tea:
 
 88
 00:07:24,900 --> 00:07:25,830
-To calm the mind. 
+To calm the mind.
 
 89
 00:07:25,870 --> 00:07:27,620
@@ -362,7 +362,7 @@ Oh yeah, good point!
 
 90
 00:07:28,350 --> 00:07:29,750
- I mean, yes. 
+ I mean, yes.
 
 91
 00:07:30,880 --> 00:07:35,980
@@ -374,7 +374,7 @@ positive energy and negative energy.
 
 93
 00:07:39,400 --> 00:07:43,460
- Only a select few firebenders can separate these energies. 
+ Only a select few firebenders can separate these energies.
 
 94
 00:07:43,470 --> 00:07:48,210
@@ -386,31 +386,31 @@ and in a moment the positive and negative energy come crashing back together.
 
 96
 00:07:54,150 --> 00:07:59,200
-You provide release and guidance, creating lightning. 
+You provide release and guidance, creating lightning.
 
 97
 00:08:12,010 --> 00:08:13,770
- I'm ready to try it! 
+ I'm ready to try it!
 
 98
 00:08:15,000 --> 00:08:18,610
- Remember, once you separate the energy, you do not command it. 
+ Remember, once you separate the energy, you do not command it.
 
 99
 00:08:18,640 --> 00:08:20,930
-You are simply its humble guide. 
+You are simply its humble guide.
 
 100
 00:08:21,270 --> 00:08:22,670
-Breathe first. 
+Breathe first.
 
 101
 00:08:38,580 --> 00:08:42,750
-This time we're going to try something a little different. Instead of moving a rock, 
+This time we're going to try something a little different. Instead of moving a rock,
 
 102
 00:08:43,150 --> 00:08:45,140
-you're going to stop a rock. 
+you're going to stop a rock.
 
 103
 00:08:45,180 --> 00:08:46,450
@@ -422,7 +422,7 @@ I'm going to roll that boulder down at you.
 
 105
 00:08:50,420 --> 00:08:55,690
-If you have the attitude of an earthbender, you'll stay in your stance and stop the rock. 
+If you have the attitude of an earthbender, you'll stay in your stance and stop the rock.
 
 106
 00:08:56,850 --> 00:08:58,160
@@ -430,11 +430,11 @@ Like this
 
 107
 00:08:58,770 --> 00:09:03,310
-Sorry Toph, but are you sure this is really the best way to teach Aang earthbending? 
+Sorry Toph, but are you sure this is really the best way to teach Aang earthbending?
 
 108
 00:09:03,320 --> 00:09:07,320
-I'm glad you said something. Actually, there is a better way. 
+I'm glad you said something. Actually, there is a better way.
 
 109
 00:09:07,580 --> 00:09:11,790
@@ -442,19 +442,19 @@ This way he'll really have to sense the vibrations of the boulder to stop it.
 
 110
 00:09:12,210 --> 00:09:13,750
- Thank you Katara. 
+ Thank you Katara.
 
 111
 00:09:13,790 --> 00:09:15,330
- Yeah, thanks Katara! 
+ Yeah, thanks Katara!
 
 112
 00:09:43,580 --> 00:09:46,260
-I guess I just panicked. I don't know what to say. 
+I guess I just panicked. I don't know what to say.
 
 113
 00:09:46,290 --> 00:09:48,300
-There's nothing to say. 
+There's nothing to say.
 
 114
 00:09:48,340 --> 00:09:51,900
@@ -462,11 +462,11 @@ You blew it. You had a perfect stance and perfect form ...
 
 115
 00:09:51,930 --> 00:09:55,460
-but when it came right down to it you didn't have the guts. 
+but when it came right down to it you didn't have the guts.
 
 116
 00:09:55,490 --> 00:09:57,960
-I know. I'm sorry. 
+I know. I'm sorry.
 
 117
 00:09:58,400 --> 00:10:01,990
@@ -474,23 +474,23 @@ Yeah, you are sorry. If you're not tough enough to stop the rock,
 
 118
 00:10:02,140 --> 00:10:07,240
- then you could at least give it the pleasure of smushing you instead of jumping out of the way like a jelly-boned wimp! 
+ then you could at least give it the pleasure of smushing you instead of jumping out of the way like a jelly-boned wimp!
 
 119
 00:10:07,770 --> 00:10:12,370
-Now, do you have what it takes to face that rock like an earthbender!? 
+Now, do you have what it takes to face that rock like an earthbender!?
 
 120
 00:10:13,830 --> 00:10:16,460
-No. I don't think I do. 
+No. I don't think I do.
 
 121
 00:10:16,870 --> 00:10:21,300
-Aang, it's no big deal. You'll take a break and try earthbending again when you're ready. 
+Aang, it's no big deal. You'll take a break and try earthbending again when you're ready.
 
 122
 00:10:21,710 --> 00:10:24,660
-Besides, you still have a lot of waterbending to work on, okay? 
+Besides, you still have a lot of waterbending to work on, okay?
 
 123
 00:10:24,690 --> 00:10:26,920
@@ -502,51 +502,51 @@ Yeah, whatever, go splash around until you feel better.
 
 125
 00:10:36,240 --> 00:10:40,170
-Why can't I do it? Instead of lightning, it keeps exploding in my face! 
+Why can't I do it? Instead of lightning, it keeps exploding in my face!
 
 126
 00:10:40,360 --> 00:10:42,150
-Like everything always does! 
+Like everything always does!
 
 127
 00:10:42,870 --> 00:10:44,780
-I was afraid this might happen. 
+I was afraid this might happen.
 
 128
 00:10:45,480 --> 00:10:50,840
-You will not be able to master lightning until you have dealt with the turmoil inside you. 
+You will not be able to master lightning until you have dealt with the turmoil inside you.
 
 129
 00:10:50,870 --> 00:10:52,190
-What turmoil? 
+What turmoil?
 
 130
 00:10:52,210 --> 00:10:58,080
- Zuko, you must let go of your feelings of shame if you want your anger to go away. 
+ Zuko, you must let go of your feelings of shame if you want your anger to go away.
 
 131
 00:10:58,110 --> 00:11:01,370
- But I don't feel any shame at all! I'm as proud as ever! 
+ But I don't feel any shame at all! I'm as proud as ever!
 
 132
 00:11:01,400 --> 00:11:04,620
-Prince Zuko, pride is not the object of shame, 
+Prince Zuko, pride is not the object of shame,
 
 133
 00:11:04,650 --> 00:11:05,850
-but its source. 
+but its source.
 
 134
 00:11:05,890 --> 00:11:08,960
-True humility is the only antidote to shame. 
+True humility is the only antidote to shame.
 
 135
 00:11:09,290 --> 00:11:12,880
-Well,  my life has been nothing but humbling lately. 
+Well,  my life has been nothing but humbling lately.
 
 136
 00:11:14,470 --> 00:11:16,210
-I have another idea. 
+I have another idea.
 
 137
 00:11:16,830 --> 00:11:20,530
@@ -554,63 +554,63 @@ I will teach you a firebending move that even Azula doesn't know,
 
 138
 00:11:20,560 --> 00:11:23,070
- because I made it up myself! 
+ because I made it up myself!
 
 139
 00:11:27,470 --> 00:11:30,580
-You probably think I deserve this, don't you? 
+You probably think I deserve this, don't you?
 
 140
 00:11:32,730 --> 00:11:35,970
- Look, I'm sorry I hunted you, but that's just the natural order of things! 
+ Look, I'm sorry I hunted you, but that's just the natural order of things!
 
 141
 00:11:36,240 --> 00:11:38,950
-Big things eat smaller things, nothing personal! 
+Big things eat smaller things, nothing personal!
 
 142
 00:11:38,960 --> 00:11:41,670
-But this time it didn't work out that way. 
+But this time it didn't work out that way.
 
 143
 00:11:43,590 --> 00:11:46,260
- I admit it. You're cute. 
+ I admit it. You're cute.
 
 144
 00:11:48,130 --> 00:11:49,560
-Okay, you've convinced me. 
+Okay, you've convinced me.
 
 145
 00:11:49,600 --> 00:11:54,470
-If I get out of this alive, it's a comically correct vegetarian existence for me. 
+If I get out of this alive, it's a comically correct vegetarian existence for me.
 
 146
 00:11:54,500 --> 00:11:59,730
-No meat. Even though meat is so tasty. 
+No meat. Even though meat is so tasty.
 
 147
 00:12:10,650 --> 00:12:13,080
-It looks like my karma is already paying off! 
+It looks like my karma is already paying off!
 
 148
 00:12:14,270 --> 00:12:15,790
-That's okay! I got it! 
+That's okay! I got it!
 
 149
 00:12:20,630 --> 00:12:22,120
-Now come back boomerang. 
+Now come back boomerang.
 
 150
 00:12:30,990 --> 00:12:33,880
- You know this block you're having is only temporary, right? 
+ You know this block you're having is only temporary, right?
 
 151
 00:12:33,910 --> 00:12:35,400
- I don't want to talk about it. 
+ I don't want to talk about it.
 
 152
 00:12:35,770 --> 00:12:38,370
-You do know that's the problem, don't you? 
+You do know that's the problem, don't you?
 
 153
 00:12:38,800 --> 00:12:41,110
@@ -618,27 +618,27 @@ If you face this issue instead of avoiding it...
 
 154
 00:12:41,150 --> 00:12:43,430
-I know I know I know I know, I get it, alright! 
+I know I know I know I know, I get it, alright!
 
 155
 00:12:43,600 --> 00:12:45,740
- I need to face it head-on, like a rock. 
+ I need to face it head-on, like a rock.
 
 156
 00:12:45,780 --> 00:12:49,800
-But I just can't do it! I don't know why I can't, but I can't. 
+But I just can't do it! I don't know why I can't, but I can't.
 
 157
 00:12:49,960 --> 00:12:54,020
- Aang, if fire and water are opposites, then what's the opposite of air? 
+ Aang, if fire and water are opposites, then what's the opposite of air?
 
 158
 00:12:54,420 --> 00:12:55,550
-I guess it's earth. 
+I guess it's earth.
 
 159
 00:12:55,880 --> 00:12:58,390
-That's why it's so hard for you to get this. 
+That's why it's so hard for you to get this.
 
 160
 00:12:58,430 --> 00:13:02,850
@@ -646,7 +646,7 @@ That's why it's so hard for you to get this.
 
 161
 00:13:05,450 --> 00:13:06,540
-Think fast! 
+Think fast!
 
 162
 00:13:09,690 --> 00:13:10,550
@@ -654,47 +654,47 @@ Excellent.
 
 163
 00:13:10,590 --> 00:13:13,710
- You have the reflexes of a waterbending master. 
+ You have the reflexes of a waterbending master.
 
 164
 00:13:13,740 --> 00:13:15,670
-Thanks Katara. 
+Thanks Katara.
 
 165
 00:13:15,680 --> 00:13:17,300
-Sifu Katara. 
+Sifu Katara.
 
 166
 00:13:22,020 --> 00:13:23,430
-Fire is the element of power. 
+Fire is the element of power.
 
 167
 00:13:23,470 --> 00:13:29,790
-The people of the Fire Nation have desire and will, and the energy and drive to achieve what they want. 
+The people of the Fire Nation have desire and will, and the energy and drive to achieve what they want.
 
 168
 00:13:31,050 --> 00:13:33,740
-Earth is the element of substance. 
+Earth is the element of substance.
 
 169
 00:13:33,780 --> 00:13:40,630
-The people of the Earth Kingdom are diverse and strong. They are persistent and enduring. 
+The people of the Earth Kingdom are diverse and strong. They are persistent and enduring.
 
 170
 00:13:41,340 --> 00:13:43,250
-Air is the element of freedom. 
+Air is the element of freedom.
 
 171
 00:13:43,290 --> 00:13:50,830
-The Air Nomads detached themselves from worldly concerns and found peace and freedom. 
+The Air Nomads detached themselves from worldly concerns and found peace and freedom.
 
 172
 00:13:50,860 --> 00:13:54,740
-Also, they apparently had pretty good senses of humor! 
+Also, they apparently had pretty good senses of humor!
 
 173
 00:13:58,410 --> 00:14:01,220
-Water is the element of change. 
+Water is the element of change.
 
 174
 00:14:01,260 --> 00:14:05,990
@@ -702,15 +702,15 @@ The people of the Water Tribe are capable of adapting to many things.
 
 175
 00:14:06,030 --> 00:14:12,650
-They have a deep sense of community and love that holds them together through anything. 
+They have a deep sense of community and love that holds them together through anything.
 
 176
 00:14:13,930 --> 00:14:15,770
-Why are you telling me these things? 
+Why are you telling me these things?
 
 177
 00:14:16,250 --> 00:14:19,760
-It is important to draw wisdom from many different places. 
+It is important to draw wisdom from many different places.
 
 178
 00:14:19,800 --> 00:14:25,000
@@ -722,23 +722,23 @@ Understanding others, the other elements, and the other nations ...
 
 180
 00:14:30,070 --> 00:14:31,800
-will help you become whole. 
+will help you become whole.
 
 181
 00:14:32,430 --> 00:14:35,890
- All this four elements talk is sounding like Avatar stuff. 
+ All this four elements talk is sounding like Avatar stuff.
 
 182
 00:14:35,930 --> 00:14:42,440
- It is the combination of the four elements in one person that makes the Avatar so powerful. 
+ It is the combination of the four elements in one person that makes the Avatar so powerful.
 
 183
 00:14:42,470 --> 00:14:45,350
-But, it can make you more powerful too. 
+But, it can make you more powerful too.
 
 184
 00:14:46,360 --> 00:14:50,820
- You see, the technique I am about to teach you is one I learned by studying the waterbenders. 
+ You see, the technique I am about to teach you is one I learned by studying the waterbenders.
 
 185
 00:14:59,740 --> 00:15:02,510
@@ -750,7 +750,7 @@ I think you would't mind. And besides,
 
 187
 00:15:05,600 --> 00:15:08,580
- even if you did, you're too much of a pushover to do anything about it. 
+ even if you did, you're too much of a pushover to do anything about it.
 
 188
 00:15:09,570 --> 00:15:13,510
@@ -758,11 +758,11 @@ As a matter of fact, I don't mind. I'm happy to share anything I have.
 
 189
 00:15:13,550 --> 00:15:15,920
-You know, I'm really glad you feel that way, 
+You know, I'm really glad you feel that way,
 
 190
 00:15:15,930 --> 00:15:19,800
-because I also have this great new nutcracker. 
+because I also have this great new nutcracker.
 
 191
 00:15:22,690 --> 00:15:26,380
@@ -770,11 +770,11 @@ Actually, I'd prefer if you didn't...That's an antique,
 
 192
 00:15:26,410 --> 00:15:29,710
- hand crafted by the monks...It's a delicate instrument! 
+ hand crafted by the monks...It's a delicate instrument!
 
 193
 00:15:29,740 --> 00:15:32,420
-It's not the only delicate instrument around here. 
+It's not the only delicate instrument around here.
 
 194
 00:15:41,390 --> 00:15:42,210
@@ -782,23 +782,23 @@ Hey Aang, have you seen...
 
 195
 00:15:42,240 --> 00:15:43,210
-Meditating here! 
+Meditating here!
 
 196
 00:15:43,790 --> 00:15:47,280
-It's important. It's almost sundown and Sokka isn't back yet. 
+It's important. It's almost sundown and Sokka isn't back yet.
 
 197
 00:15:47,310 --> 00:15:48,890
-I think we should search for him. 
+I think we should search for him.
 
 198
 00:15:49,090 --> 00:15:51,400
-We'll find him faster if we split up. 
+We'll find him faster if we split up.
 
 199
 00:15:53,990 --> 00:15:58,540
-Okay karma person or thing, whoever's in charge of this stuff, 
+Okay karma person or thing, whoever's in charge of this stuff,
 
 200
 00:15:58,570 --> 00:16:04,912
@@ -806,7 +806,7 @@ if I can just get out of this situation alive, I will give up meat and sarcasm. 
 
 201
 00:16:05,000 --> 00:16:07,130
-OW! That's all I got! 
+OW! That's all I got!
 
 202
 00:16:07,630 --> 00:16:09,430
@@ -814,63 +814,63 @@ It's pretty much my whole identity!
 
 203
 00:16:09,430 --> 00:16:12,000
- Sokka, the meat and sarcasm guy! 
+ Sokka, the meat and sarcasm guy!
 
 204
 00:16:12,040 --> 00:16:15,900
-But I'm willing to be Sokka the veggies and straight talk fellow! 
+But I'm willing to be Sokka the veggies and straight talk fellow!
 
 205
 00:16:15,900 --> 00:16:16,830
-Deal? 
+Deal?
 
 206
 00:16:17,900 --> 00:16:21,170
-Aang! Thank goodness! Have you got any meat? 
+Aang! Thank goodness! Have you got any meat?
 
 207
 00:16:21,450 --> 00:16:23,060
-Sokka! Are you okay? 
+Sokka! Are you okay?
 
 208
 00:16:24,360 --> 00:16:29,430
- Stop, stop! You're going to pull my fingers off and I don't think the rest of me is coming! 
+ Stop, stop! You're going to pull my fingers off and I don't think the rest of me is coming!
 
 209
 00:16:30,460 --> 00:16:33,390
-Hmm... I bet I can airbend you out of here. 
+Hmm... I bet I can airbend you out of here.
 
 210
 00:16:39,690 --> 00:16:44,300
-Seriously Aang, I know you're new at it, but I could use a little earthbending here. How about it? 
+Seriously Aang, I know you're new at it, but I could use a little earthbending here. How about it?
 
 211
 00:16:45,750 --> 00:16:46,520
-I can't. 
+I can't.
 
 212
 00:16:46,560 --> 00:16:47,950
-I can't do it. 
+I can't do it.
 
 213
 00:16:54,700 --> 00:16:56,398
-If you can't earthbend me out of here, go get Toph. 
+If you can't earthbend me out of here, go get Toph.
 
 214
 00:16:56,890 --> 00:16:58,060
-I can't do that either. 
+I can't do that either.
 
 215
 00:16:58,440 --> 00:17:00,595
-You can't? Why not? 
+You can't? Why not?
 
 216
 00:17:00,601 --> 00:17:04,425
-It would just be really...uncomfortable. 
+It would just be really...uncomfortable.
 
 217
 00:17:04,425 --> 00:17:07,743
-Uncomfortable?Well, I wouldn't want to make you feel uncomfortable. 
+Uncomfortable?Well, I wouldn't want to make you feel uncomfortable.
 
 218
 00:17:08,240 --> 00:17:08,970
@@ -878,27 +878,27 @@ Thanks Sokka.
 
 219
 00:17:09,010 --> 00:17:12,080
-This whole earthbending thing really has me confused. 
+This whole earthbending thing really has me confused.
 
 220
 00:17:12,600 --> 00:17:16,390
-There's so much pressure. Everyone expects me to get it right away. 
+There's so much pressure. Everyone expects me to get it right away.
 
 221
 00:17:17,000 --> 00:17:19,160
-It puts me in a really awkward position. 
+It puts me in a really awkward position.
 
 222
 00:17:19,200 --> 00:17:21,690
- Awkward position? I think I know the feeling. 
+ Awkward position? I think I know the feeling.
 
 223
 00:17:21,690 --> 00:17:26,420
-If I try, I fail. But if I don't try, I'm never going to get it. 
+If I try, I fail. But if I don't try, I'm never going to get it.
 
 224
 00:17:26,710 --> 00:17:29,783
-I feel like I'm caught between a rock and a hard place. 
+I feel like I'm caught between a rock and a hard place.
 
 225
 00:17:29,900 --> 00:17:31,350
@@ -906,51 +906,51 @@ How about that.
 
 226
 00:17:32,180 --> 00:17:35,880
-Aang, this is my friend Foo Foo Cuddlypoops. Foo Foo Cuddlypoops, Aang. 
+Aang, this is my friend Foo Foo Cuddlypoops. Foo Foo Cuddlypoops, Aang.
 
 227
 00:17:35,890 --> 00:17:39,940
-Aww, what a cute name for a little baby sabertooth mooselion cub. 
+Aww, what a cute name for a little baby sabertooth mooselion cub.
 
 228
 00:17:40,230 --> 00:17:43,080
-Really? He looks nothing like a sabertooth mooselion. 
+Really? He looks nothing like a sabertooth mooselion.
 
 229
 00:17:43,120 --> 00:17:46,050
- It's hard to tell before their giant teeth and horns grow in. 
+ It's hard to tell before their giant teeth and horns grow in.
 
 230
 00:17:46,610 --> 00:17:49,700
-Whatcha doin' out here, little guy? Did you lose your mama? 
+Whatcha doin' out here, little guy? Did you lose your mama?
 
 231
 00:17:58,230 --> 00:18:00,760
-Waterbenders deal with the flow of energy. 
+Waterbenders deal with the flow of energy.
 
 232
 00:18:01,180 --> 00:18:04,570
-A waterbender lets their defense become their offense, 
+A waterbender lets their defense become their offense,
 
 233
 00:18:04,600 --> 00:18:07,620
-turning their opponents' energy against them. 
+turning their opponents' energy against them.
 
 234
 00:18:07,690 --> 00:18:10,290
-I learned a way to do this with lightning. 
+I learned a way to do this with lightning.
 
 235
 00:18:10,450 --> 00:18:12,550
-You can teach me to redirect lightning? 
+You can teach me to redirect lightning?
 
 236
 00:18:13,380 --> 00:18:18,240
-If you let the energy in your own body flow, the lightning will follow it. 
+If you let the energy in your own body flow, the lightning will follow it.
 
 237
 00:18:18,540 --> 00:18:25,980
-You must create a pathway from your fingertips up your arm to your shoulder and down into your stomach. 
+You must create a pathway from your fingertips up your arm to your shoulder and down into your stomach.
 
 238
 00:18:26,010 --> 00:18:29,180
@@ -958,35 +958,35 @@ The stomach is the source of energy in your body.
 
 239
 00:18:29,450 --> 00:18:32,010
- It is called the sea of chi. 
+ It is called the sea of chi.
 
 240
 00:18:32,680 --> 00:18:36,710
-Only in my case, it is more like a vast ocean. 
+Only in my case, it is more like a vast ocean.
 
 241
 00:18:39,480 --> 00:18:44,530
-From the stomach, you direct it up again and out the other arm. 
+From the stomach, you direct it up again and out the other arm.
 
 242
 00:18:44,850 --> 00:18:50,920
-The stomach detour is critical. You must not let the lightning pass through your heart 
+The stomach detour is critical. You must not let the lightning pass through your heart
 
 243
 00:18:50,950 --> 00:18:52,860
-... or the damage could be deadly. 
+... or the damage could be deadly.
 
 244
 00:18:53,920 --> 00:18:59,820
-You may wish to try a physical motion to get a feel for the pathway's flow. 
+You may wish to try a physical motion to get a feel for the pathway's flow.
 
 245
 00:19:00,120 --> 00:19:01,917
-Like this. 
+Like this.
 
 246
 00:19:05,120 --> 00:19:14,700
-Now, are you focusing your energy? Can you feel your own chi flowing in, down, up, and out? 
+Now, are you focusing your energy? Can you feel your own chi flowing in, down, up, and out?
 
 247
 00:19:14,730 --> 00:19:15,920
@@ -994,15 +994,15 @@ I think so.
 
 248
 00:19:17,750 --> 00:19:21,800
-Come on. You've got to feel the flow. 
+Come on. You've got to feel the flow.
 
 249
 00:19:27,720 --> 00:19:29,690
-Excellent! You've got it! 
+Excellent! You've got it!
 
 250
 00:19:29,730 --> 00:19:32,370
-Great! I'm ready to try it with real lightning! 
+Great! I'm ready to try it with real lightning!
 
 251
 00:19:32,680 --> 00:19:34,360
@@ -1010,23 +1010,23 @@ What, are you crazy?
 
 252
 00:19:34,790 --> 00:19:36,120
- Lightning is very dangerous. 
+ Lightning is very dangerous.
 
 253
 00:19:36,160 --> 00:19:40,310
- I thought that was the point: You teaching me how to protect myself from it. 
+ I thought that was the point: You teaching me how to protect myself from it.
 
 254
 00:19:40,640 --> 00:19:43,980
-Yah, But I'm not going to shoot lightning at you! 
+Yah, But I'm not going to shoot lightning at you!
 
 255
 00:19:44,020 --> 00:19:48,960
-If you are lucky, you will never have to use this technique at all. 
+If you are lucky, you will never have to use this technique at all.
 
 256
 00:19:52,430 --> 00:19:55,290
- Well, if you won't help me, I'll find my own lightning. 
+ Well, if you won't help me, I'll find my own lightning.
 
 257
 00:19:59,420 --> 00:20:03,380
@@ -1034,19 +1034,19 @@ If you are lucky, you will never have to use this technique at all.
 
 258
 00:20:08,560 --> 00:20:13,220
-See? We have no problem with you! We're friendly. 
+See? We have no problem with you! We're friendly.
 
 259
 00:20:14,200 --> 00:20:16,580
-Aang, this is bad! You gotta get me outta here! 
+Aang, this is bad! You gotta get me outta here!
 
 260
 00:20:28,670 --> 00:20:30,470
-This is really bad! 
+This is really bad!
 
 261
 00:20:30,510 --> 00:20:34,150
-Please, Aang! You have to earthbend me out, there's no other way! 
+Please, Aang! You have to earthbend me out, there's no other way!
 
 262
 00:20:43,050 --> 00:20:44,140
@@ -1054,27 +1054,27 @@ oh no
 
 263
 00:20:45,430 --> 00:20:47,690
-Whoo-hoo! Look at me! 
+Whoo-hoo! Look at me!
 
 264
 00:20:57,160 --> 00:20:58,300
-Please don't leave me again. 
+Please don't leave me again.
 
 265
 00:20:58,330 --> 00:20:59,300
-I won't. 
+I won't.
 
 266
 00:21:16,980 --> 00:21:18,440
-What are you doing here? 
+What are you doing here?
 
 267
 00:21:18,580 --> 00:21:20,020
-Just enjoying the show. 
+Just enjoying the show.
 
 268
 00:21:20,050 --> 00:21:20,980
-What?  
+What?
 
 269
 00:21:21,020 --> 00:21:22,020
@@ -1082,11 +1082,11 @@ You were there the whole time?
 
 270
 00:21:22,870 --> 00:21:23,270
-Pretty much. 
+Pretty much.
 
 271
 00:21:23,710 --> 00:21:25,440
-Why didn't you do something? 
+Why didn't you do something?
 
 272
 00:21:25,760 --> 00:21:27,060
@@ -1094,43 +1094,43 @@ Sokka was in trouble!
 
 273
 00:21:27,100 --> 00:21:28,200
- I was in trouble! 
+ I was in trouble!
 
 274
 00:21:28,240 --> 00:21:30,490
-You could've gotten him out and helped us get away! 
+You could've gotten him out and helped us get away!
 
 275
 00:21:30,970 --> 00:21:32,250
-I guess it just didn't occur to me. 
+I guess it just didn't occur to me.
 
 276
 00:21:37,670 --> 00:21:40,590
-Enough! I want my staff back! 
+Enough! I want my staff back!
 
 277
 00:21:42,000 --> 00:21:42,790
- Do it now. 
+ Do it now.
 
 278
 00:21:42,820 --> 00:21:43,750
-What? 
+What?
 
 279
 00:21:43,790 --> 00:21:45,500
-Earthbend, twinkletoes. 
+Earthbend, twinkletoes.
 
 280
 00:21:46,110 --> 00:21:48,730
-You just stood your ground against a crazy beast, 
+You just stood your ground against a crazy beast,
 
 281
 00:21:48,830 --> 00:21:51,750
-and even more impressive, you stood your ground against me. 
+and even more impressive, you stood your ground against me.
 
 282
 00:21:51,770 --> 00:21:53,713
-You've got the stuff. 
+You've got the stuff.
 
 283
 00:21:53,713 --> 00:21:54,300
@@ -1142,43 +1142,43 @@ Do it!
 
 285
 00:21:58,920 --> 00:21:59,900
-You did it! 
+You did it!
 
 286
 00:22:00,230 --> 00:22:01,960
-You're an earthbender. 
+You're an earthbender.
 
 287
 00:22:02,060 --> 00:22:03,340
-I can't believe it! 
+I can't believe it!
 
 288
 00:22:03,380 --> 00:22:07,050
-Aww, this is really a wonderful, touching moment. 
+Aww, this is really a wonderful, touching moment.
 
 289
 00:22:07,300 --> 00:22:11,520
-So, could you get me out of here so I can give you both a big, snuggly hug? 
+So, could you get me out of here so I can give you both a big, snuggly hug?
 
 290
 00:22:11,550 --> 00:22:13,090
-No problem, Sokka! 
+No problem, Sokka!
 
 291
 00:22:13,540 --> 00:22:17,900
-Actually, you should probably let me do that. You're still a little new to this. 
+Actually, you should probably let me do that. You're still a little new to this.
 
 292
 00:22:17,930 --> 00:22:19,390
-You might accidentally crush him. 
+You might accidentally crush him.
 
 293
 00:22:19,680 --> 00:22:21,320
-Yeah, no crushing please. 
+Yeah, no crushing please.
 
 294
 00:22:28,520 --> 00:22:30,050
-You found him! 
+You found him!
 
 295
 00:22:31,420 --> 00:22:35,220
@@ -1194,7 +1194,7 @@ The whole time that I was in that hole, not knowing if I would live or die,
 
 298
 00:22:39,640 --> 00:22:41,210
-Hey Katara, look what I can do! 
+Hey Katara, look what I can do!
 
 299
 00:22:44,490 --> 00:22:45,800
@@ -1206,11 +1206,11 @@ You did it!
 
 301
 00:22:47,140 --> 00:22:49,790
-You tried the positive reinforcement, didn't you? 
+You tried the positive reinforcement, didn't you?
 
 302
 00:22:50,290 --> 00:22:52,030
-Yep. It worked wonders. 
+Yep. It worked wonders.
 
 303
 00:22:54,080 --> 00:22:59,280
@@ -1218,11 +1218,11 @@ Yep. It worked wonders.
 
 304
 00:22:59,310 --> 00:23:01,780
- Physically and mentally unmovable! 
+ Physically and mentally unmovable!
 
 305
 00:23:11,590 --> 00:23:13,810
-You've always thrown everything you could at me! 
+You've always thrown everything you could at me!
 
 306
 00:23:13,870 --> 00:23:18,010
@@ -1230,18 +1230,14 @@ Well I can take it! And now I can give it back!
 
 307
 00:23:22,220 --> 00:23:24,190
-Come on! Strike me! 
+Come on! Strike me!
 
 308
 00:23:24,230 --> 00:23:26,080
-You've never held back before! 
+You've never held back before!
 
 309
 00:23:35,580 --> 00:23:41,157
 -=To be Continued=-
 Translation from www.avatarspirit.net
 Sub: Tucity
-
-9999
-00:00:0,500 --> 00:00:2,00
-<font color="#ffff00" size=14>www.tvsubtitles.net</font>

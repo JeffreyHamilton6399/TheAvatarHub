@@ -1288,9 +1288,3 @@ sokka: must you ruin everything?
 00:23:32,879 --> 00:23:34,513
 katara: i can't believe
 i missed you.
-
-
-
-0
-00:00:0,500 --> 00:00:2,00
-<font color="#ffff00" size=14>www.tvsubtitles.net</font>

@@ -88,7 +88,7 @@ I need to know what I put him through.
 
 20
 00:02:45,259 --> 00:02:48,559
-My guess is…
+My guess isï¿½
 They were taken to the Boiling Rock.
 
 21
@@ -643,7 +643,7 @@ I knew you'd come.
 135
 00:14:24,340 --> 00:14:26,940
 Female Guard:
-‘Scuse me, I need to get into that cell.
+ï¿½Scuse me, I need to get into that cell.
 
 136
 00:14:27,058 --> 00:14:28,558
@@ -652,7 +652,7 @@ you can't go in there.
 
 137
 00:14:29,911 --> 00:14:32,911
-The lights are out… the prisoner
+The lights are outï¿½ the prisoner
 could sneak up on you.
 
 138
@@ -721,7 +721,7 @@ I intend to collect.
 151
 00:16:13,777 --> 00:16:17,977
 - Oh, good. You guys have met.
-- A…actually, we met a long time ago.
+- Aï¿½actually, we met a long time ago.
 
 152
 00:16:18,037 --> 00:16:23,037
@@ -813,7 +813,7 @@ how are you going to get the cooler out?
 170
 00:17:29,970 --> 00:17:32,870
 What?
-We didn't. We… We didn't say that.
+We didn't. Weï¿½ We didn't say that.
 
 171
 00:17:32,933 --> 00:17:34,333
@@ -928,7 +928,7 @@ there might be a pirate.
 194
 00:19:33,975 --> 00:19:34,975
 Female Guard:
-No foolin’.
+No foolinï¿½.
 
 195
 00:19:35,045 --> 00:19:38,045
@@ -1140,7 +1140,3 @@ Hey you, get off the gondola.
 239
 00:23:35,482 --> 00:23:36,482
 Dad.
-
-9999
-00:00:0,500 --> 00:00:2,00
-<font color="#ffff00" size=14>www.tvsubtitles.net</font>

@@ -1,4 +1,4 @@
-﻿1
+1
 00:00:00,649 --> 00:00:03,021
 <i>Water.</i>
 
@@ -803,7 +803,3 @@ Subtitle by rendy1287 [at gmail dot com]
 00:23:12,502 --> 00:23:14,811
 Thanks to Acastus for The Transcript.
 http://www.avatarspiritmedia.net/
-
-9999
-00:00:0,500 --> 00:00:2,00
-<font color="#ffff00" size=14>www.tvsubtitles.net</font>

@@ -1252,9 +1252,3 @@ My royal parts are showing.
 00:22:36,129 --> 00:22:44,321
 Made by elpiedro from
 http:/santahelp. wordpress. com
-
-
-
-0
-00:00:0,500 --> 00:00:2,00
-<font color="#ffff00" size=14>www.tvsubtitles.net</font>

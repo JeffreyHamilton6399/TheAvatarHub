@@ -1,4 +1,4 @@
-﻿1
+1
 00:00:01,377 --> 00:00:03,169
 Water
 
@@ -1243,7 +1243,3 @@ Because I will make sure your destiny ends, right then and there. Permanently.
 00:23:37,827 --> 00:23:41,345
 Transcript by kenb215
 Subtitle by Osimon [at gmail dot com]
-
-9999
-00:00:0,500 --> 00:00:2,00
-<font color="#ffff00" size=14>www.tvsubtitles.net</font>

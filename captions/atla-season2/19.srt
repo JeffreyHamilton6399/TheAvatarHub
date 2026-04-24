@@ -182,7 +182,7 @@ But there is good news.
 41
 00:03:54,987 --> 00:04:01,041
 As we speak, the Council of Five is meeting
-to plan an invasion of The Fire Nation this summer. 
+to plan an invasion of The Fire Nation this summer.
 
 42
 00:04:01,041 --> 00:04:03,385
@@ -1631,8 +1631,1186 @@ He doesn't need to Zuko. Today, you restored your own honor.
 00:46:11,538 --> 00:46:16,190
 The Earth Kingdom... has fallen.
 
+381
+00:46:17,658 --> 00:46:18,658
+Water
 
+382
+00:46:20,131 --> 00:46:21,131
+Earth
 
-0
-00:00:0,500 --> 00:00:2,00
-<font color="#ffff00" size=14>www.tvsubtitles.net</font>
+383
+00:46:21,812 --> 00:46:23,425
+Fire
+
+384
+00:46:24,417 --> 00:46:25,417
+Air
+
+385
+00:46:26,715 --> 00:46:29,603
+Long ago,the four nations lived together in harmony
+
+386
+00:46:29,638 --> 00:46:33,931
+then everything changed when the firenation attacked
+
+387
+00:46:35,227 --> 00:46:38,877
+Only the avatar mastered all four elements could stop them
+
+388
+00:46:39,194 --> 00:46:41,957
+but when the world needed him most he vanished
+
+389
+00:46:42,964 --> 00:46:46,013
+100 years passed, my brother and I discovered the new avatar
+
+390
+00:46:46,303 --> 00:46:48,026
+airbinder named Aang
+
+391
+00:46:48,347 --> 00:46:50,526
+And although his airbinding skill is great,
+
+392
+00:46:50,819 --> 00:46:53,312
+he has a lot to learn before he is ready to save anyone.
+
+393
+00:46:54,256 --> 00:46:57,029
+but I believe...
+... Aang can save the world
+
+394
+00:46:58,315 --> 00:47:01,869
+-=AVATAR=-
+The last airbender
+Translation from www. avatarspirit. net
+Sub: Tucity
+
+395
+00:47:03,134 --> 00:47:05,596
+Previously on
+Avatar...
+
+396
+00:47:06,061 --> 00:47:08,043
+There's a man living at the Eastern Air Temple.
+
+397
+00:47:08,113 --> 00:47:11,033
+He says he can teach me to control the Avatar State.
+
+398
+00:47:11,033 --> 00:47:12,340
+What's happening?
+
+399
+00:47:12,340 --> 00:47:15,819
+You're going through a metamorphosis, my nephew.
+
+400
+00:47:15,819 --> 00:47:18,819
+the Dai Li remains loyal to you, Long Feng, sir.
+
+401
+00:47:20,515 --> 00:47:21,609
+Hello?
+
+402
+00:47:25,103 --> 00:47:28,731
+It is with the highest honor that I welcome the Kyoshi warriors.
+
+403
+00:47:28,914 --> 00:47:32,327
+We are the Earth King's humble servants.
+
+404
+00:47:32,990 --> 00:47:37,690
+Book two: Earth
+Chapter nineteen: The Guru
+
+405
+00:47:45,452 --> 00:47:46,854
+What's that smell?
+
+406
+00:47:47,579 --> 00:47:48,647
+It's jook.
+
+407
+00:47:48,648 --> 00:47:50,515
+I'm sure you wouldn't like it.
+
+408
+00:47:54,172 --> 00:47:56,628
+Actually, it smells delicious.
+
+409
+00:47:56,629 --> 00:47:58,232
+I'd love a bowl, Uncle.
+
+410
+00:47:59,320 --> 00:48:04,038
+Now that your fever is gone, you seem different somehow.
+
+411
+00:48:04,222 --> 00:48:05,693
+It's a new day.
+
+412
+00:48:05,825 --> 00:48:07,780
+We've got a new apartment,
+
+413
+00:48:07,784 --> 00:48:10,688
+new furniture, and today's the grand opening of your new tea shop.
+
+414
+00:48:10,925 --> 00:48:12,450
+Things are looking up,  Uncle.
+
+415
+00:48:18,449 --> 00:48:22,449
+You haven't seen your Dad in over two years. You must be so excited.
+
+416
+00:48:23,398 --> 00:48:27,349
+I know I should be, but I just feel sick to my stomach.
+
+417
+00:48:27,350 --> 00:48:30,193
+Don't be nervous, he's going to be so happy to see you.
+
+418
+00:48:30,513 --> 00:48:31,617
+So what about you?
+
+419
+00:48:31,757 --> 00:48:33,871
+Are you nervous to meet this Guru?
+
+420
+00:48:33,922 --> 00:48:36,771
+Not at all. I'm ready to master the Avatar State.
+
+421
+00:48:36,807 --> 00:48:38,432
+I'll do whatever it takes.
+
+422
+00:48:40,905 --> 00:48:42,429
+See you in a week. Yip Yip!
+
+423
+00:49:00,042 --> 00:49:01,397
+Sokka, good to see you.
+
+424
+00:49:20,790 --> 00:49:22,790
+Sokka!?
+
+425
+00:49:22,873 --> 00:49:24,328
+Hi Dad!
+
+426
+00:49:31,463 --> 00:49:35,039
+Look Bosco, the Kyoshi Warriors are here to protect us.
+
+427
+00:49:35,925 --> 00:49:37,723
+Aren't you excited?
+
+428
+00:49:39,710 --> 00:49:41,574
+It's been a difficult week for me.
+
+429
+00:49:41,575 --> 00:49:43,460
+My most trusted advisor, Long Feng,
+
+430
+00:49:43,461 --> 00:49:47,415
+and his Dai Li agents tried to take control of Ba Sing Se from me.
+
+431
+00:49:47,417 --> 00:49:50,859
+It's terrible when you can't trust the people who are closest to you.
+
+432
+00:49:50,860 --> 00:49:51,860
+But there is good news.
+
+433
+00:49:52,544 --> 00:49:54,118
+As we speak,
+
+434
+00:49:54,120 --> 00:49:58,372
+the Council of Five is meeting to plan an invasion of The Fire Nation this summer.
+
+435
+00:49:58,373 --> 00:50:00,826
+On the day of a solar eclipse.
+
+436
+00:50:01,201 --> 00:50:02,538
+Really?
+
+437
+00:50:02,539 --> 00:50:06,222
+Now that sounds like a fascinating and brilliant plan.
+
+438
+00:50:11,348 --> 00:50:15,078
+General Fong's base will serve as the launching point of the attack.
+
+439
+00:50:15,090 --> 00:50:20,190
+In exactly two months, the Army and Navy will invade the Fire Nation...
+
+440
+00:50:20,192 --> 00:50:22,772
+on The Day of Black Sun.
+
+441
+00:50:22,980 --> 00:50:27,878
+Or we could send in Momo to do some damage. Cause the..
+
+442
+00:50:28,680 --> 00:50:29,976
+Sorry.
+
+443
+00:50:32,998 --> 00:50:37,262
+All we need is the Earth King's seal in order to execute the plan.
+
+444
+00:50:39,469 --> 00:50:42,809
+I'll get these scrolls to him right away. Thank you, General How.
+
+445
+00:51:01,062 --> 00:51:02,132
+Hello?
+
+446
+00:51:04,054 --> 00:51:05,969
+You're Guru Pathik, right?
+
+447
+00:51:05,970 --> 00:51:08,739
+The person who attached the note to Appa's horn?
+
+448
+00:51:08,804 --> 00:51:15,873
+Indeed. I was a spiritual brother of your people, and a personal friend of Monk Gyatso.
+
+449
+00:51:16,490 --> 00:51:20,275
+In your note, you said you could teach me to gain control of the Avatar State.
+
+450
+00:51:20,480 --> 00:51:21,276
+How?
+
+451
+00:51:21,277 --> 00:51:27,151
+You must gain balance within yourself before you can bring balance to the world.
+
+452
+00:51:27,364 --> 00:51:30,790
+And the first step to gaining balance begins with this.
+
+453
+00:51:30,791 --> 00:51:32,542
+Drink up!
+
+454
+00:51:36,306 --> 00:51:38,967
+It tastes like onion and banana juice!
+
+455
+00:51:38,968 --> 00:51:40,912
+That's because it is.
+
+456
+00:51:47,066 --> 00:51:48,690
+I believe we need to go right!
+
+457
+00:51:48,692 --> 00:51:50,457
+What are you talking about?
+
+458
+00:51:50,458 --> 00:51:52,668
+The Bei Fong Estate's this way.
+
+459
+00:51:52,669 --> 00:51:55,238
+I'm quite certain you're mistaken.
+
+460
+00:51:55,239 --> 00:51:58,835
+Can you two old ladies quit your bickering for a second?
+
+461
+00:51:58,836 --> 00:52:00,826
+I gotta go to the bathroom!
+
+462
+00:52:03,545 --> 00:52:05,136
+Okay, but make it quick.
+
+463
+00:52:06,126 --> 00:52:07,568
+What's wrong with you!
+
+464
+00:52:08,630 --> 00:52:14,434
+Oh very sneaky Toph! Nice try, but you can't trick me.
+
+465
+00:52:14,435 --> 00:52:17,667
+Let me out of here, so I can kick both your butts!
+
+466
+00:52:17,668 --> 00:52:22,368
+Quit your banging. You might think you're the greatest earthbender in the world,
+
+467
+00:52:22,369 --> 00:52:24,756
+but even you can't bend metal.
+
+468
+00:52:35,234 --> 00:52:38,391
+We have been presented with an extraordinary opportunity, girls.
+
+469
+00:52:38,392 --> 00:52:41,839
+Mai finally gets to wear makeup that's not totally depressing?
+
+470
+00:52:43,555 --> 00:52:47,893
+I'm talking about conquering the whole Earth Kingdom.
+
+471
+00:52:47,894 --> 00:52:53,785
+For a hundred years the fire nation has hammered away at Ba Sing Se from the outside.
+
+472
+00:52:53,786 --> 00:52:58,769
+But now we are on the inside, and we can take it by ourselves.
+
+473
+00:52:58,770 --> 00:53:03,295
+Gosh, you're so confident. I really admire that about you.
+
+474
+00:53:03,296 --> 00:53:08,548
+From the inside we're in the perfect position to organize a coup and overthrow the Earth King.
+
+475
+00:53:08,549 --> 00:53:10,518
+The key is the Dai Li.
+
+476
+00:53:10,868 --> 00:53:14,727
+Whoever controls the Dai Li, controls Ba Sing Se.
+
+477
+00:53:19,442 --> 00:53:24,848
+In order to master the Avatar State, you must open all of the chakras.
+
+478
+00:53:25,579 --> 00:53:29,246
+Aang, tell me everything you know about chakras.
+
+479
+00:53:29,592 --> 00:53:31,056
+What are chakras?
+
+480
+00:53:31,863 --> 00:53:35,931
+Oh, I see. I guess we'll start with the basics.
+
+481
+00:53:36,616 --> 00:53:41,310
+The water flows through this creek much like the energy flows through your body.
+
+482
+00:53:42,001 --> 00:53:46,354
+As you see there are several pools where the water swirls around before flowing on.
+
+483
+00:53:47,057 --> 00:53:50,381
+These pools are like our charkas.
+
+484
+00:53:50,382 --> 00:53:53,805
+So chakras are pools of spiraling energy in our bodies?
+
+485
+00:53:53,906 --> 00:53:54,987
+Exactly!
+
+486
+00:53:55,539 --> 00:54:00,086
+If nothing else were around, this creek would flow pure and clear.
+
+487
+00:54:00,087 --> 00:54:04,535
+However, life is messy, and things tend to fall in the creek,
+
+488
+00:54:04,540 --> 00:54:06,542
+and then what happens?
+
+489
+00:54:06,805 --> 00:54:08,302
+The creek can't flow?
+
+490
+00:54:08,303 --> 00:54:09,303
+Yes.
+
+491
+00:54:09,304 --> 00:54:12,786
+But if we open the paths between the pools.
+
+492
+00:54:12,787 --> 00:54:14,677
+The energy flows!
+
+493
+00:54:19,918 --> 00:54:22,811
+There are seven chakras that go up the body.
+
+494
+00:54:22,812 --> 00:54:25,390
+Each pool of energy has a purpose,
+
+495
+00:54:25,393 --> 00:54:29,330
+and can be blocked by a specific kind of emotional muck.
+
+496
+00:54:29,330 --> 00:54:30,644
+Be warned...
+
+497
+00:54:30,921 --> 00:54:33,894
+opening the chakras is an intense experience,
+
+498
+00:54:33,895 --> 00:54:39,667
+and once you begin the process, you cannot stop until all seven are open.
+
+499
+00:54:40,126 --> 00:54:41,571
+Are you ready?
+
+500
+00:54:43,581 --> 00:54:45,460
+I'll do whatever it takes.
+
+501
+00:54:45,461 --> 00:54:48,139
+First we will open the Earth chakra,
+
+502
+00:54:48,140 --> 00:54:52,392
+located at the base of the spine. It deals with survival ...
+
+503
+00:54:52,393 --> 00:54:54,598
+and is blocked by fear.
+
+504
+00:54:54,599 --> 00:54:57,566
+What are you most afraid of?
+
+505
+00:54:57,567 --> 00:55:01,598
+Let your fears become clear to you.
+
+506
+00:55:13,967 --> 00:55:14,931
+Aang,
+
+507
+00:55:15,025 --> 00:55:17,210
+your vision is not real.
+
+508
+00:55:17,497 --> 00:55:22,648
+You are concerned for your survival, but you must surrender those fears.
+
+509
+00:55:22,649 --> 00:55:26,754
+Let your fears flow down the creek.
+
+510
+00:55:29,646 --> 00:55:33,252
+You have opened your Earth chakra.
+
+511
+00:55:41,991 --> 00:55:43,310
+Next is the...
+
+512
+00:55:43,311 --> 00:55:44,311
+Water chakra?
+
+513
+00:55:44,312 --> 00:55:48,791
+Brilliant! Maybe one day you will be a Guru too.
+
+514
+00:55:49,623 --> 00:55:54,476
+This chakra deals with pleasure, and is blocked by guilt.
+
+515
+00:55:54,477 --> 00:55:59,387
+Now, look at all the guilt which burdens you so.
+
+516
+00:55:59,388 --> 00:56:02,459
+What do you blame yourself for?
+
+517
+00:56:06,306 --> 00:56:08,239
+I ran away.
+
+518
+00:56:18,802 --> 00:56:20,705
+I hurt all of those people.
+
+519
+00:56:20,706 --> 00:56:24,578
+Accept the reality that these things happened,
+
+520
+00:56:24,579 --> 00:56:28,909
+but do not let them cloud and poison your energy.
+
+521
+00:56:28,910 --> 00:56:36,025
+If you are to be a positive influence on the world, you need to forgive yourself.
+
+522
+00:56:41,151 --> 00:56:44,775
+This bay leads directly to the outskirts of Ba Sing Se.
+
+523
+00:56:45,250 --> 00:56:50,210
+We've been using these tangle mines to stop the fire nation ships from getting through.
+
+524
+00:56:50,422 --> 00:56:53,189
+You're father invented tangle mines himself.
+
+525
+00:56:54,007 --> 00:56:58,955
+Destructive, buoyant, and ...
+
+526
+00:56:59,258 --> 00:57:01,153
+... terrible smelling.
+
+527
+00:57:01,154 --> 00:57:05,634
+Very perceptive. The mines are filled with skunk-fish and seaweed.
+
+528
+00:57:05,635 --> 00:57:09,816
+When a ship detonates the mine, the seaweed tangles up the propeller,
+
+529
+00:57:09,817 --> 00:57:13,797
+and the foul smell forces people to abandon the ship.
+
+530
+00:57:13,979 --> 00:57:16,911
+I call it the stink' n' sink.
+
+531
+00:57:18,421 --> 00:57:19,760
+Good one Dad!
+
+532
+00:57:20,041 --> 00:57:22,830
+You are definitely your father's son.
+
+533
+00:57:23,264 --> 00:57:26,791
+Hakoda, our scouts have spotted four fire nation ships.
+
+534
+00:57:26,792 --> 00:57:28,939
+Bato, get these mines loaded up.
+
+535
+00:57:28,940 --> 00:57:32,010
+The rest of you men, prepare for battle!
+
+536
+00:57:33,982 --> 00:57:35,639
+What should I do, Dad?
+
+537
+00:57:35,813 --> 00:57:40,018
+Aren't you listening? I said the rest of you men get ready for battle.
+
+538
+00:57:48,513 --> 00:57:52,415
+Who thought when we came to this city as refugees,
+
+539
+00:57:52,420 --> 00:57:55,669
+that I'd end up owning my own tea shop.
+
+540
+00:57:56,227 --> 00:58:00,804
+Follow your passion Zuko, and life will reward you.
+
+541
+00:58:00,805 --> 00:58:02,581
+Congratulations Uncle.
+
+542
+00:58:02,582 --> 00:58:04,674
+I'm very thankful.
+
+543
+00:58:04,675 --> 00:58:09,490
+You deserve it. The Jasmine Dragon will be the best tea shop in the city.
+
+544
+00:58:09,491 --> 00:58:14,933
+No, I'm thankful because you decided to share this special day with me.
+
+545
+00:58:14,934 --> 00:58:17,772
+It means more than you know.
+
+546
+00:58:19,996 --> 00:58:22,337
+Now let's make these people some tea.
+
+547
+00:58:24,015 --> 00:58:27,036
+Yes! Let's make some tea!
+
+548
+00:58:30,980 --> 00:58:35,190
+Third is the Fire chakra, located in the stomach.
+
+549
+00:58:35,191 --> 00:58:38,837
+My Fire chakra would like to eat something other than onion-banana juice.
+
+550
+00:58:40,572 --> 00:58:42,440
+Good one. Moving on.
+
+551
+00:58:43,274 --> 00:58:48,146
+This chakra deals with will power and is blocked by shame.
+
+552
+00:58:48,147 --> 00:58:50,187
+What are you ashamed of?
+
+553
+00:58:51,156 --> 00:58:54,584
+What are your biggest disappointments in yourself?
+
+554
+00:58:58,247 --> 00:59:00,681
+I'm never going to fire bend again.
+
+555
+00:59:00,682 --> 00:59:02,029
+I can't.
+
+556
+00:59:02,030 --> 00:59:06,824
+You will never find balance if you deny this part of your life.
+
+557
+00:59:06,825 --> 00:59:12,499
+You are the Avatar, and therefore, you are a firebender.
+
+558
+00:59:18,770 --> 00:59:25,093
+That chakra opened less like a flowing creek, and more like a burping bison.
+
+559
+00:59:26,908 --> 00:59:31,479
+Tastes like onion and bananas, but strangely something else.
+
+560
+00:59:31,480 --> 00:59:33,490
+Pickles?
+
+561
+00:59:40,005 --> 00:59:43,009
+I'm tired of wearing this girly disguise.
+
+562
+00:59:43,263 --> 00:59:45,530
+I don't know how anyone can fight in this.
+
+563
+00:59:45,531 --> 00:59:49,976
+Maybe that's why it was so easy to beat the Kyoshi Warriors and take their clothes.
+
+564
+00:59:50,661 --> 00:59:53,477
+How much longer do we have to serve the Earth King?
+
+565
+00:59:53,478 --> 00:59:57,434
+If I have to clean up one more pile of bear poop, I'm gonna throw up.
+
+566
+00:59:57,435 --> 01:00:02,867
+Princess Azula promised we would go back to the fire nation as soon as we captured the Avatar.
+
+567
+01:00:02,868 --> 01:00:04,734
+We just have to be patient.
+
+568
+01:00:04,735 --> 01:00:05,660
+Shush up!
+
+569
+01:00:05,662 --> 01:00:08,586
+Do you want the whole palace to know we're Fire Nation?
+
+570
+01:00:08,587 --> 01:00:10,430
+Sorry.
+
+571
+01:00:18,302 --> 01:00:22,849
+Good work girls.  I am sure the Dai Li will deliver the message.
+
+572
+01:00:24,437 --> 01:00:27,792
+The fourth chakra is located in the heart.
+
+573
+01:00:27,793 --> 01:00:32,075
+It deals with love, and is blocked by grief.
+
+574
+01:00:33,593 --> 01:00:37,184
+Lay all your grief out in front of you.
+
+575
+01:01:00,795 --> 01:01:03,946
+You have indeed felt a great loss.
+
+576
+01:01:05,016 --> 01:01:08,230
+But love is a form of energy,
+
+577
+01:01:08,231 --> 01:01:11,658
+and it swirls all around us.
+
+578
+01:01:12,070 --> 01:01:16,135
+The Air Nomads love for you has not left this world.
+
+579
+01:01:16,136 --> 01:01:22,968
+It is still inside of your heart, and is reborn in the form of new love.
+
+580
+01:01:27,068 --> 01:01:30,183
+Let the pain flow away.
+
+581
+01:01:31,044 --> 01:01:32,315
+Very good.
+
+582
+01:01:33,686 --> 01:01:36,552
+Can I have some onion banana juice please?
+
+583
+01:01:37,404 --> 01:01:43,512
+The fifth in the chain is the Sound chakra, located in the throat.
+
+584
+01:01:43,513 --> 01:01:48,039
+It deals with truth, and is blocked by lies.
+
+585
+01:01:48,040 --> 01:01:50,147
+The ones we tell ourselves.
+
+586
+01:01:50,148 --> 01:01:53,797
+Why didn't you tell us you were the Avatar?
+
+587
+01:01:53,798 --> 01:01:55,843
+Because I never wanted to be.
+
+588
+01:01:55,844 --> 01:01:59,213
+You cannot lie about your own nature.
+
+589
+01:01:59,214 --> 01:02:03,373
+You must accept that you are the Avatar.
+
+590
+01:02:14,726 --> 01:02:21,247
+Very good Aang. You have opened the chakra of Truth.
+
+591
+01:02:22,167 --> 01:02:28,682
+The sixth pool of energy is the Light chakra, located in the center of the forehead.
+
+592
+01:02:28,683 --> 01:02:33,346
+It deals with insight and is blocked by illusion.
+
+593
+01:02:33,347 --> 01:02:38,537
+The greatest illusion of this world is the illusion of separation.
+
+594
+01:02:38,538 --> 01:02:44,277
+Things you think are separate and different are actually one and the same.
+
+595
+01:02:44,278 --> 01:02:45,872
+Like the four nations.
+
+596
+01:02:45,873 --> 01:02:47,618
+Yes
+
+597
+01:02:47,619 --> 01:02:52,502
+We are all one people, but we live as if divided.
+
+598
+01:02:52,503 --> 01:02:56,315
+We're all connected. Everything is connected.
+
+599
+01:02:56,316 --> 01:03:01,637
+That's right. Even the separation of the four elements is an illusion.
+
+600
+01:03:02,051 --> 01:03:09,346
+If you open your mind, you will see that all the elements are one.
+
+601
+01:03:09,347 --> 01:03:16,297
+Four parts of the same whole. Even metal is just a part of Earth, that has been purified and refined.
+
+602
+01:03:23,187 --> 01:03:28,519
+Come on metal.... budge.
+
+603
+01:03:29,918 --> 01:03:31,847
+Toph, you rule!
+
+604
+01:03:36,036 --> 01:03:39,205
+What do you say Momo? A cup of tea before we get back to the king?
+
+605
+01:03:43,309 --> 01:03:44,777
+Table for two please.
+
+606
+01:03:44,778 --> 01:03:49,054
+Uncle, I need 2 jasmine, one green and one lychee!
+
+607
+01:03:49,055 --> 01:03:51,983
+I'm brewing as fast as I can!
+
+608
+01:04:02,170 --> 01:04:04,367
+This is the last chakra isn't it?
+
+609
+01:04:04,368 --> 01:04:11,154
+Yes. Once you open this chakra, you will be able go in and out of the Avatar State at will.
+
+610
+01:04:11,323 --> 01:04:13,290
+And when you are in the Avatar State,
+
+611
+01:04:13,295 --> 01:04:18,916
+you will have complete control and awareness of all your actions.
+
+612
+01:04:18,917 --> 01:04:20,230
+Let's do this.
+
+613
+01:04:20,231 --> 01:04:24,627
+The Thought chakra is located at the crown of the head.
+
+614
+01:04:24,628 --> 01:04:27,875
+It deals with pure cosmic energy ...
+
+615
+01:04:27,876 --> 01:04:30,493
+and is blocked by earthly attachment.
+
+616
+01:04:30,494 --> 01:04:34,708
+Meditate on what attaches you to this world.
+
+617
+01:04:41,450 --> 01:04:44,861
+Now, let all of those attachments go.
+
+618
+01:04:45,252 --> 01:04:47,979
+Let them flow down the river.
+
+619
+01:04:47,980 --> 01:04:49,294
+Forgotten.
+
+620
+01:04:49,295 --> 01:04:54,206
+What? Why would I let go of Katara? I...I..I love her.
+
+621
+01:04:54,393 --> 01:05:01,671
+Learn to let her go, or you cannot let the pure cosmic energy flow in from the universe.
+
+622
+01:05:01,672 --> 01:05:04,343
+Why would I choose cosmic energy over Katara?
+
+623
+01:05:04,344 --> 01:05:07,597
+How could it be a bad thing that I feel an attachment to her?
+
+624
+01:05:07,598 --> 01:05:09,763
+Three chakras ago, that was a good thing.
+
+625
+01:05:09,764 --> 01:05:12,898
+You must learn to let go.
+
+626
+01:05:16,488 --> 01:05:19,876
+Thank goodness you are here Suki. Something terrible is going on.
+
+627
+01:05:19,877 --> 01:05:24,384
+The Fire Nation has infiltrated the city. I just saw Prince Zuko and his Uncle!
+
+628
+01:05:24,385 --> 01:05:26,469
+We have to tell the Earth King right away!
+
+629
+01:05:26,832 --> 01:05:30,405
+Oh, don't worry. I'll be sure to let him know.
+
+630
+01:05:38,094 --> 01:05:44,365
+So, Zu Zu's in the city too. I think it's time for a family reunion.
+
+631
+01:05:46,952 --> 01:05:49,341
+I'm sorry, but I can't let go of Katara.
+
+632
+01:05:49,729 --> 01:05:56,057
+Aang, to master the Avatar State, you must open all the chakras.
+
+633
+01:05:56,058 --> 01:05:57,928
+Surrender yourself.
+
+634
+01:05:57,929 --> 01:06:00,135
+Okay, I'll try.
+
+635
+01:06:04,793 --> 01:06:07,478
+Now, think of your attachments...
+
+636
+01:06:07,479 --> 01:06:09,823
+and let them go.
+
+637
+01:06:09,824 --> 01:06:13,581
+Let the pure cosmic energy flow.
+
+638
+01:06:41,365 --> 01:06:43,928
+Let me go!
+
+639
+01:06:59,606 --> 01:07:02,145
+Katara is in danger! I have to go.
+
+640
+01:07:02,110 --> 01:07:03,885
+No Aang.
+
+641
+01:07:03,886 --> 01:07:07,124
+By choosing attachment, you have locked the chakra!
+
+642
+01:07:07,125 --> 01:07:11,335
+If you leave now you won't be able to go into the Avatar State at all!
+
+643
+01:07:24,292 --> 01:07:26,560
+It's another one of her tricks!
+
+644
+01:07:26,561 --> 01:07:29,591
+There's a giant whole in the box. How's that a trick?
+
+645
+01:07:29,592 --> 01:07:31,332
+It's not!
+
+646
+01:07:31,766 --> 01:07:33,203
+It's the real deal!
+
+647
+01:07:42,234 --> 01:07:47,423
+I am the greatest earthbender in the world! Don't you two dunderheads ever forget it!
+
+648
+01:07:57,723 --> 01:08:01,082
+I'm going to be stuck in here forever with you, aren't I?
+
+649
+01:08:02,451 --> 01:08:05,048
+I have to go to the bathroom.
+
+650
+01:08:06,952 --> 01:08:10,209
+Ready to go knock some Fire Nation heads?
+
+651
+01:08:10,210 --> 01:08:12,276
+You don't know how much this means to me dad.
+
+652
+01:08:12,277 --> 01:08:16,063
+I'll make you proud, and I'll finally prove to you what a great warrior I am.
+
+653
+01:08:16,482 --> 01:08:21,038
+Sokka, you don't have to prove anything to me. I'm already proud of you,
+
+654
+01:08:21,039 --> 01:08:23,903
+and I've always known you were a great warrior.
+
+655
+01:08:23,904 --> 01:08:24,904
+Really?
+
+656
+01:08:24,905 --> 01:08:29,047
+Why do you think I trusted you to look after our tribe when I left?
+
+657
+01:08:39,874 --> 01:08:41,615
+This can't be good news.
+
+658
+01:08:52,815 --> 01:08:57,194
+What is this about? Your agents show up in the middle of the night and drag me down here?
+
+659
+01:08:57,195 --> 01:08:59,775
+You will not treat a Kyoshi Warrior this way!
+
+660
+01:08:59,776 --> 01:09:03,246
+But you are not a Kyoshi Warrior, are you?
+
+661
+01:09:03,247 --> 01:09:06,038
+Princess Azula of the Fire Nation!
+
+662
+01:09:06,039 --> 01:09:07,522
+What do you want?
+
+663
+01:09:07,523 --> 01:09:12,333
+I want to make a deal. It's time that I regain control of Ba Sing Se.
+
+664
+01:09:12,334 --> 01:09:14,733
+And you have something I need.
+
+665
+01:09:16,161 --> 01:09:18,260
+The Earth King's trust.
+
+666
+01:09:18,261 --> 01:09:20,092
+Why should I help you?
+
+667
+01:09:20,093 --> 01:09:23,902
+Because I can get you the Avatar.
+
+668
+01:09:23,903 --> 01:09:25,426
+I'm listening.
+
+669
+01:09:31,235 --> 01:09:32,842
+A message from the royal palace.
+
+670
+01:09:37,280 --> 01:09:38,840
+I...I can't believe it.
+
+671
+01:09:38,841 --> 01:09:39,985
+What is it Uncle?
+
+672
+01:09:40,498 --> 01:09:42,445
+Great news!
+
+673
+01:09:42,446 --> 01:09:47,534
+We've been invited to serve tea to the Earth King!
+
+674
+01:09:56,936 --> 01:09:59,690
+-=To be Continued=-
+Translation from www. avatarspirit. net
+Sub: Tucity

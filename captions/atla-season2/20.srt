@@ -182,7 +182,7 @@ But there is good news.
 41
 00:03:54,987 --> 00:04:01,041
 As we speak, the Council of Five is meeting
-to plan an invasion of The Fire Nation this summer. 
+to plan an invasion of The Fire Nation this summer.
 
 42
 00:04:01,041 --> 00:04:03,385
@@ -1631,8 +1631,979 @@ He doesn't need to Zuko. Today, you restored your own honor.
 00:46:11,538 --> 00:46:16,190
 The Earth Kingdom... has fallen.
 
+381
+00:46:16,982 --> 00:46:19,656
+Water,
 
+382
+00:46:20,083 --> 00:46:21,429
+Earth,
 
-0
-00:00:0,500 --> 00:00:2,00
-<font color="#ffff00" size=14>www.tvsubtitles.net</font>
+383
+00:46:21,730 --> 00:46:23,236
+Fire,
+
+384
+00:46:24,171 --> 00:46:25,875
+Air
+
+385
+00:46:25,585 --> 00:46:30,115
+Long ago, the four nations
+lived together in harmony.
+
+386
+00:46:30,116 --> 00:46:34,241
+Then, everything changed
+when the fire nation attacked.
+
+387
+00:46:34,242 --> 00:46:39,184
+Only the avatar, master of all
+four elements, could stop them.
+
+388
+00:46:39,185 --> 00:46:41,844
+But when the world
+needed him most, he vanished.
+
+389
+00:46:41,845 --> 00:46:46,301
+100 years passed, and my brother and I
+discovered the new avatar,
+
+390
+00:46:46,336 --> 00:46:47,858
+an airbender named Aang
+
+391
+00:46:47,893 --> 00:46:50,513
+And although his
+airbending skills are great
+
+392
+00:46:50,514 --> 00:46:53,241
+He has a lot to learn before
+he's ready to save anyone.
+
+393
+00:46:53,242 --> 00:46:57,260
+But I believe Aang
+can save the world.
+
+394
+00:47:02,845 --> 00:47:04,651
+[ Previously on Avatar... ]
+
+395
+00:47:05,350 --> 00:47:07,574
+You seem different somehow.
+
+396
+00:47:07,755 --> 00:47:09,155
+Things are looking up,  uncle.
+
+397
+00:47:09,473 --> 00:47:13,381
+From the inside we're in the perfect position to organize a coup and overthrow the Earth King.
+
+398
+00:47:13,557 --> 00:47:16,068
+The key is the Dai Li.
+
+399
+00:47:16,269 --> 00:47:17,668
+I want to make a deal.
+
+400
+00:47:17,965 --> 00:47:23,408
+In order to master the Avatar State, you must open all of the chakras.
+
+401
+00:47:24,098 --> 00:47:26,210
+Katara is in danger! I have to go.
+
+402
+00:47:26,631 --> 00:47:27,590
+No Aang.
+
+403
+00:47:27,612 --> 00:47:30,228
+If you are killed in the Avatar state,...
+
+404
+00:47:30,232 --> 00:47:33,039
+... the Avatar will cease to exist.
+
+405
+00:47:34,453 --> 00:47:37,983
+Book Two: Earth
+Chapter Twenty: The Crossroads of Destiny
+
+406
+00:47:44,854 --> 00:47:47,407
+So, what kind of trouble is Katara in?
+
+407
+00:47:47,408 --> 00:47:50,818
+I don't know. In my vision, I just knew she needed help.
+
+408
+00:47:50,819 --> 00:47:55,506
+It would be nice if your Avatar powers could be just a little more specific from time to time.
+
+409
+00:47:55,507 --> 00:47:57,477
+What is that?!
+
+410
+00:48:02,707 --> 00:48:04,101
+Need a ride?
+Ahhh!
+
+411
+00:48:04,102 --> 00:48:05,462
+Oooo!
+
+412
+00:48:06,690 --> 00:48:10,461
+The Earth King and The Council of Five do not trust the Dai Li.
+
+413
+00:48:10,977 --> 00:48:13,292
+They imprisoned your leader, Long Feng.
+
+414
+00:48:13,557 --> 00:48:16,501
+Soon they will turn on all of you, and eliminate you.
+
+415
+00:48:16,892 --> 00:48:20,032
+Seizing power today is a matter of life and death.
+
+416
+00:48:20,280 --> 00:48:23,747
+The coup must be swift and decisive.
+
+417
+00:48:24,247 --> 00:48:27,763
+The Earth King, and each of the five generals, must be taken out simultaneously.
+
+418
+00:48:28,148 --> 00:48:31,778
+Long Feng has placed you in my command while we overthrow the government.
+
+419
+00:48:32,568 --> 00:48:36,088
+If I sense any disloyalty, any hesitation,
+
+420
+00:48:36,299 --> 00:48:40,093
+any weakness at all, I will snuff it out.
+
+421
+00:48:43,022 --> 00:48:44,130
+That is all.
+
+422
+00:48:47,025 --> 00:48:51,314
+Nice speech Azula. It was pretty and poetic, but also scary in a good way.
+
+423
+00:48:51,514 --> 00:48:54,920
+Yeah, I thought you were gonna make that one guy pee his pants.
+
+424
+00:48:55,258 --> 00:48:59,777
+There are still a few loose ends. The Avatar, and my brother and uncle.
+
+425
+00:49:00,387 --> 00:49:05,007
+Many times, I imagined myself here, at the threshold of the palace.
+
+426
+00:49:05,636 --> 00:49:09,547
+But I always thought I would be here as a conqueror... instead,
+
+427
+00:49:09,848 --> 00:49:13,063
+we are the Earth Kings personal guests,
+
+428
+00:49:13,113 --> 00:49:14,698
+here to serve him tea.
+
+429
+00:49:15,306 --> 00:49:17,410
+Destiny is a funny thing.
+
+430
+00:49:17,710 --> 00:49:19,426
+It sure is uncle.
+
+431
+00:49:19,707 --> 00:49:24,390
+So how did it go with the Guru?
+Did you master the Avatar State?
+
+432
+00:49:25,223 --> 00:49:30,015
+If you leave now, you won't be able to go into the avatar state at all!
+
+433
+00:49:30,016 --> 00:49:31,364
+Aang, are you ok?
+
+434
+00:49:31,365 --> 00:49:36,204
+I'm great. It went great with the Guru.
+I completely mastered the avatar state.
+
+435
+00:49:46,355 --> 00:49:48,058
+What's taking so long?
+
+436
+00:49:48,059 --> 00:49:51,315
+Maybe the Earth King overslept.
+
+437
+00:49:54,615 --> 00:49:56,222
+Something's not right.
+
+438
+00:49:59,132 --> 00:50:00,636
+It's tea time.
+
+439
+00:50:00,844 --> 00:50:01,947
+Azula!
+
+440
+00:50:02,069 --> 00:50:03,794
+Have you met the Dai Li?
+
+441
+00:50:03,794 --> 00:50:07,909
+They're Earthbenders, but they have
+a killer instinct that is so Firebender,
+
+442
+00:50:08,470 --> 00:50:10,082
+I just love it!
+
+443
+00:50:11,434 --> 00:50:15,430
+Did I ever tell you how I got the nickname the "Dragon of the West"?
+
+444
+00:50:15,531 --> 00:50:18,578
+I'm not interested in a lengthy anecdote, uncle.
+
+445
+00:50:18,598 --> 00:50:21,610
+It's more of a demonstration really.
+
+446
+00:50:43,002 --> 00:50:46,664
+Come on. You'll be fine.
+
+447
+00:50:46,665 --> 00:50:51,337
+No. I'm tired of running. It's time I faced Azula!
+
+448
+00:50:54,994 --> 00:51:00,194
+You're so dramatic. What, are you going to do, challenge me to an Agni Kai?
+
+449
+00:51:00,195 --> 00:51:02,553
+Yes! I challenge you!
+
+450
+00:51:02,554 --> 00:51:04,167
+No thanks.
+
+451
+00:51:19,348 --> 00:51:22,486
+Katara's fine. You have nothing to worry about.
+
+452
+00:51:22,487 --> 00:51:26,275
+But, in my vision. I felt so sure that she was in trouble.
+
+453
+00:51:26,277 --> 00:51:29,896
+Well, she met with the Council of Generals to plan the invasion.
+
+454
+00:51:29,896 --> 00:51:33,524
+And since then she's been off with your friends, the Kyoshi Warriors.
+
+455
+00:51:33,556 --> 00:51:35,354
+See Aang? She's with Suki.
+
+456
+00:51:35,354 --> 00:51:39,092
+They're probably back at our apartment right now,
+talking about make up or something.
+
+457
+00:51:39,050 --> 00:51:40,883
+Ok, maybe you're right.
+
+458
+00:51:41,018 --> 00:51:46,851
+Believe me, if there was any danger at all,
+Bosco's animal instinct would sense it.
+
+459
+00:51:56,332 --> 00:51:57,745
+You've got company.
+
+460
+00:52:00,115 --> 00:52:01,307
+Zuko!
+
+461
+00:52:14,630 --> 00:52:16,132
+Momo!
+
+462
+00:52:19,450 --> 00:52:21,237
+There's no one else here.
+
+463
+00:52:21,320 --> 00:52:23,996
+Katara is in trouble! I knew it!
+
+464
+00:52:24,031 --> 00:52:24,866
+Oh no.
+
+465
+00:52:24,867 --> 00:52:27,595
+Wait, someone's at the door.
+
+466
+00:52:29,111 --> 00:52:30,912
+Actually, I know who it is.
+
+467
+00:52:30,979 --> 00:52:32,387
+It's an old friend of mine.
+
+468
+00:52:32,791 --> 00:52:34,318
+Glad to see you're okay.
+
+469
+00:52:34,712 --> 00:52:36,221
+I need your help.
+
+470
+00:52:36,308 --> 00:52:38,194
+Huh uh?!
+
+471
+00:52:43,848 --> 00:52:45,484
+You guys know each other!
+
+472
+00:52:45,485 --> 00:52:47,926
+I met him in the woods once and knocked him down.
+
+473
+00:52:47,926 --> 00:52:50,088
+Then he gave me tea and very good advice.
+
+474
+00:52:50,088 --> 00:52:51,672
+May I come in?
+
+475
+00:52:54,709 --> 00:52:57,991
+Princess Azula is here in Ba Sing Se.
+
+476
+00:52:57,992 --> 00:52:59,455
+She must have Katara.
+
+477
+00:52:59,456 --> 00:53:02,020
+She has captured my nephew as well.
+
+478
+00:53:02,021 --> 00:53:05,820
+Then we'll work together to fight Azula, and save Katara and Zuko.
+
+479
+00:53:05,821 --> 00:53:08,890
+Woah there. You lost me at, "Zuko".
+
+480
+00:53:08,891 --> 00:53:11,902
+I know how you must feel about my nephew.
+
+481
+00:53:11,902 --> 00:53:15,909
+But believe me when I tell you there is good inside him.
+
+482
+00:53:15,910 --> 00:53:20,555
+Good inside of him isn't enough. Why don't you come back
+when it's outside him too, okay?
+
+483
+00:53:20,556 --> 00:53:26,535
+Katara is in trouble. All of Ba Sing Se is in trouble.
+Working together is our best chance.
+
+484
+00:53:28,798 --> 00:53:32,021
+I brought someone along who might be able to help us.
+
+485
+00:53:41,330 --> 00:53:45,366
+Azula and Long Feng are plotting a coup. They're going to overthrow the Earth King.
+
+486
+00:53:45,367 --> 00:53:48,519
+My sister! Where are they keeping Katara
+
+487
+00:53:48,520 --> 00:53:52,592
+In the crystal catacombs of old Ba Sing Se, deep beneath the palace.
+
+488
+00:53:54,884 --> 00:53:58,698
+The movements of all the generals and the Earth King have been plotted out step by step.
+
+489
+00:53:58,699 --> 00:54:02,812
+Good. And the Fire Nation Princess is cooperating?
+
+490
+00:54:02,813 --> 00:54:07,622
+Oh yes! More than cooperating, she's really taken charge.
+
+491
+00:54:07,622 --> 00:54:10,914
+She's terrifying and inspirational all at the same time.
+
+492
+00:54:11,719 --> 00:54:13,018
+It's hard to explain.
+
+493
+00:54:17,608 --> 00:54:19,907
+Why did they throw you in here?
+
+494
+00:54:21,026 --> 00:54:22,856
+Oh wait. Let me guess. It's a trap.
+
+495
+00:54:22,807 --> 00:54:27,530
+So when Aang shows up to rescue me,
+you can finally have him in your little Fire Nation clutches.
+
+496
+00:54:30,479 --> 00:54:32,853
+You're a terrible person, you know that?
+
+497
+00:54:33,154 --> 00:54:37,724
+Always following us, hunting the Avatar, trying to capture the world's last hope for peace!
+
+498
+00:54:37,639 --> 00:54:41,640
+But what do you care? You're the Fire Lord's son.
+
+499
+00:54:42,057 --> 00:54:44,757
+Spreading war and violence and hatred is in your blood.
+
+500
+00:54:44,782 --> 00:54:46,276
+You don't know what you're talking about.
+
+501
+00:54:46,276 --> 00:54:48,987
+I don't?! How dare you!
+
+502
+00:54:49,492 --> 00:54:51,995
+You have no idea what this war has put me through.
+
+503
+00:54:52,702 --> 00:54:57,027
+Me personally. The Fire Nation took my mother away from me.
+
+504
+00:54:58,750 --> 00:55:00,397
+I'm sorry.
+
+505
+00:55:01,942 --> 00:55:04,147
+That's something we have in common.
+
+506
+00:55:07,795 --> 00:55:12,750
+Well whaddya know. There is an ancient city down there, but it's deep.
+
+507
+00:55:16,069 --> 00:55:21,083
+We should split up. Aang, you go with Iroh to look for
+Katara and the angry jerk... no offense.
+
+508
+00:55:21,084 --> 00:55:22,341
+None taken.
+
+509
+00:55:22,342 --> 00:55:25,751
+And I'll go with Toph to warn the Earth King about Azula's coup.
+
+510
+00:55:34,683 --> 00:55:38,849
+So, Toph thinks you give pretty good advice. And great tea.
+
+511
+00:55:38,850 --> 00:55:42,987
+The key to both is proper aging. What's on your mind?
+
+512
+00:55:45,795 --> 00:55:52,875
+Well, I met with this Guru who was supposed to help me
+master the Avatar State, and control this great power.
+
+513
+00:55:52,876 --> 00:55:56,618
+But to do it, I had to let go of someone I love...
+
+514
+00:55:56,618 --> 00:55:58,363
+... and I just couldn't.
+
+515
+00:55:58,420 --> 00:56:01,670
+Perfection and power are overrated.
+
+516
+00:56:01,670 --> 00:56:05,704
+I think you were very wise to choose happiness and love.
+
+517
+00:56:07,622 --> 00:56:10,059
+What happens if we can't save everyone and beat Azula?
+
+518
+00:56:10,359 --> 00:56:14,035
+Without the Avatar State, what if I am not powerful enough?
+
+519
+00:56:14,438 --> 00:56:20,349
+I don't know the answer. Sometimes life is like this dark tunnel.
+
+520
+00:56:20,399 --> 00:56:24,072
+You can't always see the light at the end of the tunnel,
+
+521
+00:56:24,662 --> 00:56:26,667
+but if you just keep moving...
+
+522
+00:56:30,440 --> 00:56:33,287
+You will come to a better place.
+
+523
+00:56:40,297 --> 00:56:41,871
+There's General How
+
+524
+00:56:53,775 --> 00:56:55,999
+Arghh! What's going on here?!
+
+525
+00:56:56,000 --> 00:56:58,036
+You're under house arrest.
+
+526
+00:56:58,037 --> 00:57:01,635
+The coup is happening right now! We've got to warn the Earth King!
+
+527
+00:57:22,522 --> 00:57:24,019
+Thank goodness we're in time!
+
+528
+00:57:24,020 --> 00:57:25,406
+In time for what?
+
+529
+00:57:25,407 --> 00:57:28,421
+Yeah, what are you in time for...
+
+530
+00:57:29,763 --> 00:57:31,374
+cutie?
+
+531
+00:57:31,374 --> 00:57:34,208
+Uh, I'm kinda involved with Suki.
+
+532
+00:57:34,209 --> 00:57:35,248
+Who?
+
+533
+00:57:37,952 --> 00:57:39,810
+They're not the real Kyoshi Warriors!
+
+534
+00:57:41,311 --> 00:57:43,072
+Sorry to disappoint you.
+
+535
+00:57:53,588 --> 00:57:56,450
+Ooo, it's like we're dancing together.
+
+536
+00:57:57,573 --> 00:57:59,585
+This fight... is over.
+
+537
+00:58:09,164 --> 00:58:11,166
+Get them all out of my sight.
+
+538
+00:58:24,383 --> 00:58:26,942
+Now comes the part where I double-cross you.
+
+539
+00:58:26,942 --> 00:58:30,803
+Dai Li, arrest the Fire Nation Princess.
+
+540
+00:58:32,333 --> 00:58:34,734
+I said, arrest her.
+
+541
+00:58:35,847 --> 00:58:36,827
+What is wrong with you?
+
+542
+00:58:36,877 --> 00:58:41,557
+It's because they haven't made up their minds.
+They're waiting to see how this is going to end.
+
+543
+00:58:41,592 --> 00:58:43,466
+What are you talking about?
+
+544
+00:58:43,501 --> 00:58:46,190
+I can see your whole history in your eyes.
+
+545
+00:58:46,190 --> 00:58:47,991
+You were born with nothing.
+
+546
+00:58:47,993 --> 00:58:51,696
+So you had to struggle and connive and claw your way to power.
+
+547
+00:58:52,308 --> 00:58:58,243
+But true power... the divine right to rule... is something you're born with.
+
+548
+00:58:57,684 --> 00:59:02,942
+The fact is, they don't know which one of us is going to be sitting on that thrown...
+
+549
+00:59:02,942 --> 00:59:04,947
+... and which one is going to be bowing down.
+
+550
+00:59:04,696 --> 00:59:07,877
+But I know. And you know.
+
+551
+00:59:09,578 --> 00:59:10,970
+Well?
+
+552
+00:59:17,020 --> 00:59:19,593
+You've beaten me at my own game.
+
+553
+00:59:19,594 --> 00:59:23,674
+Don't flatter yourself. You were never even a player.
+
+554
+00:59:25,217 --> 00:59:27,593
+I'm sorry I yelled at you before.
+
+555
+00:59:27,594 --> 00:59:28,952
+It doesn't matter.
+
+556
+00:59:28,953 --> 00:59:35,185
+It's just that for so long now, whenever I would imagine
+the face of the enemy, it was your face.
+
+557
+00:59:35,220 --> 00:59:37,617
+My face. I see
+
+558
+00:59:37,618 --> 00:59:39,957
+No, no, that's not what I meant.
+
+559
+00:59:39,958 --> 00:59:43,257
+It's ok. I used to think this scar marked me.
+
+560
+00:59:43,258 --> 00:59:47,268
+The mark of the banished prince,
+cursed to chase the Avatar forever.
+
+561
+00:59:47,269 --> 00:59:54,517
+But lately, I've realized I'm free to determine
+my own destiny, even if I'll never be free of my mark.
+
+562
+00:59:54,518 --> 00:59:57,291
+Maybe you could be free of it.
+
+563
+00:59:57,292 --> 00:59:58,137
+What?
+
+564
+00:59:58,138 --> 00:59:59,512
+I have healing abilities.
+
+565
+00:59:59,513 --> 01:00:02,163
+It's a scar. It can't be healed.
+
+566
+01:00:04,488 --> 01:00:07,211
+This is water from the Spirit Oasis at the North Pole.
+
+567
+01:00:07,628 --> 01:00:11,372
+It has special properties,
+so I have be saving it for something important.
+
+568
+01:00:12,391 --> 01:00:14,599
+I don't know if it would work, but...
+
+569
+01:00:24,978 --> 01:00:26,239
+Aang!
+
+570
+01:00:39,040 --> 01:00:41,786
+Aang, I knew you would come.
+
+571
+01:00:41,786 --> 01:00:45,511
+Uncle, I don't understand.
+What are you doing with the Avatar?
+
+572
+01:00:45,538 --> 01:00:47,192
+Saving you, that's what.
+
+573
+01:00:47,251 --> 01:00:50,294
+Zuko, it's time we talked.
+
+574
+01:00:50,294 --> 01:00:53,772
+Go help your other friends. We'll catch up with you.
+
+575
+01:01:01,558 --> 01:01:03,152
+Why uncle?
+
+576
+01:01:03,171 --> 01:01:05,603
+You are not the man you used to be, Zuko.
+
+577
+01:01:05,853 --> 01:01:11,086
+You are stronger and wiser
+and freer than you have ever been.
+
+578
+01:01:11,086 --> 01:01:14,990
+And now you have come to the crossroads of your destiny.
+
+579
+01:01:14,990 --> 01:01:20,217
+It's time for you to choose. It's time for you to choose good!
+
+580
+01:01:24,548 --> 01:01:30,074
+I expected this kind of treachery from uncle, but Zuko, Prince Zuko...
+
+581
+01:01:30,074 --> 01:01:33,674
+you're a lot of things, but you're not a traitor, are you?
+
+582
+01:01:33,674 --> 01:01:35,486
+Release him immediately!
+
+583
+01:01:35,582 --> 01:01:39,746
+It's not too late for you Zuko. You can still redeem yourself.
+
+584
+01:01:39,746 --> 01:01:43,374
+The kind of redemption she offers is not for you.
+
+585
+01:01:43,374 --> 01:01:46,190
+Why don't you let him decide, uncle?
+
+586
+01:01:46,190 --> 01:01:50,270
+I need you Zuko.
+I've plotted every move of this day.
+
+587
+01:01:50,270 --> 01:01:53,234
+This glorious day in Fire Nation history.
+
+588
+01:01:53,234 --> 01:01:55,814
+And the only way we win is together.
+
+589
+01:01:54,519 --> 01:01:59,326
+At the end of this day, you will have your honor back.
+
+590
+01:01:59,326 --> 01:02:04,190
+You will have your father's love.
+You will have everything you want.
+
+591
+01:02:04,190 --> 01:02:12,206
+Zuko, I am begging you, look into your heart
+and see what it is that you truly want.
+
+592
+01:02:12,206 --> 01:02:14,054
+You are free to choose.
+
+593
+01:02:27,046 --> 01:02:28,952
+We've got to find Sokka and Toph.
+
+594
+01:03:24,474 --> 01:03:26,978
+See any Dai Li agents near by?
+
+595
+01:03:26,978 --> 01:03:28,804
+Nope. All clear.
+
+596
+01:03:34,670 --> 01:03:35,376
+Let's go!
+
+597
+01:03:35,422 --> 01:03:36,694
+I'm not leaving without Bosco!
+
+598
+01:04:59,883 --> 01:05:01,387
+I thought you had changed!
+
+599
+01:05:04,270 --> 01:05:05,670
+I have changed.
+
+600
+01:05:32,520 --> 01:05:38,222
+Come on, it's easy. You just walk on your front paws
+instead of your rear ones. Like this.
+
+601
+01:05:42,622 --> 01:05:44,322
+That is a nice trick.
+
+602
+01:05:46,236 --> 01:05:47,626
+Just take the bear.
+
+603
+01:05:48,338 --> 01:05:49,653
+Bosco!
+
+604
+01:06:45,094 --> 01:06:46,897
+There's too many.
+
+605
+01:06:47,228 --> 01:06:51,062
+The only way, is to let her go.
+
+606
+01:06:51,062 --> 01:06:52,964
+I'm sorry Katara.
+
+607
+01:08:07,242 --> 01:08:11,642
+You've got to get out of here!
+I'll hold them off as long as I can!
+
+608
+01:09:10,966 --> 01:09:17,054
+We've done it Zuko. It's taken a hundred years,
+but the Fire Nation has conquered Ba Sing Se.
+
+609
+01:09:17,054 --> 01:09:18,806
+I betrayed uncle.
+
+610
+01:09:18,806 --> 01:09:20,715
+No, he betrayed you.
+
+611
+01:09:22,538 --> 01:09:27,290
+Zuko, when you return home,
+father will welcome you as a war hero.
+
+612
+01:09:27,310 --> 01:09:31,790
+But I don't have the Avatar.
+What if Father doesn't restore my honor?
+
+613
+01:09:31,790 --> 01:09:37,896
+He doesn't need to Zuko.
+Today, you restored your own honor.
+
+614
+01:09:45,865 --> 01:09:49,889
+The Earth Kingdom... has fallen.
+
+615
+01:09:56,898 --> 01:10:01,322
+Based on the subs by om4gus. blogspot. com
+Resync and corrections by Osimon [ at gmail dot com ]

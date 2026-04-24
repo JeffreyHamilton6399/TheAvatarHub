@@ -1,4 +1,4 @@
-﻿1
+1
 00:00:01,784 --> 00:00:03,576
 Water
 
@@ -1074,7 +1074,3 @@ Sync by Osimon [at gmail dot com]
 00:23:46,332 --> 00:23:49,647
 Thanks to Psycho Silver for The Transcript.
 http://www.avatarspiritmedia.net/
-
-9999
-00:00:0,500 --> 00:00:2,00
-<font color="#ffff00" size=14>www.tvsubtitles.net</font>

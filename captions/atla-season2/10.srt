@@ -1118,7 +1118,7 @@ But
 
 279
 00:19:29,724 --> 00:19:30,656
-Go£¡
+Goï¿½ï¿½
 
 280
 00:19:30,657 --> 00:19:32,743
@@ -1249,7 +1249,3 @@ Where's Appa?
 -=To be Continued=-
 Translation from www.avatarspirit.net
 Sub: Tucity
-
-9999
-00:00:0,500 --> 00:00:2,00
-<font color="#ffff00" size=14>www.tvsubtitles.net</font>

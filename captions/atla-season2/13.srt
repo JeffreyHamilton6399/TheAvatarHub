@@ -404,7 +404,7 @@ It's like she takes you down from the inside.
 
 100
 00:07:30,410 --> 00:07:31,575
-Yes£¿
+Yesï¿½ï¿½
 
 101
 00:07:31,610 --> 00:07:33,185
@@ -939,7 +939,3 @@ Why? We're fearsome!
 -=To be Continued=-
 Translation from www. avatarspirit. net
 Sub: Tucity
-
-9999
-00:00:0,500 --> 00:00:2,00
-<font color="#ffff00" size=14>www.tvsubtitles.net</font>

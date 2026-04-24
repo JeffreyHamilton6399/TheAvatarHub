@@ -585,7 +585,7 @@ Let the prisoners out into the yard.
 
 125
 00:11:43,508 --> 00:11:45,608
-Guard: But we’re in
+Guard: But weï¿½re in
 the middle of lockdown.
 
 126
@@ -601,7 +601,7 @@ undermining his authority. What's your name again?
 128
 00:11:53,819 --> 00:11:57,119
 Wait. Don't tell the Warden,
-I… I'm just a little confused.
+Iï¿½ I'm just a little confused.
 
 129
 00:11:57,509 --> 00:12:02,309
@@ -961,7 +961,7 @@ let's get out of here!
 
 206
 00:22:14,908 --> 00:22:16,308
-You’re both fools.
+Youï¿½re both fools.
 
 207
 00:22:18,799 --> 00:22:20,799
@@ -1013,14 +1013,10 @@ What is going on? Where did you go?
 
 217
 00:23:08,050 --> 00:23:11,050
-We…
+Weï¿½
 kind of went to a Fire Nation prison.
 
 218
 00:23:16,107 --> 00:23:19,107
 Seriously,
 you guys didn't find any meat?
-
-9999
-00:00:0,500 --> 00:00:2,00
-<font color="#ffff00" size=14>www.tvsubtitles.net</font>

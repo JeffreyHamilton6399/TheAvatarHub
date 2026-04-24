@@ -655,7 +655,7 @@ we sneaked by that fire navy blockade.
 
 142
 00:10:01,620 --> 00:10:04,520
-Keep it up, we’re almost through.
+Keep it up, weï¿½re almost through.
 
 143
 00:10:33,880 --> 00:10:35,912
@@ -898,7 +898,7 @@ I've got an idea.
 195
 00:19:33,168 --> 00:19:37,894
 You two take out that battlement.
-I got this one. Watch each other’s backs.
+I got this one. Watch each otherï¿½s backs.
 
 196
 00:20:05,105 --> 00:20:07,295
@@ -1031,7 +1031,3 @@ No, no, NO!
 225
 00:23:53,504 --> 00:23:57,487
 Firelord Ozai, where are you?
-
-9999
-00:00:0,500 --> 00:00:2,00
-<font color="#ffff00" size=14>www.tvsubtitles.net</font>
