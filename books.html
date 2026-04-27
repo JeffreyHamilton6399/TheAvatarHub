@@ -828,7 +828,7 @@ function goPrevSpread() {
 /* ─── Load book ─── */
 function bookUrl(sIdx, bIdx) {
   const b = SERIES[sIdx].books[bIdx];
-  return `${GH}/books/${b.file}`;
+  return `${GH}/main/books/${b.file}`;
 }
 
 async function loadBook(seriesIdx, bookIdx) {
