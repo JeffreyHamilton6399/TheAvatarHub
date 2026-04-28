@@ -11,6 +11,7 @@
   <link rel="apple-touch-icon" href="images/favicon.png">
   <link rel="icon" type="image/jpeg" href="images/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cinzel+Decorative:wght@400;700;900&family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -682,7 +683,7 @@ setTimeout(() => { if (!introDone) dismissIntro(); }, 1400);
                                 wAmp:rand(.4,1.6), wFreq:rand(.008,.02), wOff:rand(0,Math.PI*2), t:0};
     return {...base, vx:Math.cos(angle)*sp, vy:Math.sin(angle)*sp};
   }
-  for (let i=0; i<80; i++) particles.push(spawn());
+  for (let i=0; i<50; i++) particles.push(spawn());
   const pad = 60;
   let rafId;
   function draw() {
@@ -774,12 +775,8 @@ setTimeout(() => { if (!introDone) dismissIntro(); }, 1400);
     src.connect(gain).connect(_ctx.destination);
     src.start(0, offset);
 
-    let v = 0;
-    const t = setInterval(() => {
-      v = Math.min(0.55, v + 0.015);
-      gain.gain.value = v;
-      if (v >= 0.55) clearInterval(t);
-    }, 60);
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.55, ctx.currentTime + 2.5);
   }
 })();
 </script>

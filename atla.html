@@ -12,6 +12,7 @@
   <link rel="apple-touch-icon" href="images/favicon.png">
   <link rel="icon" type="image/jpeg" href="images/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://github.com" crossorigin>
   <link rel="dns-prefetch" href="https://objects.githubusercontent.com">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cinzel+Decorative:wght@400;700;900&family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
@@ -841,7 +842,6 @@ const ASSETS= 'images';
 const INTRO_SHOW_FROM       = 2;    // seconds in before Skip Intro appears
 const INTRO_END_SEC         = 90;   // where Skip Intro jumps to (adjust per episode)
 const NEXT_EP_BEFORE_END    = 30;   // seconds before end to show Next Episode panel
-const AUTO_PLAY_SECS        = 10;   // countdown seconds on ended
 
 const BOOKS = [
   { book:1, tag:'atla-season1', label:'Book One', sublabel:'Water', symFile:'water.png',
@@ -876,7 +876,7 @@ const vid=document.getElementById('mainVideo'),shell=document.getElementById('pl
 
 let idleTimer;
 function resetIdle(){ shell.classList.remove('idle'); clearTimeout(idleTimer); if(!vid.paused) idleTimer=setTimeout(()=>shell.classList.add('idle'),1250); }
-document.addEventListener('mousemove',resetIdle); document.addEventListener('keydown',resetIdle); document.addEventListener('touchstart',resetIdle,{passive:true});
+document.addEventListener('mousemove',resetIdle,{passive:true}); document.addEventListener('keydown',resetIdle); document.addEventListener('touchstart',resetIdle,{passive:true});
 document.addEventListener('keydown',e=>{ if(e.target.tagName==='INPUT')return; switch(e.code){ case'Space':case'KeyK':e.preventDefault();togglePlay();break;case'ArrowRight':e.preventDefault();if(isFinite(vid.duration))vid.currentTime=Math.min(vid.duration,vid.currentTime+5);showOSD('+5s');break;case'ArrowLeft':e.preventDefault();vid.currentTime=Math.max(0,vid.currentTime-5);showOSD('−5s');break;case'ArrowUp':e.preventDefault();vid.volume=Math.min(1,vid.volume+.1);vid.muted=false;volSlider.value=vid.volume;updateVolUI();showOSD('Vol '+Math.round(vid.volume*100)+'%');break;case'ArrowDown':e.preventDefault();vid.volume=Math.max(0,vid.volume-.1);vid.muted=vid.volume===0;volSlider.value=vid.volume;updateVolUI();showOSD('Vol '+Math.round(vid.volume*100)+'%');break;case'KeyM':vid.muted=!vid.muted;volSlider.value=vid.muted?0:(vid.volume||1);updateVolUI();showOSD(vid.muted?'Muted':'Sound On');break;case'KeyF':e.preventDefault();toggleFullscreen();showOSD('Fullscreen');break;case'KeyC':ccBtn&&ccBtn.click();break;
 case'BracketLeft':nudgeCaptionOffset(-0.5);break;
 case'BracketRight':nudgeCaptionOffset(0.5);break;
@@ -931,10 +931,13 @@ vid.addEventListener('play',()=>{ icPlay.style.display='none';icPause.style.disp
 vid.addEventListener('pause',()=>{ icPlay.style.display='';icPause.style.display='none';bigPlay.classList.remove('hidden');shell.classList.remove('idle');updateShimmer();cancelAuto(); });
 updateShimmer();
 vid.addEventListener('loadedmetadata',()=>{ durEl.textContent=fmt(vid.duration); });
+let isSeeking=false;
+let _lastSave=0;
 vid.addEventListener('timeupdate',()=>{ if(isSeeking)return; const pct=(vid.currentTime/vid.duration)*100||0; progFill.style.width=pct+'%';progThumb.style.left=pct+'%';curEl.textContent=fmt(vid.currentTime);
   if(vid.buffered.length){const bp=(vid.buffered.end(vid.buffered.length-1)/vid.duration)*100||0;progBuf.style.width=bp+'%';}
   if(currentEp){
-    localStorage.setItem(`atlaepisodes_b${currentEp.book}_e${currentEp.num}`,vid.currentTime);
+    const now=Date.now();
+    if(now-_lastSave>5000){ _lastSave=now; localStorage.setItem(`atlaepisodes_b${currentEp.book}_e${currentEp.num}`,vid.currentTime); }
     // Mark watched at 90%+ completion
     if(isFinite(vid.duration)&&vid.duration>0&&vid.currentTime/vid.duration>=0.9){
       const wKey=`atlaepisodes_watched_b${currentEp.book}_e${currentEp.num}`;
@@ -945,9 +948,8 @@ vid.addEventListener('timeupdate',()=>{ if(isSeeking)return; const pct=(vid.curr
       }
     }
   }
-  handleSkipIntro();handleNextPanel(); });
+  handleSkipIntro();handleNextPanel();renderCaption(); });
 
-let isSeeking=false;
 function seekTo(cx){ const r=prog.getBoundingClientRect(),pct=Math.max(0,Math.min(1,(cx-r.left)/r.width)),t=pct*vid.duration; vid.currentTime=t;progFill.style.width=(pct*100)+'%';progThumb.style.left=(pct*100)+'%';curEl.textContent=fmt(t); }
 prog.addEventListener('mousedown',e=>{isSeeking=true;seekTo(e.clientX);e.stopPropagation();});
 document.addEventListener('mousemove',e=>{if(isSeeking)seekTo(e.clientX);});
@@ -1012,8 +1014,7 @@ let CAPTION_OFFSET=parseFloat(localStorage.getItem('avatarhub_cc_offset')||'0');
 function parseSRT(text){ return text.replace(/\r/g,'').trim().split(/\n\n+/).reduce((c,b)=>{ const l=b.split('\n'),t=l[1]?.match(/(\d{2}):(\d{2}):(\d{2})[,.](\d{3})\s-->\s(\d{2}):(\d{2}):(\d{2})[,.](\d{3})/);if(t&&l.length>=3){const p=(h,m,s,ms)=>+h*3600+ +m*60+ +s+ +ms/1000;c.push({start:p(t[1],t[2],t[3],t[4]),end:p(t[5],t[6],t[7],t[8]),text:l.slice(2).join('\n')});}return c;},[]);}
 function showCaption(t){captionBox.innerHTML='<span>'+t.replace(/\n/g,'<br>')+'</span>';captionBox.style.display='block';requestAnimationFrame(()=>captionBox.classList.add('visible'));}
 function hideCaption(){captionBox.classList.remove('visible');setTimeout(()=>{if(!captionBox.classList.contains('visible'))captionBox.style.display='none';},200);}
-function renderCaption(){ if(!captionsOn||!srtCues.length){hideCaption();return;} const t=vid.currentTime+CAPTION_OFFSET,cue=srtCues.find(c=>t>=c.start&&t<=c.end),text=cue?.text??null; if(text===lastCueText)return;lastCueText=text;text?showCaption(text):hideCaption(); }
-vid.addEventListener('timeupdate',renderCaption);
+function renderCaption(){ if(!captionsOn||!srtCues.length||vid.paused){if(!captionsOn||vid.paused)return;hideCaption();return;} const t=vid.currentTime+CAPTION_OFFSET,cue=srtCues.find(c=>t>=c.start&&t<=c.end),text=cue?.text??null; if(text===lastCueText)return;lastCueText=text;text?showCaption(text):hideCaption(); }
 ccBtn.addEventListener('click',()=>{captionsOn=!captionsOn;ccBtn.classList.toggle('active',captionsOn);if(!captionsOn){hideCaption();lastCueText=null;}});
 /* Caption sync nudge — [ to shift earlier, ] to shift later, \ to reset */
 function nudgeCaptionOffset(delta){
@@ -1342,32 +1343,23 @@ ccBtn.addEventListener('click',()=>{
     src.start(0, offset);
 
     // Fade in to full volume
-    let v = 0;
-    const fadeIn = setInterval(() => {
-      v = Math.min(0.55, v + 0.015);
-      _gain.gain.value = v;
-      if (v >= 0.55) clearInterval(fadeIn);
-    }, 60);
+    _gain.gain.setValueAtTime(0, _ctx.currentTime);
+    _gain.gain.linearRampToValueAtTime(0.55, _ctx.currentTime + 2.5);
 
     // Duck ambient when video is playing, restore when paused/ended
     const video = document.getElementById('mainVideo');
     if (video) {
-      video.addEventListener('play',  () => fadeTo(0, 0.04));
-      video.addEventListener('pause', () => fadeTo(0.55, 0.015));
-      video.addEventListener('ended', () => fadeTo(0.55, 0.015));
+      video.addEventListener('play',  () => fadeTo(0));
+      video.addEventListener('pause', () => fadeTo(0.55));
+      video.addEventListener('ended', () => fadeTo(0.55));
     }
   }
 
-  function fadeTo(target, speed) {
+  function fadeTo(target) {
     if (!_gain) return;
-    const s = speed || 0.02;
-    const timer = setInterval(() => {
-      if (!_gain) { clearInterval(timer); return; }
-      const cur = _gain.gain.value;
-      const diff = target - cur;
-      if (Math.abs(diff) < s) { _gain.gain.value = target; clearInterval(timer); }
-      else { _gain.gain.value = cur + (diff > 0 ? s : -s); }
-    }, 60);
+    _gain.gain.cancelScheduledValues(_ctx.currentTime);
+    _gain.gain.setValueAtTime(_gain.gain.value, _ctx.currentTime);
+    _gain.gain.linearRampToValueAtTime(target, _ctx.currentTime + 0.8);
   }
 })();
 </script>

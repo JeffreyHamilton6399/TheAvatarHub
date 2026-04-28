@@ -12,9 +12,10 @@
   <link rel="apple-touch-icon" href="images/favicon.png">
   <link rel="icon" type="image/jpeg" href="images/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://github.com" crossorigin>
   <link rel="dns-prefetch" href="https://objects.githubusercontent.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cinzel+Decorative:wght@400;700;900&family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cinzel+Decorative:wght@400;700;900&family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1340,7 +1341,7 @@ function resetIdle() {
   clearTimeout(idleTimer);
   if (!vid.paused) idleTimer = setTimeout(() => shell.classList.add('idle'), 1250);
 }
-document.addEventListener('mousemove', resetIdle);
+document.addEventListener('mousemove', resetIdle, {passive:true});
 document.addEventListener('keydown',   resetIdle);
 document.addEventListener('touchstart', resetIdle, {passive:true});
 
@@ -1528,23 +1529,27 @@ updateShimmer();
 /* ── Duration / time display ── */
 vid.addEventListener('loadedmetadata', () => { durEl.textContent = fmt(vid.duration); });
 
+/* ── Seek bar state ── */
+let isSeeking = false;
+
+let _lastSaveLive = 0;
 vid.addEventListener('timeupdate', () => {
   if (isSeeking) return;
   const pct = (vid.currentTime / vid.duration) * 100 || 0;
   progFill.style.width  = pct + '%';
   progThumb.style.left  = pct + '%';
   curEl.textContent     = fmt(vid.currentTime);
-  localStorage.setItem('liveshow_position', vid.currentTime);
+  const now = Date.now();
+  if (now - _lastSaveLive > 5000) { _lastSaveLive = now; localStorage.setItem('liveshow_position', vid.currentTime); }
   // Buffered range
   if (vid.buffered.length) {
     const bufPct = (vid.buffered.end(vid.buffered.length - 1) / vid.duration) * 100 || 0;
     progBuf.style.width = bufPct + '%';
   }
+  renderCaption();
 });
 
 /* ── Seek bar ── */
-let isSeeking = false;
-
 function seekTo(clientX) {
   const rect = prog.getBoundingClientRect();
   const pct  = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
@@ -1630,7 +1635,7 @@ function hideCaption() {
 }
 
 function renderCaption() {
-  if (!captionsOn || !srtCues.length) { hideCaption(); return; }
+  if (!captionsOn || !srtCues.length || vid.paused) { if (!captionsOn || vid.paused) return; hideCaption(); return; }
   const t = vid.currentTime + CAPTION_OFFSET;
   const cue = srtCues.find(c => t >= c.start && t <= c.end);
   const text = cue?.text ?? null;
@@ -1638,8 +1643,6 @@ function renderCaption() {
   lastCueText = text;
   text ? showCaption(text) : hideCaption();
 }
-
-vid.addEventListener('timeupdate', renderCaption);
 
 ccBtn.addEventListener('click', () => {
   captionsOn = !captionsOn;
@@ -1710,7 +1713,7 @@ vid.addEventListener('loadedmetadata', () => {
     canvas.style.height = H + 'px';
   }
   resize();
-  window.addEventListener('resize', () => { resize(); });
+  window.addEventListener('resize', () => { resize(); }, { passive: true });
   // Re-measure after fonts/images load and content settles
   window.addEventListener('load', resize);
 
@@ -1752,7 +1755,7 @@ vid.addEventListener('loadedmetadata', () => {
     }
   }
 
-  const COUNT = 160; // more particles since we cover the full doc
+  const COUNT = 70; // reduced for performance
   for (let i = 0; i < COUNT; i++) particles.push(spawn(true));
 
   const pad = 80;
@@ -1956,33 +1959,24 @@ window.addEventListener('pagehide', () => {
     src.connect(_gain).connect(_ctx.destination);
     src.start(0, offset);
 
-    // Fade in to full volume
-    let v = 0;
-    const fadeIn = setInterval(() => {
-      v = Math.min(0.55, v + 0.015);
-      _gain.gain.value = v;
-      if (v >= 0.55) clearInterval(fadeIn);
-    }, 60);
+    // Fade in using AudioParam ramp
+    _gain.gain.setValueAtTime(0, _ctx.currentTime);
+    _gain.gain.linearRampToValueAtTime(0.55, _ctx.currentTime + 2.5);
 
     // Duck ambient when video is playing, restore when paused/ended
     const video = document.getElementById('mainVideo');
     if (video) {
-      video.addEventListener('play',  () => fadeTo(0, 0.04));
-      video.addEventListener('pause', () => fadeTo(0.55, 0.015));
-      video.addEventListener('ended', () => fadeTo(0.55, 0.015));
+      video.addEventListener('play',  () => fadeTo(0));
+      video.addEventListener('pause', () => fadeTo(0.55));
+      video.addEventListener('ended', () => fadeTo(0.55));
     }
   }
 
-  function fadeTo(target, speed) {
+  function fadeTo(target) {
     if (!_gain) return;
-    const s = speed || 0.02;
-    const timer = setInterval(() => {
-      if (!_gain) { clearInterval(timer); return; }
-      const cur = _gain.gain.value;
-      const diff = target - cur;
-      if (Math.abs(diff) < s) { _gain.gain.value = target; clearInterval(timer); }
-      else { _gain.gain.value = cur + (diff > 0 ? s : -s); }
-    }, 60);
+    _gain.gain.cancelScheduledValues(_ctx.currentTime);
+    _gain.gain.setValueAtTime(_gain.gain.value, _ctx.currentTime);
+    _gain.gain.linearRampToValueAtTime(target, _ctx.currentTime + 0.8);
   }
 })();
 </script>
