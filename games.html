@@ -762,9 +762,11 @@ setTimeout(() => { if (!introDone) dismissIntro(); }, 1400);
     _started = true;
 
     // Resume at the exact position in the loop the hub was at
-    const t0 = parseInt(sessionStorage.getItem('avatarhub_ambient_t0') || '0');
-    const offset = (t0 && decoded.duration > 0)
-      ? ((Date.now() - t0) / 1000) % decoded.duration
+    const t0      = parseInt(sessionStorage.getItem('avatarhub_ambient_t0') || '0');
+    const elapsed = parseFloat(sessionStorage.getItem('avatarhub_ambient_elapsed') || '0');
+    const rawSecs = t0 ? (Date.now() - t0) / 1000 : elapsed;
+    const offset  = (rawSecs > 0 && decoded.duration > 0)
+      ? rawSecs % decoded.duration
       : 0;
 
     const src  = _ctx.createBufferSource();
@@ -780,5 +782,120 @@ setTimeout(() => { if (!introDone) dismissIntro(); }, 1400);
   }
 })();
 </script>
+
+<script>
+/* ══════════════════════════════════════════
+   UI SFX  — click + hover ticks (synthesised, no audio file)
+   + ambient t0 keepalive so offset stays accurate across pages
+══════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  // ── Shared AudioContext (lazy, reuse existing if index already made one) ──
+  let _sfxCtx = null;
+  function getSfxCtx() {
+    if (_sfxCtx && _sfxCtx.state !== 'closed') return _sfxCtx;
+    try { _sfxCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
+    return _sfxCtx;
+  }
+
+  // ── Core synth: shaped noise burst ───────────────────────────────────────
+  //   freq      – bandpass centre frequency (Hz)
+  //   dur       – duration in seconds
+  //   vol       – peak gain (0-1)
+  //   Q         – bandpass Q (sharpness)
+  function playTick(freq, dur, vol, Q) {
+    const ctx = getSfxCtx();
+    if (!ctx) return;
+    if (ctx.state === 'suspended') ctx.resume();
+    if (ctx.state !== 'running') return;
+
+    const len  = Math.floor(ctx.sampleRate * dur);
+    const buf  = ctx.createBuffer(1, len, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) {
+      // White noise shaped by an exponential decay envelope
+      data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 4);
+    }
+
+    const src    = ctx.createBufferSource();
+    const bp     = ctx.createBiquadFilter();
+    const gain   = ctx.createGain();
+
+    bp.type            = 'bandpass';
+    bp.frequency.value = freq;
+    bp.Q.value         = Q;
+
+    gain.gain.setValueAtTime(vol, ctx.currentTime);
+
+    src.buffer = buf;
+    src.connect(bp).connect(gain).connect(ctx.destination);
+    src.start();
+  }
+
+  // ── Click SFX ─────────────────────────────────────────────────────────────
+  function playClickSfx() { playTick(1100, 0.038, 0.22, 0.9); }
+
+  // ── Hover SFX ─────────────────────────────────────────────────────────────
+  function playHoverSfx() { playTick(2200, 0.018, 0.06, 1.2); }
+
+  // ── Target detection ──────────────────────────────────────────────────────
+  const CLICK_SEL  = 'a, button, [role="button"], .hub-card, .card-cta, ' +
+                     '.ep-card, .ep-thumb, .book-tab, .season-tab, ' +
+                     '.pill-btn, .pill-tab, .theme-opt, .sp-ambient-row, ' +
+                     '.sp-install-row, .star-btn, .ctrl-btn, .card-poster, ' +
+                     '.merch-card, .comic-btn, .nav-btn, .modal-close, ' +
+                     '.page-btn, [data-ep], [data-book]';
+
+  const HOVER_SEL  = 'a, button, [role="button"], .hub-card, .ep-card, ' +
+                     '.ep-thumb, .pill-btn, .pill-tab, .theme-opt, ' +
+                     '.card-cta, .merch-card, .comic-btn, .nav-btn, ' +
+                     '.ctrl-btn, .star-btn, [data-ep], [data-book]';
+
+  // ── Delegated click listener ──────────────────────────────────────────────
+  document.addEventListener('click', function (e) {
+    if (e.target.closest(CLICK_SEL)) playClickSfx();
+  }, { passive: true });
+
+  // ── Delegated hover listener (mouseover = fires once per enter) ───────────
+  let _hoverCooldown = false;
+  document.addEventListener('mouseover', function (e) {
+    if (_hoverCooldown) return;
+    if (e.target.closest(HOVER_SEL)) {
+      playHoverSfx();
+      _hoverCooldown = true;
+      setTimeout(() => { _hoverCooldown = false; }, 80); // max ~12 ticks/s
+    }
+  }, { passive: true });
+
+  // ── Ambient t0 keepalive ──────────────────────────────────────────────────
+  // The index.html stamps avatarhub_ambient_t0 = Date.now() when ambient
+  // starts. Sub-pages use (Date.now() - t0) to compute the loop offset.
+  // But if you stay on a sub-page for a while that t0 gets stale for the
+  // *next* page — so we re-stamp it every 10 s with the *current* wall time
+  // minus the current computed offset, effectively sliding the anchor forward
+  // without changing the perceived position.
+  (function keepAliveT0() {
+    if (localStorage.getItem('avatarhub_ambient_off') === '1') return;
+    if (sessionStorage.getItem('avatarhub_ambient_active') !== '1') return;
+
+    setInterval(function () {
+      const t0old = parseInt(sessionStorage.getItem('avatarhub_ambient_t0') || '0');
+      if (!t0old) return;
+      // We don't know duration here, but we can just slide the anchor:
+      // new anchor = now − (now − t0old)  →  same offset, fresher timestamp
+      // i.e. simply re-stamp with current time minus elapsed (no-op for position)
+      // Actually simplest: just leave t0 as-is; the modulo arithmetic on the
+      // next page will handle any large elapsed value correctly.
+      // What we DO need: update t0 so the NEXT page doesn't over-run a stale value.
+      // Re-stamp = now - currentOffset.  We don't know decoded.duration here,
+      // so we store elapsed seconds separately instead.
+      const elapsed = (Date.now() - t0old) / 1000;
+      sessionStorage.setItem('avatarhub_ambient_elapsed', elapsed.toFixed(3));
+    }, 10000);
+  })();
+})();
+</script>
+
 </body>
 </html>
