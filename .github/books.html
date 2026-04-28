@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Avatar Books — Graphic Novels</title>
+  <meta name="theme-color" content="#04070d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Avatar Books">
+  <link rel="apple-touch-icon" href="images/favicon.png">
+  <link rel="icon" type="image/jpeg" href="images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cinzel+Decorative:wght@400;700;900&family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --deep:#04070d; --panel:#0a111c; --blue:#4db8ff; --white:#f0f4ff;
+      --muted:#6b8aab; --dim:#2d3f56; --border:rgba(255,255,255,0.06);
+      --gold:#c9a84c; --air:#f5c518; --water:#4db8ff; --earth:#6abf69; --fire:#f97316;
+      --books:#a87ccc; --books-rgb:168,124,204;
+    }
+    @keyframes slideUp    { from{opacity:0;transform:translateY(36px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes overlayOut { from{opacity:1} to{opacity:0} }
+    @keyframes pulseGlowAir   { 0%,100%{filter:drop-shadow(0 0 4px #f5c518)} 50%{filter:drop-shadow(0 0 14px #f5c518)} }
+    @keyframes pulseGlowWater { 0%,100%{filter:drop-shadow(0 0 4px #4db8ff)} 50%{filter:drop-shadow(0 0 14px #4db8ff)} }
+    @keyframes pulseGlowEarth { 0%,100%{filter:drop-shadow(0 0 4px #6abf69)} 50%{filter:drop-shadow(0 0 14px #6abf69)} }
+    @keyframes pulseGlowFire  { 0%,100%{filter:drop-shadow(0 0 4px #f97316)} 50%{filter:drop-shadow(0 0 14px #f97316)} }
+    @keyframes pulseGlowBooks { 0%,100%{filter:drop-shadow(0 0 4px #a87ccc)} 50%{filter:drop-shadow(0 0 14px #a87ccc)} }
+    @keyframes cardIn  { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes spin    { to { transform:rotate(360deg); } }
+
+    body { background:var(--deep); color:var(--white); font-family:'Philosopher',Georgia,serif; min-height:100vh; overflow-x:hidden; }
+    .bg-layer { position:fixed; inset:0; background-image:url('images/booksbg.png'); background-size:cover; background-position:center top; filter:blur(8px) brightness(.22) saturate(1.4); transform:scale(1.04); z-index:0; }
+    .bg-layer::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom,rgba(4,7,13,.55) 0%,transparent 35%,transparent 65%,rgba(4,7,13,.7) 100%); }
+
+    /* Intro overlay */
+    #introOverlay { position:fixed; inset:0; z-index:100; background:rgba(4,7,13,.72); backdrop-filter:blur(2px); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3rem; cursor:pointer; }
+    #introOverlay.fade-out { animation:overlayOut .65s ease forwards; pointer-events:none; }
+    .intro-tagline { font-family:'Philosopher',serif; font-size:clamp(.6rem,1.6vw,.8rem); font-style:italic; letter-spacing:.5em; text-transform:uppercase; color: rgba(240,244,255,.8); opacity:0; transition:opacity .6s ease .15s; }
+    #introOverlay.symbols-in .intro-tagline { opacity:1; }
+    .symbols-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(2rem,5vw,5rem); align-items:center; justify-items:center; }
+    @media(max-width:600px){ .symbols-grid{ grid-template-columns:repeat(2,1fr); gap:2rem; } }
+    .sym-item { display:flex; flex-direction:column; align-items:center; gap:.9rem; opacity:0; transform:scale(.78); transition:opacity .55s ease,transform .55s cubic-bezier(.22,1,.36,1); }
+    #introOverlay.symbols-in .sym-item { opacity:1; transform:scale(1); }
+    .sym-img  { width:clamp(64px,8vw,100px); height:clamp(64px,8vw,100px); object-fit:contain; }
+    .sym-item.air   .sym-img { animation:pulseGlowAir   2.6s ease-in-out infinite 0s; }
+    .sym-item.water .sym-img { animation:pulseGlowWater 2.6s ease-in-out infinite .4s; }
+    .sym-item.earth .sym-img { animation:pulseGlowEarth 2.6s ease-in-out infinite .8s; }
+    .sym-item.fire  .sym-img { animation:pulseGlowFire  2.6s ease-in-out infinite 1.2s; }
+    .sym-label { font-family:'Philosopher',serif; font-size:clamp(.55rem,1.3vw,.7rem); letter-spacing:.3em; text-transform:uppercase; }
+    .sym-item.air   .sym-label { color:var(--air); }
+    .sym-item.water .sym-label { color:var(--water); }
+    .sym-item.earth .sym-label { color:var(--earth); }
+    .sym-item.fire  .sym-label { color:var(--fire); }
+
+    /* Page layout */
+    .page { position:relative; z-index:1; min-height:100vh; display:flex; flex-direction:column; }
+    .anim-header,.anim-title,.anim-sub,.anim-content { opacity:0; }
+    body.page-ready .anim-header  { animation:slideUp .7s cubic-bezier(.22,1,.36,1) .05s both; }
+    body.page-ready .anim-title   { animation:slideUp .8s cubic-bezier(.22,1,.36,1) .18s both; }
+    body.page-ready .anim-sub     { animation:slideUp .8s cubic-bezier(.22,1,.36,1) .30s both; }
+    body.page-ready .anim-content { animation:slideUp .9s cubic-bezier(.22,1,.36,1) .42s both; }
+
+    header { padding:1.4rem 4rem; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); }
+    .back-link { font-family:'Cinzel',serif; font-size:.52rem; letter-spacing:.3em; text-transform:uppercase; color:var(--muted); text-decoration:none; border:1px solid var(--dim); padding:.4em 1.2em; border-radius:30px; transition:color .2s,border-color .2s; display:flex; align-items:center; gap:.5em; }
+    .back-link:hover { color:var(--gold); border-color:rgba(201,168,76,.4); }
+
+    .hero { text-align:center; padding:4rem 2rem 2.5rem; }
+    .hero-main { font-family:'Cinzel Decorative',serif; font-weight:900; font-size:clamp(2rem,5vw,4rem); letter-spacing:.1em; background:linear-gradient(135deg,#fff 0%,#d4b8ff 50%,#a87ccc 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:.4rem; ; overflow:visible; padding:0.05em 0.1em 0.15em; line-height:1.15;}
+    .hero-sub { font-family:'Philosopher',serif; font-style:italic; font-size:clamp(.9rem,2.5vw,1.4rem); color:var(--muted); letter-spacing:.25em; margin-bottom:.6rem; }
+    .hero-badge { display:inline-block; font-family:'Cinzel',serif; font-size:.5rem; letter-spacing:.3em; text-transform:uppercase; color:var(--books); border:1px solid rgba(var(--books-rgb),.35); padding:.35em 1.2em; border-radius:20px; background:rgba(var(--books-rgb),.06); }
+
+    .below-content { width:100%; max-width:1400px; margin:0 auto; padding:2rem clamp(1.5rem,5vw,4rem) 6rem; display:flex; flex-direction:column; gap:0; }
+    .section-divider { display:flex; align-items:center; gap:1rem; margin-bottom:2.5rem; }
+    .section-divider-line { flex:1; height:1px; background:var(--border); }
+    .section-divider-inner { display:flex; align-items:center; gap:.7rem; white-space:nowrap; }
+    .section-divider-title { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.35em; text-transform:uppercase; color:var(--muted); }
+    .divider-sym { width:14px; height:14px; object-fit:contain; opacity:.55; animation:pulseGlowBooks 2.6s ease-in-out infinite; }
+
+    .season-bar { display:flex; align-items:center; gap:1.2rem; margin-bottom:2rem; position:relative; }
+    .season-label { font-family:'Cinzel',serif; font-size:.5rem; letter-spacing:.3em; text-transform:uppercase; color:var(--muted); white-space:nowrap; }
+    .season-pill-wrap { position:relative; }
+    .season-pill { display:flex; align-items:center; gap:.6em; font-family:'Cinzel Decorative',serif; font-size:clamp(.7rem,1.5vw,.88rem); letter-spacing:.06em; color:var(--white); background:rgba(10,17,28,.8); border:1px solid rgba(255,255,255,.14); border-radius:30px; padding:.5em 1.1em .5em .9em; cursor:pointer; transition:border-color .2s,background .2s; user-select:none; }
+    .season-pill:hover, .season-pill.open { border-color:rgba(255,255,255,.3); background:rgba(20,30,50,.9); }
+    .season-pill-sym { width:18px; height:18px; object-fit:contain; flex-shrink:0; }
+    .season-pill-chevron { width:14px; height:14px; margin-left:.2em; transition:transform .25s; flex-shrink:0; opacity:.6; }
+    .season-pill.open .season-pill-chevron { transform:rotate(180deg); }
+    .season-dropdown { position:fixed; z-index:200; background:rgba(8,14,26,.97); border:1px solid rgba(255,255,255,.12); border-radius:14px; padding:.5rem; min-width:220px; backdrop-filter:blur(20px); box-shadow:0 12px 40px rgba(0,0,0,.6); opacity:0; transform:translateY(-6px); pointer-events:none; transition:opacity .2s,transform .2s; }
+    .season-dropdown.open { opacity:1; transform:translateY(0); pointer-events:all; }
+    .season-opt { display:flex; align-items:center; gap:.75rem; padding:.7rem 1rem; border-radius:9px; cursor:pointer; transition:background .15s; user-select:none; }
+    .season-opt:hover { background:rgba(255,255,255,.07); }
+    .season-opt.active { background:rgba(255,255,255,.06); }
+    .season-opt-sym { width:22px; height:22px; object-fit:contain; flex-shrink:0; }
+    .season-opt-name { font-family:'Cinzel Decorative',serif; font-size:.78rem; letter-spacing:.04em; }
+    .season-opt-count { font-family:'Philosopher',serif; font-size:.72rem; color:var(--muted); font-style:italic; margin-top:.1rem; }
+    .season-opt-check { margin-left:auto; width:14px; height:14px; opacity:0; flex-shrink:0; }
+    .season-opt.active .season-opt-check { opacity:1; }
+
+    .book-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:.75rem; padding:.5rem 0 2rem; }
+    .book-card { background:rgba(10,17,28,.65); border:1px solid var(--border); border-radius:10px; padding:1rem 1.1rem; cursor:pointer; transition:border-color .2s,background .2s,transform .15s,box-shadow .2s; animation:cardIn .3s ease both; display:flex; flex-direction:column; gap:.45rem; position:relative; }
+    .book-card:hover { background:rgba(15,25,40,.9); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.35); }
+    .book-card.active { border-color:rgba(var(--books-rgb),.5); background:rgba(var(--books-rgb),.07); box-shadow:0 0 18px rgba(var(--books-rgb),.1); }
+    .book-card-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:.1rem; }
+    .book-num { font-family:'Cinzel',serif; font-size:.43rem; letter-spacing:.3em; text-transform:uppercase; color:var(--muted); }
+    .book-now-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; margin-top:3px; display:none; background:var(--books); animation:pulseGlowBooks 2s ease-in-out infinite; }
+    .book-card.active .book-now-dot { display:block; }
+    .book-title-text { font-family:'Philosopher',serif; font-size:.88rem; color:var(--white); line-height:1.4; }
+    .book-series-label { font-family:'Cinzel',serif; font-size:.4rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-top:.1rem; }
+    .book-open-icon { position:absolute; bottom:.7rem; right:.8rem; opacity:0; transition:opacity .2s; }
+    .book-card:hover .book-open-icon { opacity:.5; }
+
+    /* Viewer */
+    .viewer-section { width:100%; max-width:1400px; margin:0 auto; padding:0 clamp(1.5rem,5vw,4rem); }
+    .now-reading-bar { display:flex; align-items:center; gap:1rem; padding:.8rem 1.2rem .8rem 0; margin-bottom:.5rem; opacity:0; transition:opacity .4s; }
+    .nr-dot { width:6px; height:6px; border-radius:50%; background:var(--books); flex-shrink:0; animation:pulseGlowBooks 2s ease-in-out infinite; }
+    .nr-label { font-family:'Cinzel',serif; font-size:.46rem; letter-spacing:.3em; text-transform:uppercase; color:var(--muted); white-space:nowrap; }
+    .nr-title { font-family:'Philosopher',serif; font-size:clamp(.85rem,1.5vw,1rem); color:var(--white); font-style:italic; }
+    .nr-ep { font-family:'Cinzel',serif; font-size:.48rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-left:auto; white-space:nowrap; }
+    .viewer-frame { position:relative; padding:5px; border-radius:20px; background:linear-gradient(135deg,rgba(168,124,204,.75) 0%,rgba(100,70,140,.35) 25%,rgba(200,160,230,.55) 50%,rgba(100,70,140,.30) 75%,rgba(168,124,204,.70) 100%); box-shadow:0 0 0 1px rgba(168,124,204,.18),0 0 40px rgba(168,124,204,.13),0 0 80px rgba(168,124,204,.06); }
+    .corner { position:absolute; z-index:30; width:44px; height:44px; display:flex; align-items:center; justify-content:center; background:rgba(4,7,13,.85); border-radius:50%; box-shadow:0 0 0 1px rgba(168,124,204,.3); }
+    .corner-img { width:26px; height:26px; object-fit:contain; opacity:.85; }
+    .corner-tl{top:-20px;left:-20px} .corner-tr{top:-20px;right:-20px} .corner-bl{bottom:-20px;left:-20px} .corner-br{bottom:-20px;right:-20px}
+    .corner-water { animation:pulseGlowWater 2.6s ease-in-out infinite .4s; }
+    .corner-earth { animation:pulseGlowEarth 2.6s ease-in-out infinite .8s; }
+    .corner-fire  { animation:pulseGlowFire  2.6s ease-in-out infinite 1.2s; }
+    .corner-air   { animation:pulseGlowAir   2.6s ease-in-out infinite 0s; }
+    .viewer-shell { background:#111; border-radius:16px; overflow:hidden; position:relative; min-height:0; display:flex; flex-direction:column; }
+    .viewer-placeholder { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.2rem; padding:4rem 2rem; }
+    .placeholder-text { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.4em; text-transform:uppercase; color:var(--muted); text-align:center; line-height:1.8; }
+    .viewer-loading { position:absolute; inset:0; background:rgba(4,7,13,.85); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem; z-index:10; border-radius:16px; opacity:0; pointer-events:none; transition:opacity .3s; }
+    .viewer-loading.active { opacity:1; pointer-events:all; }
+    .viewer-loading-spinner { width:36px; height:36px; border:2px solid rgba(168,124,204,.2); border-top-color:rgba(168,124,204,.8); border-radius:50%; animation:spin .8s linear infinite; }
+    .viewer-loading-text { font-family:'Cinzel',serif; font-size:.48rem; letter-spacing:.3em; text-transform:uppercase; color:var(--muted); }
+
+    /* PDF.js two-page spread reader */
+    #pdfReader { display:none; flex-direction:column; flex:1; background:#0d0d0d; border-radius:16px 16px 0 0; overflow:hidden; }
+    #pdfSpread { flex:1; display:flex; align-items:center; justify-content:center; gap:0; padding:1rem; background:#0d0d0d; min-height:0; position:relative; }
+    .spread-page { display:flex; align-items:center; justify-content:center; position:relative; }
+    .spread-page canvas { display:block; max-width:100%; height:auto; box-shadow:0 6px 32px rgba(0,0,0,.7); }
+    /* Left page: shadow on the right (spine), right page: shadow on the left */
+    .spread-page.left  canvas { border-radius:2px 0 0 2px; box-shadow:-4px 0 18px rgba(0,0,0,.5), 4px 0 12px rgba(0,0,0,.6); }
+    .spread-page.right canvas { border-radius:0 2px 2px 0; box-shadow: 4px 0 18px rgba(0,0,0,.5),-4px 0 12px rgba(0,0,0,.6); }
+    /* Single page (cover / last odd page) */
+    .spread-page.single canvas { border-radius:2px; box-shadow:0 6px 40px rgba(0,0,0,.7); }
+    /* Spine shadow between pages */
+    .spread-spine { width:6px; flex-shrink:0; align-self:stretch; background:linear-gradient(to right,rgba(0,0,0,.55),rgba(0,0,0,.1) 40%,rgba(0,0,0,.1) 60%,rgba(0,0,0,.55)); pointer-events:none; }
+    /* Click zones for prev/next on the spread itself */
+    .spread-hit { position:absolute; top:0; bottom:0; width:28%; cursor:pointer; z-index:5; display:flex; align-items:center; opacity:0; transition:opacity .2s; }
+    .spread-hit:hover { opacity:1; }
+    .spread-hit.prev { left:0; justify-content:flex-start; padding-left:1rem; }
+    .spread-hit.next { right:0; justify-content:flex-end; padding-right:1rem; }
+    .spread-hit-icon { width:40px; height:40px; border-radius:50%; background:rgba(168,124,204,.18); border:1px solid rgba(168,124,204,.35); display:flex; align-items:center; justify-content:center; backdrop-filter:blur(8px); }
+    .spread-hit-icon svg { width:18px; height:18px; fill:rgba(168,124,204,.9); }
+    @keyframes pageFlip { 0%{opacity:0;transform:scaleX(.92)} 100%{opacity:1;transform:scaleX(1)} }
+    #pdfSpread.flip { animation:pageFlip .18s ease both; }
+
+    /* Fullscreen reader */
+    .viewer-frame:fullscreen,
+    .viewer-frame:-webkit-full-screen {
+      background: #0a0a0a;
+      display: flex; flex-direction: column;
+      border-radius: 0; padding: 0;
+    }
+    .viewer-frame:fullscreen .viewer-shell,
+    .viewer-frame:-webkit-full-screen .viewer-shell { border-radius: 0; flex: 1; }
+    .viewer-frame:fullscreen #pdfSpread,
+    .viewer-frame:-webkit-full-screen #pdfSpread { flex: 1; min-height: 0; }
+    .viewer-frame:fullscreen .viewer-controls,
+    .viewer-frame:-webkit-full-screen .viewer-controls { border-radius: 0; }
+    /* Swipe hint overlay (mobile) */
+    .swipe-hint {
+      position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%);
+      font-family: 'Cinzel', serif; font-size: .4rem; letter-spacing: .25em;
+      text-transform: uppercase; color: rgba(168,124,204,.6);
+      pointer-events: none; z-index: 20;
+      opacity: 0; transition: opacity .5s;
+    }
+    .swipe-hint.show { opacity: 1; }
+    /* Drag cursor on spread */
+    #pdfSpread { cursor: grab; }
+    #pdfSpread.dragging { cursor: grabbing; }
+
+    /* Page controls bar */
+    .viewer-controls { display:flex; align-items:center; justify-content:space-between; gap:.75rem; padding:.85rem 1.5rem; background:rgba(8,12,22,.9); backdrop-filter:blur(28px); border-top:1px solid rgba(255,255,255,.07); border-radius:0 0 16px 16px; flex-wrap:wrap; }
+    .vcbtn { font-family:'Cinzel',serif; font-size:.48rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); background:none; border:1px solid var(--dim); padding:.45em 1.2em; border-radius:20px; cursor:pointer; transition:color .2s,border-color .2s,background .2s; text-decoration:none; display:flex; align-items:center; gap:.4em; white-space:nowrap; }
+    .vcbtn:hover { color:var(--books); border-color:rgba(var(--books-rgb),.5); background:rgba(var(--books-rgb),.06); }
+    .vcbtn:disabled { opacity:.3; cursor:default; pointer-events:none; }
+    .vcbtn svg { width:12px; height:12px; flex-shrink:0; }
+    .vcbtn-primary { color:var(--books); border-color:rgba(var(--books-rgb),.4); background:rgba(var(--books-rgb),.08); }
+    .vcbtn-primary:hover { background:rgba(var(--books-rgb),.18); border-color:rgba(var(--books-rgb),.7); }
+
+    /* Page counter + jump input */
+    .page-counter { display:flex; align-items:center; gap:.5rem; }
+    .page-input { width:44px; background:rgba(255,255,255,.06); border:1px solid var(--dim); border-radius:6px; color:var(--white); font-family:'Cinzel',serif; font-size:.52rem; text-align:center; padding:.3em .2em; outline:none; transition:border-color .2s; -moz-appearance:textfield; }
+    .page-input::-webkit-inner-spin-button, .page-input::-webkit-outer-spin-button { -webkit-appearance:none; }
+    .page-input:focus { border-color:rgba(var(--books-rgb),.5); }
+    .page-sep { font-family:'Cinzel',serif; font-size:.44rem; color:var(--muted); }
+    .page-total { font-family:'Cinzel',serif; font-size:.44rem; color:var(--muted); min-width:20px; }
+
+    /* Book nav group */
+    .ctrl-group { display:flex; align-items:center; gap:.5rem; }
+
+    /* Zoom */
+    .zoom-wrap { display:flex; align-items:center; gap:.3rem; }
+    .zoom-btn { font-family:'Cinzel',serif; font-size:.6rem; color:var(--muted); background:none; border:1px solid var(--dim); width:26px; height:26px; border-radius:6px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:color .2s,border-color .2s; padding:0; line-height:1; }
+    .zoom-btn:hover { color:var(--books); border-color:rgba(var(--books-rgb),.5); }
+    .zoom-val { font-family:'Cinzel',serif; font-size:.44rem; color:var(--muted); min-width:34px; text-align:center; }
+
+    /* Info panel */
+    .info-panel { display:flex; gap:3rem; flex-wrap:wrap; margin-bottom:3.5rem; margin-top:3rem; }
+    .info-main { flex:1; min-width:260px; }
+    .info-title { font-family:'Cinzel Decorative',serif; font-size:clamp(1.1rem,2.5vw,1.6rem); letter-spacing:.06em; margin-bottom:.6rem; background:linear-gradient(135deg,#fff 0%,#d4b8ff 50%,#a87ccc 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .info-meta { font-family:'Cinzel',serif; font-size:.5rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-bottom:.9rem; display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
+    .dot { opacity:.4; }
+    .genre-tags { display:flex; flex-wrap:wrap; gap:.4rem; margin-bottom:1.1rem; }
+    .genre-tag { font-family:'Cinzel',serif; font-size:.42rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); border:1px solid var(--dim); padding:.3em .9em; border-radius:20px; background:rgba(255,255,255,.03); }
+    .info-synopsis { font-family:'Philosopher',serif; font-size:clamp(.85rem,1.5vw,.98rem); color:rgba(240,244,255,.75); line-height:1.75; }
+    .info-divider { width:1px; background:var(--border); flex-shrink:0; align-self:stretch; }
+    .info-stats { display:flex; flex-direction:column; gap:1.1rem; min-width:220px; }
+    .stat-item { display:flex; flex-direction:column; gap:.2rem; }
+    .stat-label { font-family:'Cinzel',serif; font-size:.42rem; letter-spacing:.25em; text-transform:uppercase; color:var(--muted); }
+    .stat-value { font-family:'Philosopher',serif; font-size:.9rem; color:var(--white); }
+
+    [data-reveal] { opacity:0; transform:translateY(32px); transition:opacity .75s cubic-bezier(.22,1,.36,1),transform .75s cubic-bezier(.22,1,.36,1); }
+    [data-reveal].revealed { opacity:1; transform:translateY(0); }
+
+    .jeffrey-watermark { position:fixed; bottom:14px; right:18px; z-index:50; display:inline-flex; align-items:center; gap:5px; text-decoration:none; font-family:'Cinzel',serif; font-size:.42rem; letter-spacing:.2em; text-transform:uppercase; color:rgba(107,138,171,.45); transition:color .2s,opacity .2s; opacity:.6; }
+    .jeffrey-watermark:hover { color:rgba(240,244,255,.7); opacity:1; }
+
+    @media(max-width:600px) {
+      header { padding:1.5rem 1.5rem; }
+      .left-page, .book-spine { display:none; }
+      .right-page { border-radius:3px; box-shadow:inset 0 0 20px rgba(0,0,0,.18); }
+      .info-panel { flex-direction:column; }
+      .info-divider { display:none; }
+      .book-grid { grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); }
+    }
+    /* ── Mobile portrait: single-page mode, no stretch ── */
+    @media(max-width:600px) and (orientation:portrait) {
+      .viewer-shell { min-height:0; }
+      #pdfSpread { padding:.5rem; flex-direction:column; }
+      .spread-page { width:100%; }
+      .spread-page canvas { width:100% !important; height:auto !important; }
+      .spread-page.left canvas, .spread-page.right canvas { border-radius:3px; box-shadow:0 4px 16px rgba(0,0,0,.6); }
+      .spread-spine { display:none; }
+      .viewer-controls { padding:.6rem .75rem; gap:.4rem; flex-wrap:wrap; justify-content:center; }
+      .ctrl-group { gap:.3rem; }
+      .vcbtn { padding:.4em .7em; font-size:.38rem; }
+      .zoom-wrap { display:none; }
+      .zoom-val { display:none; }
+    }
+    /* ── Mobile fullscreen: use viewport-filling div since iOS blocks requestFullscreen ── */
+    .viewer-frame.fake-fs {
+      position:fixed !important; inset:0 !important; z-index:9000 !important;
+      border-radius:0 !important; padding:0 !important;
+      width:100vw !important; height:100vh !important;
+      background:#000 !important;
+    }
+    .viewer-frame.fake-fs .viewer-shell { border-radius:0; flex:1; min-height:0; }
+    .viewer-frame.fake-fs #pdfSpread { flex:1; min-height:0; padding:.5rem; }
+    .viewer-frame.fake-fs .viewer-controls { border-radius:0; }
+    .viewer-frame.fake-fs .corner { display:none; }
+  
+    /* ── Cross-page theme variables ── */
+    body.theme-parchment {
+      --deep:#f5efe0; --panel:#ede4ce; --white:#1a1008; --muted:#7a6040;
+      --dim:#b8a880; --border:rgba(0,0,0,0.10); --gold:#9a6820;
+      --card-bg: linear-gradient(160deg,rgba(255,250,235,.97) 0%,rgba(245,238,215,.99) 100%);
+    }
+    body.theme-water {
+      --deep:#dff0f8; --panel:#c8e4f2; --white:#0a1a2e; --muted:#3a6080;
+      --dim:#7ab0cc; --border:rgba(0,0,0,0.09);
+      --card-bg: linear-gradient(160deg,rgba(220,240,252,.97) 0%,rgba(200,228,245,.99) 100%);
+    }
+    body.theme-earth {
+      --deep:#f0f4e8; --panel:#e2ead0; --white:#1a2008; --muted:#5a7040;
+      --dim:#a0b878; --border:rgba(0,0,0,0.09);
+      --card-bg: linear-gradient(160deg,rgba(238,245,220,.97) 0%,rgba(224,235,200,.99) 100%);
+    }
+    body.theme-parchment .bg-layer { filter: blur(8px) brightness(0.45) saturate(.7); }
+    body.theme-water    .bg-layer  { filter: blur(8px) brightness(0.4) saturate(1.2) hue-rotate(190deg); }
+    body.theme-earth    .bg-layer  { filter: blur(8px) brightness(0.4) saturate(1.1) hue-rotate(55deg); }
+    body.theme-parchment,body.theme-water,body.theme-earth { background: var(--deep); color: var(--white); }
+    body.theme-parchment header,body.theme-water header,body.theme-earth header { border-color: rgba(0,0,0,.1); }
+    body.theme-parchment .back-link,body.theme-water .back-link,body.theme-earth .back-link { color: var(--muted); border-color: var(--dim); }
+    body.theme-parchment .header-tag,body.theme-water .header-tag,body.theme-earth .header-tag { color: var(--muted); border-color: var(--dim); }
+    body.theme-parchment .ep-card,body.theme-water .ep-card,body.theme-earth .ep-card { background: rgba(255,255,255,.6); border-color: rgba(0,0,0,.1); }
+    body.theme-parchment .ep-title-text,body.theme-water .ep-title-text,body.theme-earth .ep-title-text { color: var(--white); }
+    body.theme-parchment .ep-num,body.theme-water .ep-num,body.theme-earth .ep-num { color: var(--muted); }
+    body.theme-parchment .section-divider-line,body.theme-water .section-divider-line,body.theme-earth .section-divider-line { background: rgba(0,0,0,.1); }
+    body.theme-parchment .info-title,body.theme-water .info-title,body.theme-earth .info-title { -webkit-text-fill-color: var(--white); color: var(--white); }
+    body.theme-parchment .info-synopsis,body.theme-water .info-synopsis,body.theme-earth .info-synopsis { color: var(--white); }
+    body.theme-parchment .genre-tag,body.theme-water .genre-tag,body.theme-earth .genre-tag { color: var(--muted); border-color: var(--dim); }
+    body.theme-parchment .stat-value,body.theme-water .stat-value,body.theme-earth .stat-value { color: var(--white); }
+    body.theme-parchment .viewer-controls,body.theme-water .viewer-controls,body.theme-earth .viewer-controls { background: rgba(255,255,255,.88); }
+    body.theme-parchment .vcbtn,body.theme-water .vcbtn,body.theme-earth .vcbtn { color: var(--muted); border-color: var(--dim); }
+    body.theme-parchment .book-card,body.theme-water .book-card,body.theme-earth .book-card { background: rgba(255,255,255,.65); border-color: rgba(0,0,0,.1); }
+    body.theme-parchment .book-title-text,body.theme-water .book-title-text,body.theme-earth .book-title-text { color: var(--white); }
+    body.theme-parchment .game-card,body.theme-water .game-card,body.theme-earth .game-card { background: rgba(255,255,255,.65); border-color: rgba(0,0,0,.1); }
+    body.theme-parchment .game-title,body.theme-water .game-title,body.theme-earth .game-title { color: var(--white); }
+    body.theme-parchment .game-desc,body.theme-water .game-desc,body.theme-earth .game-desc { color: var(--muted); }
+    body.theme-parchment .game-tag,body.theme-water .game-tag,body.theme-earth .game-tag { color: var(--muted); border-color: var(--dim); }
+    /* Fix hardcoded-color elements */
+    body.theme-parchment .time-disp,body.theme-water .time-disp,body.theme-earth .time-disp { color: rgba(0,0,0,.45); }
+    body.theme-parchment .time-disp b,body.theme-water .time-disp b,body.theme-earth .time-disp b { color: var(--white); }
+    body.theme-parchment .info-synopsis,body.theme-water .info-synopsis,body.theme-earth .info-synopsis { color: var(--white); opacity:.85; }
+    body.theme-parchment .about-text p,body.theme-water .about-text p,body.theme-earth .about-text p { color: var(--white); opacity:.82; }
+    body.theme-parchment .about-fact-value,body.theme-water .about-fact-value,body.theme-earth .about-fact-value { color: var(--white); }
+    body.theme-parchment .info-meta,body.theme-water .info-meta,body.theme-earth .info-meta { color: var(--muted); }
+    body.theme-parchment .hero-main,body.theme-water .hero-main,body.theme-earth .hero-main { -webkit-text-fill-color: var(--white); color: var(--white); }
+    body.theme-parchment .hero-sub,body.theme-water .hero-sub,body.theme-earth .hero-sub { color: var(--muted); }
+    body.theme-parchment .section-divider-title,body.theme-water .section-divider-title,body.theme-earth .section-divider-title { color: var(--muted); }
+    body.theme-parchment .np-title,body.theme-water .np-title,body.theme-earth .np-title { color: var(--white); }
+    body.theme-parchment .np-ep,body.theme-parchment .np-label,body.theme-water .np-ep,body.theme-water .np-label,body.theme-earth .np-ep,body.theme-earth .np-label { color: var(--muted); }
+    body.theme-parchment #nextEpPanel,body.theme-water #nextEpPanel,body.theme-earth #nextEpPanel { background: rgba(255,255,255,.95); border-color: rgba(0,0,0,.12); }
+    body.theme-parchment .nep-eyebrow,body.theme-water .nep-eyebrow,body.theme-earth .nep-eyebrow { color: var(--muted); }
+    body.theme-parchment .nep-title,body.theme-water .nep-title,body.theme-earth .nep-title { color: var(--white); }
+</style>
+</head>
+<body>
+<script>
+/* Apply saved theme immediately */
+(function(){
+  var t=localStorage.getItem("avatarhub_theme");
+  if(t&&t!=="dark") document.body.classList.add(t);
+})();
+</script>
+<script>
+/* ══ PASSWORD GATE — runs before anything renders ══
+   Stored in localStorage — only need to enter once ever.
+   Hash: simple obfuscated check (not cryptographic — just keeps casual visitors out). */
+(function(){
+  var PASS = 'AvatarAang';
+  var KEY  = 'avatarhub_auth';
+  if (localStorage.getItem(KEY) === '1') return; // already authed this session
+
+  /* Inject gate CSS */
+  var style = document.createElement('style');
+  style.textContent = [
+    '#avatarGate{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;',
+    'background:radial-gradient(ellipse at 50% 40%,#071220 0%,#04070d 65%);',
+    'font-family:"Cinzel",Georgia,serif;}',
+    '#avatarGate .gate-symbols{display:flex;align-items:center;gap:clamp(1.2rem,4vw,3rem);margin-bottom:.5rem;}',
+    '#avatarGate .gate-sym{width:clamp(36px,5vw,56px);height:clamp(36px,5vw,56px);object-fit:contain;opacity:.8;}',
+    '#avatarGate .gate-title{font-family:"Cinzel Decorative",Georgia,serif;font-size:clamp(1.4rem,4vw,2.4rem);',
+    'letter-spacing:.12em;background:linear-gradient(135deg,#fff 0%,#d4e8ff 40%,#4db8ff 100%);',
+    '-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-align:center;overflow:visible;padding:0.05em 0.1em 0.15em;line-height:1.15;}',
+    '#avatarGate .gate-sub{font-family:"Philosopher",Georgia,serif;font-style:italic;font-size:clamp(.75rem,1.8vw,1rem);',
+    'color:#6b8aab;letter-spacing:.3em;text-transform:uppercase;text-align:center;}',
+    '#avatarGate .gate-form{display:flex;flex-direction:column;align-items:center;gap:.9rem;width:min(340px,88vw);}',
+    '#avatarGate .gate-label{font-size:.44rem;letter-spacing:.35em;text-transform:uppercase;color:#6b8aab;}',
+    '#avatarGate .gate-input-wrap{position:relative;width:100%;}',
+    '#avatarGate .gate-input{width:100%;background:rgba(10,17,28,.85);border:1px solid rgba(77,184,255,.25);',
+    'border-radius:30px;color:#f0f4ff;font-family:"Philosopher",Georgia,serif;font-size:1rem;',
+    'padding:.75em 3rem .75em 1.4em;outline:none;letter-spacing:.05em;',
+    'transition:border-color .25s,box-shadow .25s;text-align:center;}',
+    '#avatarGate .gate-input:focus{border-color:rgba(77,184,255,.6);box-shadow:0 0 0 3px rgba(77,184,255,.1);}',
+    '#avatarGate .gate-eye{position:absolute;right:.85rem;top:50%;transform:translateY(-50%);',
+    'background:none;border:none;cursor:pointer;color:#6b8aab;padding:.2em;display:flex;align-items:center;}',
+    '#avatarGate .gate-eye:hover{color:#4db8ff;}',
+    '#avatarGate .gate-btn{width:100%;font-family:"Cinzel",Georgia,serif;font-size:.55rem;letter-spacing:.35em;',
+    'text-transform:uppercase;color:#04070d;background:linear-gradient(135deg,#4db8ff,#1a8fcc);',
+    'border:none;border-radius:30px;padding:.8em 1.5em;cursor:pointer;',
+    'transition:opacity .2s,transform .15s,box-shadow .2s;',
+    'box-shadow:0 4px 18px rgba(77,184,255,.35);}',
+    '#avatarGate .gate-btn:hover{opacity:.92;box-shadow:0 6px 24px rgba(77,184,255,.5);}',
+    '#avatarGate .gate-btn:active{transform:scale(.97);}',
+    '#avatarGate .gate-err{font-family:"Philosopher",Georgia,serif;font-style:italic;',
+    'font-size:.82rem;color:#f97316;letter-spacing:.08em;opacity:0;transition:opacity .3s;min-height:1.2em;}',
+    '#avatarGate .gate-err.show{opacity:1;}',
+    '@keyframes gateShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}',
+    '#avatarGate .gate-form.shake{animation:gateShake .4s cubic-bezier(.36,.07,.19,.97) both;}',
+    '@keyframes gatePulseAir{0%,100%{filter:drop-shadow(0 0 4px #f5c518)}50%{filter:drop-shadow(0 0 14px #f5c518)}}',
+    '@keyframes gatePulseWater{0%,100%{filter:drop-shadow(0 0 4px #4db8ff)}50%{filter:drop-shadow(0 0 14px #4db8ff)}}',
+    '@keyframes gatePulseEarth{0%,100%{filter:drop-shadow(0 0 4px #6abf69)}50%{filter:drop-shadow(0 0 14px #6abf69)}}',
+    '@keyframes gatePulseFire{0%,100%{filter:drop-shadow(0 0 4px #f97316)}50%{filter:drop-shadow(0 0 14px #f97316)}}',
+    '@keyframes gateIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}',
+    '#avatarGate .gate-form{animation:gateIn .55s cubic-bezier(.22,1,.36,1) .2s both;}',
+    '#avatarGate .gate-title{animation:gateIn .55s cubic-bezier(.22,1,.36,1) .05s both;}',
+    '#avatarGate .gate-sub{animation:gateIn .55s cubic-bezier(.22,1,.36,1) .12s both;}',
+    '@keyframes gateOut{to{opacity:0;transform:scale(1.04)}}',
+    '#avatarGate.leaving{animation:gateOut .5s cubic-bezier(.4,0,1,1) both;pointer-events:none;}',
+    '#avatarGate .gate-divider{width:60px;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,.4),transparent);}',
+  ].join('');
+  document.head.appendChild(style);
+
+  /* Build gate HTML */
+  var gate = document.createElement('div');
+  gate.id = 'avatarGate';
+  gate.innerHTML =
+    '<div class="gate-symbols">' +
+      '<img class="gate-sym" src="images/air.png"   alt="Air"   style="animation:gatePulseAir   2.8s ease-in-out infinite 0s">' +
+      '<img class="gate-sym" src="images/water.png" alt="Water" style="animation:gatePulseWater 2.8s ease-in-out infinite .5s">' +
+      '<img class="gate-sym" src="images/earth.png" alt="Earth" style="animation:gatePulseEarth 2.8s ease-in-out infinite 1s">' +
+      '<img class="gate-sym" src="images/fire.png"  alt="Fire"  style="animation:gatePulseFire  2.8s ease-in-out infinite 1.5s">' +
+    '</div>' +
+    '<div class="gate-title">AvatarArchive</div>' +
+    '<div class="gate-sub">Members Only</div>' +
+    '<div class="gate-divider"></div>' +
+    '<div class="gate-form" id="gateForm">' +
+      '<label class="gate-label" for="gateInput">Enter Password</label>' +
+      '<div class="gate-input-wrap">' +
+        '<input class="gate-input" type="password" id="gateInput" placeholder="••••••••••" autocomplete="current-password" autocorrect="off" autocapitalize="off" spellcheck="false">' +
+        '<button class="gate-eye" id="gateEye" type="button" tabindex="-1" aria-label="Toggle visibility">' +
+          '<svg id="eyeShow" width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>' +
+          '<svg id="eyeHide" width="17" height="17" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46A11.804 11.804 0 0 0 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>' +
+        '</button>' +
+      '</div>' +
+      '<button class="gate-btn" id="gateSubmit">Enter the Avatar World</button>' +
+      '<div class="gate-err" id="gateErr">Incorrect password — try again</div>' +
+    '</div>';
+
+  document.body.insertBefore(gate, document.body.firstChild);
+
+  /* Interactions */
+  var input  = document.getElementById('gateInput');
+  var btn    = document.getElementById('gateSubmit');
+  var err    = document.getElementById('gateErr');
+  var form   = document.getElementById('gateForm');
+  var eye    = document.getElementById('gateEye');
+  var eyeShow= document.getElementById('eyeShow');
+  var eyeHide= document.getElementById('eyeHide');
+
+  function showErr(msg){
+    err.textContent = msg || 'Incorrect password — try again';
+    err.classList.add('show');
+    form.classList.remove('shake');
+    void form.offsetWidth; // reflow to restart animation
+    form.classList.add('shake');
+    input.select();
+    setTimeout(function(){ err.classList.remove('show'); }, 2800);
+  }
+
+  function tryEnter(){
+    var val = input.value;
+    if (!val) { showErr('Please enter the password'); return; }
+    if (val === PASS) {
+      localStorage.setItem(KEY, '1');
+      gate.classList.add('leaving');
+      setTimeout(function(){ gate.style.display = 'none'; }, 500);
+    } else {
+      input.value = '';
+      showErr('Incorrect password — try again');
+    }
+  }
+
+  btn.addEventListener('click', tryEnter);
+  input.addEventListener('keydown', function(e){ if (e.key === 'Enter') tryEnter(); });
+
+  /* Show/hide password toggle */
+  eye.addEventListener('click', function(){
+    if (input.type === 'password') {
+      input.type = 'text';
+      eyeShow.style.display = 'none';
+      eyeHide.style.display = '';
+    } else {
+      input.type = 'password';
+      eyeShow.style.display = '';
+      eyeHide.style.display = 'none';
+    }
+    input.focus();
+  });
+
+  /* Auto-focus after a tiny delay (avoids mobile keyboard popping prematurely) */
+  setTimeout(function(){ input.focus(); }, 350);
+})();
+</script>
+
+
+<div id="introOverlay" title="Click to enter">
+  <p class="intro-tagline">Four elements. One destiny.</p>
+  <div class="symbols-grid">
+    <div class="sym-item water"><img src="images/water.png" alt="Water" class="sym-img"><span class="sym-label">Water</span></div>
+    <div class="sym-item earth"><img src="images/earth.png" alt="Earth" class="sym-img"><span class="sym-label">Earth</span></div>
+    <div class="sym-item fire" ><img src="images/fire.png"  alt="Fire"  class="sym-img"><span class="sym-label">Fire</span></div>
+    <div class="sym-item air"  ><img src="images/air.png"   alt="Air"   class="sym-img"><span class="sym-label">Air</span></div>
+  </div>
+</div>
+
+<div class="bg-layer"></div>
+
+<div class="page">
+  <header class="anim-header">
+    <a href="index.html" class="back-link">
+      <svg viewBox="0 0 24 24" fill="currentColor" style="width:11px;height:11px;flex-shrink:0"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      Hub
+    </a>
+  </header>
+
+  <section class="hero">
+    <h1 class="hero-main anim-title">The Avatar Books</h1>
+    <p class="hero-sub anim-sub">Graphic Novels &amp; Comics</p>
+    <span class="hero-badge anim-sub" style="animation-delay:.38s">Dark Horse Comics</span>
+  </section>
+
+  <section class="viewer-section anim-content">
+    <div class="now-reading-bar" id="nowReadingBar">
+      <div class="nr-dot"></div>
+      <span class="nr-label">Now Reading</span>
+      <span class="nr-title" id="nrTitle">Select a book below</span>
+      <span class="nr-ep"    id="nrSeries"></span>
+    </div>
+
+    <div class="viewer-frame" id="viewerFrame">
+      <div class="corner corner-tl"><img src="images/water.png" alt="" class="corner-img corner-water"></div>
+      <div class="corner corner-tr"><img src="images/earth.png" alt="" class="corner-img corner-earth"></div>
+      <div class="corner corner-bl"><img src="images/fire.png"  alt="" class="corner-img corner-fire"></div>
+      <div class="corner corner-br"><img src="images/air.png"   alt="" class="corner-img corner-air"></div>
+
+      <div class="viewer-shell" id="viewerShell">
+        <div class="viewer-placeholder" id="viewerPlaceholder">
+          <svg viewBox="0 0 72 64" width="90" height="80" fill="none" style="opacity:.18">
+            <rect x="2"  y="6" width="30" height="52" rx="2" fill="rgba(168,124,204,.5)" stroke="rgba(168,124,204,.7)" stroke-width="1.5"/>
+            <rect x="40" y="6" width="30" height="52" rx="2" fill="rgba(168,124,204,.35)" stroke="rgba(168,124,204,.7)" stroke-width="1.5"/>
+            <path d="M32 6 Q36 32 32 58" stroke="rgba(168,124,204,.5)" stroke-width="2.5" fill="none"/>
+            <path d="M40 6 Q36 32 40 58" stroke="rgba(168,124,204,.5)" stroke-width="2.5" fill="none"/>
+            <line x1="10" y1="22" x2="26" y2="22" stroke="rgba(168,124,204,.4)" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="10" y1="30" x2="26" y2="30" stroke="rgba(168,124,204,.4)" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="10" y1="38" x2="20" y2="38" stroke="rgba(168,124,204,.4)" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <p class="placeholder-text">Select a book from the list below<br>to begin reading</p>
+        </div>
+        <div id="pdfReader">
+          <div id="pdfSpread">
+            <div class="spread-hit prev" id="spreadPrev">
+              <div class="spread-hit-icon"><svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg></div>
+            </div>
+            <div class="spread-hit next" id="spreadNext">
+              <div class="spread-hit-icon"><svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+            </div>
+          </div>
+        </div>
+        <div class="viewer-loading" id="viewerLoading">
+          <div class="viewer-loading-spinner"></div>
+          <span class="viewer-loading-text">Loading Book…</span>
+        </div>
+        <div class="viewer-controls" id="viewerControls" style="display:none;">
+
+          <div class="ctrl-group">
+            <button class="vcbtn" id="prevPageBtn">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
+            </button>
+            <div class="page-counter">
+              <input class="page-input" type="number" id="pageInput" min="1" value="1">
+              <span class="page-sep">/</span>
+              <span class="page-total" id="pageTotal">—</span>
+            </div>
+            <button class="vcbtn" id="nextPageBtn">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+            </button>
+          </div>
+          <div class="ctrl-group">
+            <div class="zoom-wrap">
+              <button class="zoom-btn" id="zoomOut">−</button>
+              <span class="zoom-val" id="zoomVal">100%</span>
+              <button class="zoom-btn" id="zoomIn">+</button>
+            </div>
+
+            <button class="vcbtn" id="fsBookBtn" title="Fullscreen">
+              <svg id="fsIconOpen" viewBox="0 0 24 24" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+              <svg id="fsIconClose" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="below-content anim-content" style="animation-delay:.55s">
+    <div data-reveal style="margin-top:3rem;">
+      <div class="section-divider">
+        <div class="section-divider-line"></div>
+        <div class="section-divider-inner">
+          <img src="images/air.png" alt="" class="divider-sym">
+          <span class="section-divider-title">Choose Your Book</span>
+          <img src="images/air.png" alt="" class="divider-sym">
+        </div>
+        <div class="section-divider-line"></div>
+      </div>
+    </div>
+
+    <div class="season-bar">
+      <span class="season-label">Series</span>
+      <div class="season-pill-wrap">
+        <div class="season-pill" id="seriesPill">
+          <img class="season-pill-sym" id="pillSym" src="images/water.png" alt="">
+          <span id="pillLabel">The Last Airbender</span>
+          <svg class="season-pill-chevron" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+        </div>
+        <div class="season-dropdown" id="seriesDropdown"></div>
+      </div>
+    </div>
+
+    <div class="book-grid" id="bookGrid"></div>
+
+    <div class="info-panel" data-reveal>
+      <div class="info-main">
+        <h2 class="info-title">Avatar Graphic Novels</h2>
+        <div class="info-meta">
+          <span>2010 – Present</span><span class="dot">·</span>
+          <span>Dark Horse Comics</span><span class="dot">·</span>
+          <span>Official Canon</span>
+        </div>
+        <div class="genre-tags">
+          <span class="genre-tag">Adventure</span>
+          <span class="genre-tag">Fantasy</span>
+          <span class="genre-tag">Action</span>
+          <span class="genre-tag">Graphic Novel</span>
+          <span class="genre-tag">Canon</span>
+        </div>
+        <p class="info-synopsis">
+          The official Avatar graphic novel series bridges the gaps between the animated shows,
+          continuing the stories of Aang, Korra, and their friends in full canon adventures
+          published by Dark Horse Comics. Written and overseen by the original show creators,
+          these books expand the Avatar universe with stories that couldn't be told on screen.
+        </p>
+      </div>
+      <div class="info-divider"></div>
+      <div class="info-stats">
+        <div class="stat-item" data-reveal data-reveal-delay="0.05"><span class="stat-label">Publisher</span><span class="stat-value">Dark Horse Comics</span></div>
+        <div class="stat-item" data-reveal data-reveal-delay="0.12"><span class="stat-label">Format</span><span class="stat-value">Graphic Novel · PDF</span></div>
+        <div class="stat-item" data-reveal data-reveal-delay="0.19"><span class="stat-label">Canon Status</span><span class="stat-value">Official — approved by DiMartino &amp; Konietzko</span></div>
+        <div class="stat-item" data-reveal data-reveal-delay="0.26"><span class="stat-label">Series</span><span class="stat-value">The Last Airbender · The Legend of Korra</span></div>
+      </div>
+    </div>
+  </div>
+  <footer style="height:2rem"></footer>
+</div>
+
+<a class="jeffrey-watermark" href="https://www.youtube.com/@Jeffrey_Creates" target="_blank" rel="noopener">
+  <svg viewBox="0 0 24 24" style="width:9px;height:9px;fill:#ff1c1c;flex-shrink:0"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+  Jeffrey Creates
+</a>
+
+<script>
+/* ─── PDF.js ─── */
+const PDFJS_CDN    = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+const PDFJS_WORKER = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+/* ─── CONFIG ─── */
+const GH    = 'https://raw.githubusercontent.com/JeffreyHamilton6399/AvatarArchive';
+const ASSETS= 'images';
+
+const SERIES = [
+  {
+    id: 'atla', label: 'The Last Airbender', symFile: 'water.png',
+    symAnim: 'pulseGlowWater', symColor: 'var(--water)',
+    books: [
+      { title: 'The Promise, Part 1',       tag: 'books', file: 'thepromise1.pdf' },
+      { title: 'The Promise, Part 2',       tag: 'books', file: 'thepromise2.pdf' },
+      { title: 'The Promise, Part 3',       tag: 'books', file: 'thepromise3.pdf' },
+      { title: 'The Search, Part 1',        tag: 'books', file: 'thesearch1.pdf' },
+      { title: 'The Search, Part 2',        tag: 'books', file: 'thesearch2.pdf' },
+      { title: 'The Search, Part 3',        tag: 'books', file: 'thesearch3.pdf' },
+      { title: 'The Rift, Part 1',          tag: 'books', file: 'therift1.pdf' },
+      { title: 'The Rift, Part 2',          tag: 'books', file: 'therift2.pdf' },
+      { title: 'The Rift, Part 3',          tag: 'books', file: 'therift3.pdf' },
+      { title: 'Smoke and Shadow, Part 1',  tag: 'books', file: 'smokeandshadow1.pdf' },
+      { title: 'Smoke and Shadow, Part 2',  tag: 'books', file: 'smokeandshadow2.pdf' },
+      { title: 'Smoke and Shadow, Part 3',  tag: 'books', file: 'smokeandshadow3.pdf' },
+      { title: 'North and South, Part 1',   tag: 'books', file: 'northandsouth1.pdf' },
+      { title: 'North and South, Part 2',   tag: 'books', file: 'northandsouth2.pdf' },
+      { title: 'North and South, Part 3',   tag: 'books', file: 'northandsouth3.pdf' },
+      { title: 'Imbalance, Part 1',         tag: 'books', file: 'imbalance1.pdf' },
+      { title: 'Imbalance, Part 2',         tag: 'books', file: 'imbalance2.pdf' },
+      { title: 'Imbalance, Part 3',         tag: 'books', file: 'imbalance3.pdf' },
+    ]
+  },
+  {
+    id: 'korra', label: 'The Legend of Korra', symFile: 'earth.png',
+    symAnim: 'pulseGlowEarth', symColor: 'var(--earth)',
+    books: [
+      { title: 'Turf Wars, Part 1',           tag: 'books', file: 'turfwars1.pdf' },
+      { title: 'Turf Wars, Part 2',           tag: 'books', file: 'turfwars2.pdf' },
+      { title: 'Turf Wars, Part 3',           tag: 'books', file: 'turfwars3.pdf' },
+      { title: 'Ruins of the Empire, Part 1', tag: 'books', file: 'ruinsoftheempire1.pdf' },
+      { title: 'Ruins of the Empire, Part 2', tag: 'books', file: 'ruinsoftheempire2.pdf' },
+      { title: 'Ruins of the Empire, Part 3', tag: 'books', file: 'ruinsoftheempire3.pdf' },
+    ]
+  }
+];
+
+/* ─── PDF Reader State ─── */
+let pdfjsLib = null;
+let pdfDoc   = null;
+let currentPage = 1;
+let totalPages  = 0;
+let zoomScale   = 1.0;
+
+/* ─── Update page counter UI ─── */
+function updatePageUI() {
+  pageInput.value = currentPage;
+  prevPageBtn.disabled = currentPage <= 1;
+  nextPageBtn.disabled = (currentPage === 1 && totalPages <= 1) || (currentPage > 1 && currentPage + (currentPage % 2 === 0 ? 2 : 1) > totalPages);
+}
+
+/* ─── App State ─── */
+let currentSeries  = 0;
+let currentBookIdx = null;
+
+/* ─── Load PDF.js lazily via <script> tag (UMD build — works everywhere) ─── */
+async function ensurePDFJS() {
+  if (pdfjsLib) return pdfjsLib;
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = PDFJS_CDN;
+    s.onload = () => {
+      pdfjsLib = window.pdfjsLib;
+      if (!pdfjsLib) { reject(new Error('pdfjsLib not found on window')); return; }
+      pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER;
+      resolve(pdfjsLib);
+    };
+    s.onerror = () => reject(new Error('Failed to load PDF.js script'));
+    document.head.appendChild(s);
+  });
+}
+
+/* ─── Refs ─── */
+const pill         = document.getElementById('seriesPill');
+const pillSym      = document.getElementById('pillSym');
+const pillLabel    = document.getElementById('pillLabel');
+const dropdown     = document.getElementById('seriesDropdown');
+const bookGrid     = document.getElementById('bookGrid');
+const placeholder  = document.getElementById('viewerPlaceholder');
+const pdfReader    = document.getElementById('pdfReader');
+const viewerCtrl   = document.getElementById('viewerControls');
+const nrBar        = document.getElementById('nowReadingBar');
+const nrTitle      = document.getElementById('nrTitle');
+const nrSeries     = document.getElementById('nrSeries');
+const loadingEl    = document.getElementById('viewerLoading');
+const prevPageBtn  = document.getElementById('prevPageBtn');
+const nextPageBtn  = document.getElementById('nextPageBtn');
+const pageInput    = document.getElementById('pageInput');
+const pageTotalEl  = document.getElementById('pageTotal');
+const zoomInBtn    = document.getElementById('zoomIn');
+const zoomOutBtn   = document.getElementById('zoomOut');
+const zoomValEl    = document.getElementById('zoomVal');
+
+/* ─── Render a single page into a canvas, return canvas ─── */
+async function renderPageToCanvas(pageNum) {
+  const page     = await pdfDoc.getPage(pageNum);
+  const dpr      = window.devicePixelRatio || 1;
+  const viewport = page.getViewport({ scale: zoomScale * dpr });
+  const cssVp    = page.getViewport({ scale: zoomScale });
+
+  const canvas   = document.createElement('canvas');
+  canvas.dataset.page  = pageNum;
+  canvas.width         = viewport.width;
+  canvas.height        = viewport.height;
+  canvas.style.width   = cssVp.width  + 'px';
+  canvas.style.height  = cssVp.height + 'px';
+
+  const ctx = canvas.getContext('2d');
+  await page.render({ canvasContext: ctx, viewport }).promise;
+  return canvas;
+}
+
+/* ─── Render the current spread ─── */
+async function renderSpread(animate) {
+  if (!pdfDoc) return;
+  const spread = document.getElementById('pdfSpread');
+
+  // Remove old pages but keep hit zones
+  spread.querySelectorAll('.spread-page, .spread-spine').forEach(el => el.remove());
+
+  if (animate) {
+    spread.classList.remove('flip');
+    void spread.offsetWidth; // reflow
+    spread.classList.add('flip');
+  }
+
+  // Page 1 is a single cover (right-hand page only)
+  // All other spreads: left = even, right = odd  e.g. spread 2 = pages 2,3
+  const isFirstPage = currentPage === 1;
+  const leftNum  = isFirstPage ? null : (currentPage % 2 === 0 ? currentPage     : currentPage - 1);
+  const rightNum = isFirstPage ? 1    : (currentPage % 2 === 0 ? currentPage + 1 : currentPage);
+
+  const validLeft  = leftNum  && leftNum  <= totalPages;
+  const validRight = rightNum && rightNum <= totalPages;
+
+  if (validLeft) {
+    const leftWrap = document.createElement('div');
+    leftWrap.className = 'spread-page left';
+    leftWrap.appendChild(await renderPageToCanvas(leftNum));
+    spread.insertBefore(leftWrap, document.getElementById('spreadPrev').nextSibling);
+
+    const spine = document.createElement('div');
+    spine.className = 'spread-spine';
+    leftWrap.after(spine);
+  }
+
+  if (validRight) {
+    const rightWrap = document.createElement('div');
+    rightWrap.className = 'spread-page ' + (validLeft ? 'right' : 'single');
+    rightWrap.appendChild(await renderPageToCanvas(rightNum));
+    spread.insertBefore(rightWrap, document.getElementById('spreadNext'));
+  }
+
+  updatePageUI();
+
+  // Save position
+  if (currentSeries !== null && currentBookIdx !== null) {
+    localStorage.setItem(`avatarbooks_page_${currentSeries}_${currentBookIdx}`, currentPage);
+  }
+}
+
+/* ─── Navigate spreads ─── */
+function goNextSpread() {
+  if (currentPage === 1) {
+    // Cover → first real spread (pages 2-3)
+    if (totalPages > 1) { currentPage = 2; renderSpread(true); }
+  } else {
+    const next = currentPage % 2 === 0 ? currentPage + 2 : currentPage + 1;
+    if (next <= totalPages) { currentPage = next; renderSpread(true); }
+  }
+}
+function goPrevSpread() {
+  if (currentPage <= 2) {
+    currentPage = 1; renderSpread(true);
+  } else {
+    const prev = currentPage % 2 === 0 ? currentPage - 2 : currentPage - 1;
+    currentPage = Math.max(1, prev); renderSpread(true);
+  }
+}
+
+/* ─── Load book ─── */
+function bookUrl(sIdx, bIdx) {
+  const b = SERIES[sIdx].books[bIdx];
+  return `${GH}/main/books/${b.file}`;
+}
+
+async function loadBook(seriesIdx, bookIdx) {
+  currentSeries  = seriesIdx;
+  currentBookIdx = bookIdx;
+  const s = SERIES[seriesIdx];
+  const b = s.books[bookIdx];
+  const url = bookUrl(seriesIdx, bookIdx);
+
+  nrTitle.textContent  = b.title;
+  nrSeries.textContent = s.label;
+  nrBar.style.opacity  = '1';
+    placeholder.style.display = 'none';
+  pdfReader.style.display   = 'none';
+  viewerCtrl.style.display  = 'none';
+  document.getElementById('pdfSpread').querySelectorAll('.spread-page,.spread-spine').forEach(el => el.remove());
+  loadingEl.classList.add('active');
+
+  localStorage.setItem('avatarbooks_last', JSON.stringify({ seriesIdx, bookIdx }));
+  renderBooks(seriesIdx);
+  document.querySelector('.viewer-section').scrollIntoView({ behavior:'smooth', block:'start' });
+
+  try {
+    const lib = await ensurePDFJS();
+
+    // GitHub Releases redirects through CDN URLs without CORS headers,
+    // so fetch the raw bytes and pass them to PDF.js as a typed array.
+    const loadingText = loadingEl.querySelector('.viewer-loading-text');
+    if (loadingText) loadingText.textContent = 'Downloading…';
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+
+    // Show download % if the server sends Content-Length
+    const contentLength = resp.headers.get('content-length');
+    let buffer;
+    if (contentLength && resp.body && loadingText) {
+      const total = parseInt(contentLength);
+      const reader = resp.body.getReader();
+      const chunks = [];
+      let received = 0;
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        chunks.push(value);
+        received += value.length;
+        loadingText.textContent = `Downloading… ${Math.round(received / total * 100)}%`;
+      }
+      buffer = await new Blob(chunks).arrayBuffer();
+    } else {
+      buffer = await resp.arrayBuffer();
+    }
+    if (loadingText) loadingText.textContent = 'Rendering…';
+    pdfDoc = await lib.getDocument({ data: new Uint8Array(buffer) }).promise;
+    totalPages  = pdfDoc.numPages;
+    pageTotalEl.textContent = totalPages;
+    pageInput.max = totalPages;
+
+    // Restore last-read page
+    const savedPage = parseInt(localStorage.getItem(`avatarbooks_page_${seriesIdx}_${bookIdx}`) || '1');
+    currentPage = Math.min(Math.max(1, savedPage), totalPages);
+
+    loadingEl.classList.remove('active');
+    pdfReader.style.display = 'flex';
+    viewerCtrl.style.display = 'flex';
+    await renderSpread(false);
+
+  } catch(err) {
+    /* PDF load error — silently fail */
+    loadingEl.classList.remove('active');
+    loadingEl.innerHTML = `<span class="viewer-loading-text" style="color:#f97316">Failed to load PDF.<br>Try opening directly.</span>`;
+    loadingEl.style.opacity = '1';
+    loadingEl.style.pointerEvents = 'all';
+    viewerCtrl.style.display = 'flex';
+  }
+}
+
+/* ─── Zoom ─── */
+const ZOOM_STEPS = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
+function setZoom(scale) {
+  zoomScale = scale;
+  zoomValEl.textContent = Math.round(scale * 100) + '%';
+  if (pdfDoc) renderSpread(false);
+}
+zoomInBtn.addEventListener('click', () => {
+  const idx = ZOOM_STEPS.findIndex(z => z >= zoomScale);
+  const next = idx < ZOOM_STEPS.length - 1 ? ZOOM_STEPS[idx + 1] : zoomScale;
+  if (next !== zoomScale) setZoom(next);
+});
+zoomOutBtn.addEventListener('click', () => {
+  const idx = [...ZOOM_STEPS].reverse().findIndex(z => z <= zoomScale);
+  const prev = idx < ZOOM_STEPS.length - 1 ? [...ZOOM_STEPS].reverse()[idx + 1] : zoomScale;
+  if (prev !== zoomScale) setZoom(prev);
+});
+
+/* ─── Page controls ─── */
+prevPageBtn.addEventListener('click', () => goPrevSpread());
+nextPageBtn.addEventListener('click', () => goNextSpread());
+document.getElementById('spreadPrev').addEventListener('click', () => goPrevSpread());
+document.getElementById('spreadNext').addEventListener('click', () => goNextSpread());
+pageInput.addEventListener('change', () => {
+  const p = Math.min(Math.max(1, parseInt(pageInput.value) || 1), totalPages);
+  currentPage = p; renderSpread(true);
+});
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if (!pdfDoc) return;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); goNextSpread(); }
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { e.preventDefault(); goPrevSpread(); }
+});
+
+/* Book nav handled via swipe/drag — prev/next book buttons removed */
+
+/* ─── Intro overlay ─── */
+const overlay = document.getElementById('introOverlay');
+let dismissed = false;
+requestAnimationFrame(() => setTimeout(() => overlay.classList.add('symbols-in'), 80));
+function dismissOverlay(){
+  if(dismissed) return; dismissed = true;
+  overlay.classList.add('fade-out');
+  setTimeout(() => { overlay.style.display = 'none'; document.body.classList.add('page-ready'); }, 650);
+}
+overlay.addEventListener('click', dismissOverlay, { once: true });
+setTimeout(dismissOverlay, 1400);
+
+/* ─── Series dropdown ─── */
+document.body.appendChild(dropdown);
+SERIES.forEach((s, i) => {
+  const opt = document.createElement('div');
+  opt.className = 'season-opt' + (i === 0 ? ' active' : '');
+  opt.dataset.idx = i;
+  opt.innerHTML = `
+    <img class="season-opt-sym" src="${ASSETS}/${s.symFile}" alt="" style="animation:${s.symAnim} 2.4s ease-in-out infinite;">
+    <div class="season-opt-info">
+      <div class="season-opt-name" style="color:${s.symColor}">${s.label}</div>
+      <div class="season-opt-count">${s.books.length} Book${s.books.length!==1?'s':''}</div>
+    </div>
+    <svg class="season-opt-check" viewBox="0 0 24 24" fill="${s.symColor}"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>`;
+  opt.addEventListener('click', () => { selectSeries(i); closePill(); });
+  dropdown.appendChild(opt);
+});
+
+function setPill(idx) {
+  const s = SERIES[idx];
+  pillSym.src = `${ASSETS}/${s.symFile}`;
+  pillSym.style.animation = `${s.symAnim} 2.4s ease-in-out infinite`;
+  pillLabel.textContent = s.label;
+  pillLabel.style.color = s.symColor;
+  dropdown.querySelectorAll('.season-opt').forEach(o => {
+    o.classList.toggle('active', parseInt(o.dataset.idx) === idx);
+  });
+}
+function openPill() {
+  const rect = pill.getBoundingClientRect();
+  dropdown.style.top  = (rect.bottom + 8) + 'px';
+  dropdown.style.left = rect.left + 'px';
+  pill.classList.add('open');
+  dropdown.classList.add('open');
+}
+function closePill() { pill.classList.remove('open'); dropdown.classList.remove('open'); }
+pill.addEventListener('click', e => { e.stopPropagation(); pill.classList.contains('open') ? closePill() : openPill(); });
+document.addEventListener('click', () => closePill());
+dropdown.addEventListener('click', e => e.stopPropagation());
+
+function renderBooks(seriesIdx) {
+  const s = SERIES[seriesIdx];
+  bookGrid.innerHTML = '';
+  s.books.forEach((b, i) => {
+    const card = document.createElement('div');
+    card.className = 'book-card' + (seriesIdx === currentSeries && i === currentBookIdx ? ' active' : '');
+    card.dataset.sidx = seriesIdx;
+    card.dataset.bidx = i;
+    card.style.animationDelay = (i * 0.025) + 's';
+    card.innerHTML = `
+      <div class="book-card-top">
+        <span class="book-num">${(i+1).toString().padStart(2,'0')}</span>
+        <div class="book-now-dot"></div>
+      </div>
+      <div class="book-title-text">${b.title}</div>
+      <div class="book-series-label">${s.label}</div>
+      <svg class="book-open-icon" viewBox="0 0 24 24" width="14" height="14" fill="rgba(168,124,204,.8)"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>`;
+    card.addEventListener('click', () => loadBook(seriesIdx, i));
+    bookGrid.appendChild(card);
+  });
+}
+
+function selectSeries(idx) {
+  currentSeries = idx;
+  setPill(idx);
+  renderBooks(idx);
+}
+
+/* ─── Init ─── */
+setPill(0);
+renderBooks(0);
+
+/* ─── Auto-load last-read book ─── */
+document.body.addEventListener('animationend', function onReady(e) {
+  if (e.target.classList.contains('anim-content')) {
+    document.body.removeEventListener('animationend', onReady);
+    try {
+      const saved = JSON.parse(localStorage.getItem('avatarbooks_last') || 'null');
+      const sidx = saved?.sidx ?? saved?.seriesIdx;
+      const bidx = saved?.bidx ?? saved?.bookIdx;
+      if (saved && SERIES[sidx] && SERIES[sidx].books[bidx]) {
+        selectSeries(sidx);
+        loadBook(sidx, bidx);
+      }
+    } catch(e) {}
+  }
+});
+
+/* ─── Scroll reveal ─── */
+(function(){
+  const els = document.querySelectorAll('[data-reveal]');
+  if (!els.length) return;
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.transitionDelay = (e.target.dataset.revealDelay || 0) + 's';
+        e.target.classList.add('revealed');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: .08 });
+  els.forEach(el => io.observe(el));
+})();
+
+/* ─── Fullscreen toggle ─── */
+(function(){
+  const fsBtn       = document.getElementById('fsBookBtn');
+  const fsOpen      = document.getElementById('fsIconOpen');
+  const fsClose     = document.getElementById('fsIconClose');
+  const viewerFrame = document.querySelector('.viewer-frame');
+  if (!fsBtn || !viewerFrame) return;
+
+  function updateFsIcons() {
+    const inFs = !!(document.fullscreenElement || document.webkitFullscreenElement) || viewerFrame.classList.contains('fake-fs');
+    fsOpen.style.display  = inFs ? 'none' : '';
+    fsClose.style.display = inFs ? ''     : 'none';
+  }
+
+  fsBtn.addEventListener('click', () => {
+    const inNativeFS = document.fullscreenElement || document.webkitFullscreenElement;
+    const inFakeFS   = viewerFrame.classList.contains('fake-fs');
+    if (inNativeFS) {
+      (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    } else if (inFakeFS) {
+      viewerFrame.classList.remove('fake-fs');
+      document.body.style.overflow = '';
+      fsIconOpen.style.display = '';
+      fsIconClose.style.display = 'none';
+    } else if (viewerFrame.requestFullscreen) {
+      viewerFrame.requestFullscreen().catch(() => {
+        /* Native FS failed (iOS) — fall back to fake fullscreen */
+        viewerFrame.classList.add('fake-fs');
+        document.body.style.overflow = 'hidden';
+        fsIconOpen.style.display = 'none';
+        fsIconClose.style.display = '';
+      });
+    } else if (viewerFrame.webkitRequestFullscreen) {
+      viewerFrame.webkitRequestFullscreen();
+    } else {
+      /* iOS Safari — use fake fullscreen */
+      viewerFrame.classList.add('fake-fs');
+      document.body.style.overflow = 'hidden';
+      fsIconOpen.style.display = 'none';
+      fsIconClose.style.display = '';
+    }
+  });
+
+  document.addEventListener('fullscreenchange', updateFsIcons);
+  document.addEventListener('webkitfullscreenchange', updateFsIcons);
+  /* Keyboard shortcut F */
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT') return;
+    if (e.code === 'KeyF') fsBtn.click();
+    if (e.code === 'ArrowRight' || e.code === 'KeyL') document.getElementById('nextPageBtn')?.click();
+    if (e.code === 'ArrowLeft'  || e.code === 'KeyJ') document.getElementById('prevPageBtn')?.click();
+  });
+})();
+
+/* ─── Swipe (touch) + Mouse drag page turning ─── */
+(function(){
+  const spread = document.getElementById('pdfSpread');
+  if (!spread) return;
+  const THRESHOLD = 60; // px drag needed to turn page
+
+  // Touch swipe
+  let touchStartX = null;
+  spread.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+  spread.addEventListener('touchend', e => {
+    if (touchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    touchStartX = null;
+    if (Math.abs(dx) < THRESHOLD) return;
+    if (dx < 0) {
+      // Swipe left → next page
+      document.getElementById('nextPageBtn')?.click();
+    } else {
+      // Swipe right → prev page
+      document.getElementById('prevPageBtn')?.click();
+    }
+  }, { passive: true });
+
+  // Mouse drag (click-and-drag left/right)
+  let mouseStartX = null;
+  let dragging    = false;
+  spread.addEventListener('mousedown', e => {
+    mouseStartX = e.clientX;
+    dragging = false;
+  });
+  spread.addEventListener('mousemove', e => {
+    if (mouseStartX === null) return;
+    if (Math.abs(e.clientX - mouseStartX) > 8) {
+      dragging = true;
+      spread.classList.add('dragging');
+    }
+  });
+  spread.addEventListener('mouseup', e => {
+    spread.classList.remove('dragging');
+    if (!dragging || mouseStartX === null) { mouseStartX = null; return; }
+    const dx = e.clientX - mouseStartX;
+    mouseStartX = null;
+    dragging = false;
+    if (Math.abs(dx) < THRESHOLD) return;
+    if (dx < 0) {
+      document.getElementById('nextPageBtn')?.click();
+    } else {
+      document.getElementById('prevPageBtn')?.click();
+    }
+  });
+  spread.addEventListener('mouseleave', () => {
+    spread.classList.remove('dragging');
+    mouseStartX = null;
+    dragging = false;
+  });
+
+  // Show swipe hint on mobile first open
+  if ('ontouchstart' in window) {
+    const hint = document.createElement('div');
+    hint.className = 'swipe-hint';
+    hint.textContent = '← Swipe to turn page →';
+    spread.appendChild(hint);
+    setTimeout(() => {
+      hint.classList.add('show');
+      setTimeout(() => hint.classList.remove('show'), 2800);
+    }, 800);
+  }
+})();
+</script>
+
+<script>
+/* ── Background ambient — resumes seamlessly from hub ── */
+(function () {
+  if (localStorage.getItem('avatarhub_ambient_off') === '1') return;
+  if (sessionStorage.getItem('avatarhub_ambient_active') !== '1') return;
+
+  let _raw     = null;
+  let _ctx     = null;
+  let _started = false;
+
+  fetch('audio/ambient.MP3')
+    .then(r => r.ok ? r.arrayBuffer() : null)
+    .then(b => { _raw = b; })
+    .catch(() => {});
+
+  setTimeout(tryStart, 80);
+  armGesture();
+
+  function armGesture() {
+    ['click','touchstart','keydown'].forEach(ev =>
+      document.addEventListener(ev, function h() {
+        document.removeEventListener(ev, h);
+        tryStart();
+      }, { passive: true })
+    );
+  }
+
+  async function tryStart() {
+    if (_started) return;
+    if (!_ctx) {
+      try { _ctx = new (window.AudioContext || window.webkitAudioContext)(); }
+      catch (e) { return; }
+    }
+    try { await _ctx.resume(); } catch (e) {}
+    if (_ctx.state !== 'running') { armGesture(); return; }
+
+    const raw = _raw || await fetch('audio/ambient.MP3')
+      .then(r => r.ok ? r.arrayBuffer() : null).catch(() => null);
+    if (!raw) return;
+
+    let decoded;
+    try { decoded = await _ctx.decodeAudioData(raw.slice(0)); }
+    catch (e) { return; }
+    if (_started) return;
+    _started = true;
+
+    // Resume at the exact position in the loop the hub was at
+    const t0 = parseInt(sessionStorage.getItem('avatarhub_ambient_t0') || '0');
+    const offset = (t0 && decoded.duration > 0)
+      ? ((Date.now() - t0) / 1000) % decoded.duration
+      : 0;
+
+    const src  = _ctx.createBufferSource();
+    const gain = _ctx.createGain();
+    src.buffer = decoded;
+    src.loop   = true;
+    gain.gain.value = 0;
+    src.connect(gain).connect(_ctx.destination);
+    src.start(0, offset);
+
+    let v = 0;
+    const t = setInterval(() => {
+      v = Math.min(0.55, v + 0.015);
+      gain.gain.value = v;
+      if (v >= 0.55) clearInterval(t);
+    }, 60);
+  }
+})();
+</script>
+</body>
+</html>
