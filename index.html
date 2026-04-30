@@ -289,7 +289,7 @@
     }
     .hero-main {
       font-family: 'Cinzel Decorative', serif; font-weight: 900;
-      font-size: clamp(2.6rem,6vw,5rem); letter-spacing: .1em;
+      font-size: clamp(2rem,4.5vw,3.8rem); letter-spacing: .1em;
       background: linear-gradient(135deg,#fff 0%,#d4e8ff 40%,#4db8ff 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
       margin-bottom: .5rem;
@@ -1605,41 +1605,44 @@ self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>
   }
 
   // ── Core synth: shaped noise burst ───────────────────────────────────────
-  //   freq      – bandpass centre frequency (Hz)
-  //   dur       – duration in seconds
-  //   vol       – peak gain (0-1)
-  //   Q         – bandpass Q (sharpness)
   function playTick(freq, dur, vol, Q) {
     const ctx = getSfxCtx();
     if (!ctx) return;
     if (ctx.state === 'suspended') ctx.resume();
     if (ctx.state !== 'running') return;
-
     const len  = Math.floor(ctx.sampleRate * dur);
     const buf  = ctx.createBuffer(1, len, ctx.sampleRate);
     const data = buf.getChannelData(0);
     for (let i = 0; i < len; i++) {
-      // White noise shaped by an exponential decay envelope
       data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 4);
     }
-
-    const src    = ctx.createBufferSource();
-    const bp     = ctx.createBiquadFilter();
-    const gain   = ctx.createGain();
-
-    bp.type            = 'bandpass';
-    bp.frequency.value = freq;
-    bp.Q.value         = Q;
-
+    const src  = ctx.createBufferSource();
+    const bp   = ctx.createBiquadFilter();
+    const gain = ctx.createGain();
+    bp.type = 'bandpass'; bp.frequency.value = freq; bp.Q.value = Q;
     gain.gain.setValueAtTime(vol, ctx.currentTime);
-
     src.buffer = buf;
     src.connect(bp).connect(gain).connect(ctx.destination);
     src.start();
   }
 
-  // ── Click SFX ─────────────────────────────────────────────────────────────
-  function playClickSfx() { playTick(1100, 0.038, 0.22, 0.9); }
+  // ── Punchy tonal click with real impact ──────────────────────────────────
+  function playClickSfx() {
+    const ctx = getSfxCtx();
+    if (!ctx || ctx.state !== 'running') return;
+    const now = ctx.currentTime;
+    const osc  = ctx.createOscillator();
+    const oscG = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(200, now);
+    osc.frequency.exponentialRampToValueAtTime(55, now + 0.08);
+    oscG.gain.setValueAtTime(0.55, now);
+    oscG.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+    osc.connect(oscG).connect(ctx.destination);
+    osc.start(now); osc.stop(now + 0.13);
+    playTick(1400, 0.022, 0.18, 1.8);
+    playTick(80, 0.09, 0.28, 3.5);
+  }
 
   // ── Hover SFX ─────────────────────────────────────────────────────────────
   function playHoverSfx() { playTick(2200, 0.018, 0.06, 1.2); }

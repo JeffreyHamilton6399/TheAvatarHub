@@ -576,15 +576,13 @@
 
     <a href="index.html" class="back-link">
       <svg viewBox="0 0 24 24" fill="currentColor" style="width:11px;height:11px;flex-shrink:0"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-      Hub
+      The Spirit Library
     </a>
-<span class="header-tag">3 Books · 61 Episodes</span>
   </header>
 
   <section class="hero">
     <h1 class="hero-main anim-title">The Last Airbender</h1>
     <p class="hero-sub anim-sub">Avatar: The Original Series</p>
-    <span class="hero-badge anim-sub" style="animation-delay:.38s">3 Books &nbsp;·&nbsp; 61 Episodes</span>
   </section>
 
   <section class="player-section anim-player">
@@ -874,12 +872,12 @@ let currentEp=null, autoFrame=null, autoStart=null;
 
 /* Intro overlay */
 const overlay=document.getElementById('introOverlay'); let dismissed=false, overlayReady=false;
-if(localStorage.getItem('aa_intro_seen')==='1'){
-  /* Already seen intro — skip overlay, show content immediately */
+if(localStorage.getItem('aa_atla_intro_seen')==='1'){
+  /* Already seen this page's intro — skip overlay, show content immediately */
   dismissed=true; overlay.style.display='none'; document.body.classList.add('page-ready');
 } else {
   requestAnimationFrame(()=>setTimeout(()=>overlay.classList.add('symbols-in'),80));
-  function dismissOverlay(){ if(!overlayReady||dismissed)return;dismissed=true;document.body.classList.add('page-ready');overlay.classList.add('fade-out');setTimeout(()=>{overlay.style.display='none';},650); }
+  function dismissOverlay(){ if(!overlayReady||dismissed)return;dismissed=true;localStorage.setItem('aa_atla_intro_seen','1');document.body.classList.add('page-ready');overlay.classList.add('fade-out');setTimeout(()=>{overlay.style.display='none';},650); }
   overlay.addEventListener('click',dismissOverlay);
   window.addEventListener('load',()=>{ overlayReady=true; overlay.classList.add('ready'); });
 }
@@ -1397,41 +1395,47 @@ ccBtn.addEventListener('click',()=>{
   }
 
   // ── Core synth: shaped noise burst ───────────────────────────────────────
-  //   freq      – bandpass centre frequency (Hz)
-  //   dur       – duration in seconds
-  //   vol       – peak gain (0-1)
-  //   Q         – bandpass Q (sharpness)
   function playTick(freq, dur, vol, Q) {
     const ctx = getSfxCtx();
     if (!ctx) return;
     if (ctx.state === 'suspended') ctx.resume();
     if (ctx.state !== 'running') return;
-
     const len  = Math.floor(ctx.sampleRate * dur);
     const buf  = ctx.createBuffer(1, len, ctx.sampleRate);
     const data = buf.getChannelData(0);
     for (let i = 0; i < len; i++) {
-      // White noise shaped by an exponential decay envelope
       data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 4);
     }
-
-    const src    = ctx.createBufferSource();
-    const bp     = ctx.createBiquadFilter();
-    const gain   = ctx.createGain();
-
-    bp.type            = 'bandpass';
-    bp.frequency.value = freq;
-    bp.Q.value         = Q;
-
+    const src  = ctx.createBufferSource();
+    const bp   = ctx.createBiquadFilter();
+    const gain = ctx.createGain();
+    bp.type = 'bandpass'; bp.frequency.value = freq; bp.Q.value = Q;
     gain.gain.setValueAtTime(vol, ctx.currentTime);
-
     src.buffer = buf;
     src.connect(bp).connect(gain).connect(ctx.destination);
     src.start();
   }
 
-  // ── Click SFX ─────────────────────────────────────────────────────────────
-  function playClickSfx() { playTick(90, 0.10, 0.20, 4.0); playTick(280, 0.045, 0.09, 2.5); }
+  // ── Punchy tonal click with real impact ──────────────────────────────────
+  function playClickSfx() {
+    const ctx = getSfxCtx();
+    if (!ctx || ctx.state !== 'running') return;
+    const now = ctx.currentTime;
+    // Layer 1: deep tonal thud (sine tone with fast pitch drop)
+    const osc  = ctx.createOscillator();
+    const oscG = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(200, now);
+    osc.frequency.exponentialRampToValueAtTime(55, now + 0.08);
+    oscG.gain.setValueAtTime(0.55, now);
+    oscG.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+    osc.connect(oscG).connect(ctx.destination);
+    osc.start(now); osc.stop(now + 0.13);
+    // Layer 2: snap transient (high noise burst)
+    playTick(1400, 0.022, 0.18, 1.8);
+    // Layer 3: low body thump
+    playTick(80, 0.09, 0.28, 3.5);
+  }
 
   // ── Hover SFX ─────────────────────────────────────────────────────────────
   function playHoverSfx() { playTick(2200, 0.018, 0.06, 1.2); }

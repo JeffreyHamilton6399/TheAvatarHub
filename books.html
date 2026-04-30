@@ -185,7 +185,7 @@
     #pdfSpread.dragging { cursor: grabbing; }
 
     /* Page controls bar */
-    .viewer-controls { display:flex; align-items:center; justify-content:space-between; gap:.75rem; padding:.85rem 1.5rem; background:rgba(8,12,22,.9); backdrop-filter:blur(28px); border-top:1px solid rgba(255,255,255,.07); border-radius:0 0 16px 16px; flex-wrap:wrap; }
+    .viewer-controls { display:flex; align-items:center; justify-content:center; gap:1.2rem; padding:.85rem 1.5rem; background:rgba(8,12,22,.9); backdrop-filter:blur(28px); border-top:1px solid rgba(255,255,255,.07); border-radius:0 0 16px 16px; flex-wrap:wrap; }
     .vcbtn { font-family:'Cinzel',serif; font-size:.48rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); background:none; border:1px solid var(--dim); padding:.45em 1.2em; border-radius:20px; cursor:pointer; transition:color .2s,border-color .2s,background .2s; text-decoration:none; display:flex; align-items:center; gap:.4em; white-space:nowrap; }
     .vcbtn:hover { color:var(--books); border-color:rgba(var(--books-rgb),.5); background:rgba(var(--books-rgb),.06); }
     .vcbtn:disabled { opacity:.3; cursor:default; pointer-events:none; }
@@ -447,9 +447,7 @@
   <header class="anim-header">
     <a href="index.html" class="back-link">
       <svg viewBox="0 0 24 24" fill="currentColor" style="width:11px;height:11px;flex-shrink:0"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-      Hub
-    </a>
-  </header>
+      The Spirit Library
 
   <section class="hero">
     <h1 class="hero-main anim-title">The Avatar Books</h1>
@@ -499,7 +497,6 @@
           <span class="viewer-loading-text">Loading Book…</span>
         </div>
         <div class="viewer-controls" id="viewerControls" style="display:none;">
-          <div class="ctrl-group">
           <div class="ctrl-group">
             <button class="vcbtn" id="prevPageBtn">
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
