@@ -12,13 +12,34 @@
       "src": "images/favicon.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "images/favicon.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "images/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "images/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
-  ]
+  ],
+  "shortcuts": [
+    { "name": "ATLA",           "short_name": "ATLA",    "url": "./atla.html",      "description": "Avatar: The Last Airbender" },
+    { "name": "Korra",          "short_name": "Korra",   "url": "./kora.html",      "description": "The Legend of Korra" },
+    { "name": "Live Action",    "short_name": "Netflix", "url": "./liveshow.html",  "description": "Netflix Live Action Series" },
+    { "name": "2026 Film",      "short_name": "Film",    "url": "./movie2026.html", "description": "Aang, The Last Airbender (2026)" }
+  ],
+  "categories": ["entertainment", "video"],
+  "lang": "en-US",
+  "dir": "ltr"
 }

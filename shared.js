@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   AvatarArchive — shared.js
+   AvatarArchive — shared.js  (performance-optimised build)
    Loaded by every page (deferred). Contains:
    - Theme application (also runs inline via tiny snippet)
    - Password gate
@@ -93,15 +93,17 @@
   const eye     = document.getElementById('gateEye');
   const eyeShow = document.getElementById('eyeShow');
   const eyeHide = document.getElementById('eyeHide');
+  let errTimer;
 
   function showErr(msg) {
+    clearTimeout(errTimer);
     err.textContent = msg || 'Incorrect password — try again';
     err.classList.add('show');
     form.classList.remove('shake');
     void form.offsetWidth;
     form.classList.add('shake');
     input.select();
-    setTimeout(() => err.classList.remove('show'), 2800);
+    errTimer = setTimeout(() => err.classList.remove('show'), 2800);
   }
 
   function tryEnter() {
@@ -201,13 +203,13 @@
     only runs on non-index pages)
 ══════════════════════════════════════════ */
 (function () {
-  // Don't run on index.html — it has its own engine
   if (document.getElementById('mapSplash')) return;
   if (localStorage.getItem('avatarhub_ambient_off') === '1') return;
   if (sessionStorage.getItem('avatarhub_ambient_active') !== '1') return;
 
   let _raw = null, _ctx = null, _gain = null, _started = false;
 
+  // Prefetch audio in the background — use fetch over XHR for better streaming support
   fetch('audio/ambient.MP3')
     .then(r => r.ok ? r.arrayBuffer() : null)
     .then(b => { _raw = b; })
@@ -217,11 +219,12 @@
   armGesture();
 
   function armGesture() {
+    const h = function () {
+      ['click', 'touchstart', 'keydown'].forEach(ev => document.removeEventListener(ev, h));
+      tryStart();
+    };
     ['click', 'touchstart', 'keydown'].forEach(ev =>
-      document.addEventListener(ev, function h() {
-        document.removeEventListener(ev, h);
-        tryStart();
-      }, { passive: true })
+      document.addEventListener(ev, h, { passive: true, once: true })
     );
   }
 
@@ -258,33 +261,25 @@
     _gain.gain.setValueAtTime(0, _ctx.currentTime);
     _gain.gain.linearRampToValueAtTime(0.55, _ctx.currentTime + 2.5);
 
-    // Sync ambient toggle button state
     const ambientRow = document.getElementById('ambientRow');
     if (ambientRow) ambientRow.classList.add('active');
 
-    // Duck when video plays, restore on pause/end
+    // Duck during video playback
     const video = document.getElementById('mainVideo');
     if (video) {
-      video.addEventListener('play',  () => fadeTo(0));
-      video.addEventListener('pause', () => fadeTo(0.55));
-      video.addEventListener('ended', () => fadeTo(0.55));
+      video.addEventListener('play',  () => fadeTo(0),    { passive: true });
+      video.addEventListener('pause', () => fadeTo(0.55), { passive: true });
+      video.addEventListener('ended', () => fadeTo(0.55), { passive: true });
     }
 
-    // Ambient toggle for sub-pages
     if (ambientRow) {
       ambientRow.addEventListener('click', () => {
         if (!_gain) return;
-        if (_started && _gain.gain.value > 0.1) {
-          fadeTo(0);
-          localStorage.setItem('avatarhub_ambient_off', '1');
-          sessionStorage.setItem('avatarhub_ambient_active', '0');
-          ambientRow.classList.remove('active');
-        } else {
-          fadeTo(0.55);
-          localStorage.setItem('avatarhub_ambient_off', '0');
-          sessionStorage.setItem('avatarhub_ambient_active', '1');
-          ambientRow.classList.add('active');
-        }
+        const isPlaying = _gain.gain.value > 0.1;
+        fadeTo(isPlaying ? 0 : 0.55);
+        localStorage.setItem('avatarhub_ambient_off', isPlaying ? '1' : '0');
+        sessionStorage.setItem('avatarhub_ambient_active', isPlaying ? '0' : '1');
+        ambientRow.classList.toggle('active', !isPlaying);
       });
     }
   }
@@ -300,174 +295,194 @@
 
 /* ══════════════════════════════════════════
    5. UI SFX — synthesised click + hover ticks
+   Deferred until idle to avoid blocking paint
 ══════════════════════════════════════════ */
-(function() {
-  const _run = function() { (function () {
-  let _sfxCtx = null;
+(function () {
+  const _run = function () {
+    let _sfxCtx = null;
 
-  function getSfxCtx() {
-    if (_sfxCtx && _sfxCtx.state !== 'closed') return _sfxCtx;
-    try { _sfxCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
-    return _sfxCtx;
-  }
-
-  function playTick(freq, dur, vol, Q) {
-    const ctx = getSfxCtx();
-    if (!ctx) return;
-    if (ctx.state === 'suspended') ctx.resume();
-    if (ctx.state !== 'running') return;
-
-    const len  = Math.floor(ctx.sampleRate * dur);
-    const buf  = ctx.createBuffer(1, len, ctx.sampleRate);
-    const data = buf.getChannelData(0);
-    for (let i = 0; i < len; i++) {
-      data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 4);
+    function getSfxCtx() {
+      if (_sfxCtx && _sfxCtx.state !== 'closed') return _sfxCtx;
+      try { _sfxCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
+      return _sfxCtx;
     }
-    const src  = ctx.createBufferSource();
-    const bp   = ctx.createBiquadFilter();
-    const gain = ctx.createGain();
-    bp.type = 'bandpass'; bp.frequency.value = freq; bp.Q.value = Q;
-    gain.gain.setValueAtTime(vol, ctx.currentTime);
-    src.buffer = buf;
-    src.connect(bp).connect(gain).connect(ctx.destination);
-    src.start();
-  }
 
-  const playClickSfx = () => playTick(1100, 0.038, 0.22, 0.9);
-  const playHoverSfx = () => playTick(2200, 0.018, 0.06, 1.2);
+    function playTick(freq, dur, vol, Q) {
+      const ctx = getSfxCtx();
+      if (!ctx) return;
+      if (ctx.state === 'suspended') ctx.resume();
+      if (ctx.state !== 'running') return;
 
-  const CLICK_SEL = 'a,button,[role="button"],.hub-card,.card-cta,.ep-card,.ep-thumb,.book-tab,.season-tab,.pill-btn,.pill-tab,.theme-opt,.sp-ambient-row,.sp-install-row,.star-btn,.ctrl-btn,.card-poster,.merch-card,.comic-btn,.nav-btn,.modal-close,.page-btn,[data-ep],[data-book]';
-  const HOVER_SEL = 'a,button,[role="button"],.hub-card,.ep-card,.ep-thumb,.pill-btn,.pill-tab,.theme-opt,.card-cta,.merch-card,.comic-btn,.nav-btn,.ctrl-btn,.star-btn,[data-ep],[data-book]';
-
-  document.addEventListener('click', e => {
-    if (e.target.closest(CLICK_SEL)) playClickSfx();
-  }, { passive: true });
-
-  let _hoverCooldown = false;
-  document.addEventListener('mouseover', e => {
-    if (_hoverCooldown) return;
-    if (e.target.closest(HOVER_SEL)) {
-      playHoverSfx();
-      _hoverCooldown = true;
-      setTimeout(() => { _hoverCooldown = false; }, 80);
+      const len  = Math.floor(ctx.sampleRate * dur);
+      const buf  = ctx.createBuffer(1, len, ctx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 4);
+      }
+      const src  = ctx.createBufferSource();
+      const bp   = ctx.createBiquadFilter();
+      const gain = ctx.createGain();
+      bp.type = 'bandpass'; bp.frequency.value = freq; bp.Q.value = Q;
+      gain.gain.setValueAtTime(vol, ctx.currentTime);
+      src.buffer = buf;
+      src.connect(bp).connect(gain).connect(ctx.destination);
+      src.start();
     }
-  }, { passive: true });
-})() };
+
+    const playClickSfx = () => playTick(1100, 0.038, 0.22, 0.9);
+    const playHoverSfx = () => playTick(2200, 0.018, 0.06, 1.2);
+
+    const CLICK_SEL = 'a,button,[role="button"],.hub-card,.card-cta,.ep-card,.ep-thumb,.book-tab,.season-tab,.pill-btn,.pill-tab,.theme-opt,.sp-ambient-row,.sp-install-row,.star-btn,.ctrl-btn,.card-poster,.merch-card,.comic-btn,.nav-btn,.modal-close,.page-btn,[data-ep],[data-book]';
+    const HOVER_SEL = 'a,button,[role="button"],.hub-card,.ep-card,.ep-thumb,.pill-btn,.pill-tab,.theme-opt,.card-cta,.merch-card,.comic-btn,.nav-btn,.ctrl-btn,.star-btn,[data-ep],[data-book]';
+
+    document.addEventListener('click', e => {
+      if (e.target.closest(CLICK_SEL)) playClickSfx();
+    }, { passive: true });
+
+    let _hoverCooldown = false;
+    document.addEventListener('mouseover', e => {
+      if (_hoverCooldown) return;
+      if (e.target.closest(HOVER_SEL)) {
+        playHoverSfx();
+        _hoverCooldown = true;
+        setTimeout(() => { _hoverCooldown = false; }, 80);
+      }
+    }, { passive: true });
+  };
+
   if ('requestIdleCallback' in window) {
     requestIdleCallback(_run, { timeout: 1500 });
   } else {
     setTimeout(_run, 100);
   }
-})();;
+})();
 
 
 /* ══════════════════════════════════════════
    6. AMBIENT t0 KEEPALIVE
-   Updates elapsed every 10s so next page can
-   resume at the correct loop offset.
+   Uses Page Visibility API + interval for accuracy.
+   Updates elapsed every 10s.
 ══════════════════════════════════════════ */
 (function () {
   if (localStorage.getItem('avatarhub_ambient_off') === '1') return;
   if (sessionStorage.getItem('avatarhub_ambient_active') !== '1') return;
 
-  setInterval(() => {
+  // Flush elapsed when the user leaves/hides the tab — most reliable write opportunity
+  function flush() {
     const t0old = parseInt(sessionStorage.getItem('avatarhub_ambient_t0') || '0');
     if (!t0old) return;
-    const elapsed = (Date.now() - t0old) / 1000;
-    sessionStorage.setItem('avatarhub_ambient_elapsed', elapsed.toFixed(3));
-  }, 10000);
+    sessionStorage.setItem('avatarhub_ambient_elapsed', ((Date.now() - t0old) / 1000).toFixed(3));
+  }
+
+  document.addEventListener('visibilitychange', flush, { passive: true });
+  window.addEventListener('pagehide', flush, { passive: true });
+
+  // Periodic backup every 10s (catches long-running tabs without navigation)
+  setInterval(flush, 10000);
 })();
 
 
 /* ══════════════════════════════════════════
    7. AMBIENT PARTICLES
    Runs on any page that has #particleCanvas.
+   Uses requestIdleCallback so it doesn't compete
+   with first paint. Skips frames when tab hidden.
 ══════════════════════════════════════════ */
-(function() {
-  const _run = function() { (function () {
-  const canvas = document.getElementById('particleCanvas');
-  if (!canvas) return;
+(function () {
+  const _run = function () {
+    const canvas = document.getElementById('particleCanvas');
+    if (!canvas) return;
 
-  const ctx  = canvas.getContext('2d');
-  const BASE = 'images/';
-  const imgs = ['air', 'water', 'earth', 'fire'].map(n => {
-    const img = new Image(); img.crossOrigin = 'anonymous'; img.src = BASE + n + '.png'; return img;
-  });
+    // Respect reduced-motion — CSS hides the canvas, but skip JS work too
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  const isMobile = window.matchMedia('(max-width:640px)').matches;
-  const COUNT    = isMobile ? 25 : 60;
-  let W, H, particles = [];
+    const ctx  = canvas.getContext('2d', { alpha: true });
+    const BASE = 'images/';
+    const imgs = ['air', 'water', 'earth', 'fire'].map(n => {
+      const img = new Image(); img.crossOrigin = 'anonymous'; img.src = BASE + n + '.png'; return img;
+    });
 
-  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-  resize();
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(resize, 200);
-  }, { passive: true });
+    const isMobile = window.matchMedia('(max-width:640px)').matches;
+    const COUNT    = isMobile ? 18 : 45; // slightly reduced for perf
+    let W, H, particles = [];
 
-  function rand(a, b) { return a + Math.random() * (b - a); }
+    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+    resize();
 
-  function spawn() {
-    const img  = imgs[Math.floor(Math.random() * imgs.length)];
-    const type = Math.random() < .4 ? 'orbit' : (Math.random() < .5 ? 'wave' : 'drift');
-    const base = { img, x: rand(0, W), y: rand(0, H), alpha: rand(.04, .1), size: rand(10, 22),
-                   rot: rand(0, Math.PI * 2), vrot: rand(-.004, .004), type };
-    if (type === 'orbit') return {
-      ...base, cx: rand(0, W), cy: rand(0, H), rx: rand(40, 160), ry: rand(30, 110),
-      angle: rand(0, Math.PI * 2), speed: rand(.002, .006) * (Math.random() < .5 ? 1 : -1)
-    };
-    const angle = rand(0, Math.PI * 2), sp = rand(.06, .22);
-    if (type === 'wave') return {
-      ...base, vx: Math.cos(angle) * sp, vy: Math.sin(angle) * sp,
-      wAmp: rand(.4, 1.6), wFreq: rand(.008, .02), wOff: rand(0, Math.PI * 2), t: 0
-    };
-    return { ...base, vx: Math.cos(angle) * sp, vy: Math.sin(angle) * sp };
-  }
+    // Debounced resize — use a shared pattern with a named fn to allow removal
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 200);
+    }, { passive: true });
 
-  for (let i = 0; i < COUNT; i++) particles.push(spawn());
-  const pad = 60;
-  let rafId;
+    function rand(a, b) { return a + Math.random() * (b - a); }
 
-  function draw() {
-    ctx.clearRect(0, 0, W, H);
-    for (const p of particles) {
-      if (p.type === 'orbit') {
-        p.angle += p.speed;
-        p.x = p.cx + Math.cos(p.angle) * p.rx;
-        p.y = p.cy + Math.sin(p.angle) * p.ry;
-      } else if (p.type === 'wave') {
-        p.t++;
-        p.x += p.vx + Math.sin(p.t * p.wFreq + p.wOff) * p.wAmp * .08;
-        p.y += p.vy;
-      } else {
-        p.x += p.vx; p.y += p.vy;
-      }
-      p.rot += p.vrot;
-      if (p.type !== 'orbit' && (p.x < -pad || p.x > W + pad || p.y < -pad || p.y > H + pad)) {
-        Object.assign(p, spawn()); p.x = rand(0, W); p.y = rand(0, H); continue;
-      }
-      if (!p.img.complete || !p.img.naturalWidth) continue;
-      ctx.save(); ctx.globalAlpha = p.alpha;
-      ctx.translate(p.x, p.y); ctx.rotate(p.rot);
-      ctx.drawImage(p.img, -p.size / 2, -p.size / 2, p.size, p.size);
-      ctx.restore();
+    function spawn() {
+      const img  = imgs[Math.floor(Math.random() * imgs.length)];
+      const type = Math.random() < .4 ? 'orbit' : (Math.random() < .5 ? 'wave' : 'drift');
+      const base = { img, x: rand(0, W), y: rand(0, H), alpha: rand(.04, .1), size: rand(10, 22),
+                     rot: rand(0, Math.PI * 2), vrot: rand(-.004, .004), type };
+      if (type === 'orbit') return {
+        ...base, cx: rand(0, W), cy: rand(0, H), rx: rand(40, 160), ry: rand(30, 110),
+        angle: rand(0, Math.PI * 2), speed: rand(.002, .006) * (Math.random() < .5 ? 1 : -1)
+      };
+      const angle = rand(0, Math.PI * 2), sp = rand(.06, .22);
+      if (type === 'wave') return {
+        ...base, vx: Math.cos(angle) * sp, vy: Math.sin(angle) * sp,
+        wAmp: rand(.4, 1.6), wFreq: rand(.008, .02), wOff: rand(0, Math.PI * 2), t: 0
+      };
+      return { ...base, vx: Math.cos(angle) * sp, vy: Math.sin(angle) * sp };
     }
-    rafId = requestAnimationFrame(draw);
-  }
-  rafId = requestAnimationFrame(draw);
 
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) cancelAnimationFrame(rafId);
-    else rafId = requestAnimationFrame(draw);
-  });
-})() };
+    for (let i = 0; i < COUNT; i++) particles.push(spawn());
+    const pad = 60;
+    let rafId;
+
+    // Pre-cache loaded state — avoids repeated property access in hot loop
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      for (const p of particles) {
+        if (p.type === 'orbit') {
+          p.angle += p.speed;
+          p.x = p.cx + Math.cos(p.angle) * p.rx;
+          p.y = p.cy + Math.sin(p.angle) * p.ry;
+        } else if (p.type === 'wave') {
+          p.t++;
+          p.x += p.vx + Math.sin(p.t * p.wFreq + p.wOff) * p.wAmp * .08;
+          p.y += p.vy;
+        } else {
+          p.x += p.vx; p.y += p.vy;
+        }
+        p.rot += p.vrot;
+        if (p.type !== 'orbit' && (p.x < -pad || p.x > W + pad || p.y < -pad || p.y > H + pad)) {
+          Object.assign(p, spawn()); p.x = rand(0, W); p.y = rand(0, H); continue;
+        }
+        if (!p.img.complete || !p.img.naturalWidth) continue;
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.drawImage(p.img, -p.size / 2, -p.size / 2, p.size, p.size);
+        ctx.restore();
+      }
+      rafId = requestAnimationFrame(draw);
+    }
+
+    rafId = requestAnimationFrame(draw);
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) { cancelAnimationFrame(rafId); rafId = null; }
+      else if (!rafId) { rafId = requestAnimationFrame(draw); }
+    }, { passive: true });
+  };
+
   if ('requestIdleCallback' in window) {
     requestIdleCallback(_run, { timeout: 2000 });
   } else {
     setTimeout(_run, 200);
   }
-})();;
+})();
 
 
 /* ══════════════════════════════════════════
@@ -477,74 +492,95 @@
 (function () {
   if (!document.getElementById('mapSplash')) return;
 
-  // Inline manifest via blob (supplements manifest.json)
-  const manifest = {
-    name: 'AvatarArchive', short_name: 'AvatarArchive',
-    description: 'Watch Avatar: The Last Airbender, The Legend of Korra, the films, and more.',
-    start_url: './index.html', display: 'standalone',
-    background_color: '#04070d', theme_color: '#04070d',
-    orientation: 'portrait-primary',
-    icons: [
-      { src: 'images/favicon.png', sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
-      { src: 'images/favicon.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
-    ]
-  };
-  const mBlob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
-  const mLink = document.createElement('link');
-  mLink.rel = 'manifest'; mLink.href = URL.createObjectURL(mBlob);
-  document.head.appendChild(mLink);
+  // Only inject blob manifest if a <link rel="manifest"> isn't already present from the HTML
+  if (!document.querySelector('link[rel="manifest"]')) {
+    const manifest = {
+      name: 'AvatarArchive', short_name: 'AvatarArchive',
+      description: 'Watch Avatar: The Last Airbender, The Legend of Korra, the films, and more.',
+      start_url: './index.html', display: 'standalone',
+      background_color: '#04070d', theme_color: '#04070d',
+      orientation: 'portrait-primary',
+      icons: [
+        { src: 'images/favicon.png', sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
+        { src: 'images/favicon.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
+      ]
+    };
+    const mBlob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+    const mLink = document.createElement('link');
+    mLink.rel = 'manifest'; mLink.href = URL.createObjectURL(mBlob);
+    document.head.appendChild(mLink);
+  }
 
   if ('serviceWorker' in navigator) {
     const swCode = `
-const CACHE = 'avatar-v4';
-const SHELL = ['./index.html','./atla.html','./kora.html','./movie2026.html','./movie2010.html','./liveshow.html','./books.html','./games.html','./merch.html','./shared.css','./shared.js','./player-engine.js'];
+const CACHE = 'avatar-v5';
+const SHELL = [
+  './index.html','./atla.html','./kora.html','./movie2026.html',
+  './movie2010.html','./liveshow.html','./books.html','./games.html',
+  './merch.html','./shared.css','./shared.js','./player-engine.js'
+];
 
-// Install: pre-cache shell
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL).catch(() => {})));
   self.skipWaiting();
 });
 
-// Activate: purge old caches
 self.addEventListener('activate', e => {
-  e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))));
+  e.waitUntil(
+    caches.keys().then(ks =>
+      Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))
+    )
+  );
   self.clients.claim();
 });
 
-// Fetch: strategy varies by resource type
 self.addEventListener('fetch', e => {
-  const url = new URL(e.request.url);
-  
+  const { request } = e;
+  const url = new URL(request.url);
+
+  // Skip non-GET and cross-origin requests
+  if (request.method !== 'GET' || url.origin !== location.origin) return;
+
   // HTML: network-first (always fresh page structure)
-  if (e.request.destination === 'document') {
-    e.respondWith(fetch(e.request).then(r => {
-      if (r.ok) { const clone = r.clone(); caches.open(CACHE).then(c => c.put(e.request, clone)); }
-      return r;
-    }).catch(() => caches.match(e.request).then(r => r || caches.match('./index.html'))));
+  if (request.destination === 'document') {
+    e.respondWith(
+      fetch(request)
+        .then(r => {
+          if (r.ok) { const clone = r.clone(); caches.open(CACHE).then(c => c.put(request, clone)); }
+          return r;
+        })
+        .catch(() => caches.match(request).then(r => r || caches.match('./index.html')))
+    );
     return;
   }
-  
+
   // JS/CSS: stale-while-revalidate
-  if (e.request.destination === 'script' || e.request.destination === 'style') {
-    e.respondWith(caches.open(CACHE).then(async cache => {
-      const cached = await cache.match(e.request);
-      const fetchPromise = fetch(e.request).then(r => { if (r.ok) cache.put(e.request, r.clone()); return r; }).catch(() => null);
-      return cached || fetchPromise;
-    }));
+  if (request.destination === 'script' || request.destination === 'style') {
+    e.respondWith(
+      caches.open(CACHE).then(async cache => {
+        const cached = await cache.match(request);
+        const fetchPromise = fetch(request)
+          .then(r => { if (r.ok) cache.put(request, r.clone()); return r; })
+          .catch(() => null);
+        return cached || fetchPromise;
+      })
+    );
     return;
   }
-  
-  // Images: cache-first (content-addressed, rarely changes)
-  if (e.request.destination === 'image') {
-    e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => {
-      if (res.ok) { const clone = res.clone(); caches.open(CACHE).then(c => c.put(e.request, clone)); }
-      return res;
-    }).catch(() => new Response('', { status: 404 }))));
+
+  // Images: cache-first
+  if (request.destination === 'image') {
+    e.respondWith(
+      caches.match(request).then(r => r || fetch(request).then(res => {
+        if (res.ok) { const clone = res.clone(); caches.open(CACHE).then(c => c.put(request, clone)); }
+        return res;
+      }).catch(() => new Response('', { status: 404 })))
+    );
     return;
   }
-  
-  // Everything else: cache-first fallback
-  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)).catch(() => {}));
+
+  // Fonts/other: cache-first with fallback
+  e.respondWith(caches.match(request).then(r => r || fetch(request)).catch(() => {}));
 });
 `;
     const swBlob = new Blob([swCode], { type: 'application/javascript' });

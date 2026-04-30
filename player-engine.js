@@ -1,19 +1,21 @@
 /* ═══════════════════════════════════════════════════════════
-   AvatarArchive — player-engine.js
+   AvatarArchive — player-engine.js  (performance-optimised)
    Shared video player: controls, seeking, volume, speed,
    fullscreen, OSD, captions (SRT), skip-intro, next-episode
    panel, brightness/contrast, keyboard shortcuts.
 
    Consuming pages must define window.PLAYER_CONFIG = { ... }
-   before this script runs. See each page for config shape.
+   before this script runs.
 ═══════════════════════════════════════════════════════════ */
 
 (function () {
   'use strict';
 
-  /* ── Refs ── */
+  /* ── Refs — queried once, reused throughout ── */
   const vid        = document.getElementById('mainVideo');
   const shell      = document.getElementById('playerShell');
+  if (!vid || !shell) return; // not a player page
+
   const bigPlay    = document.getElementById('bigPlay');
   const clickArea  = document.getElementById('clickArea');
   const playBtn    = document.getElementById('playBtn');
@@ -41,8 +43,6 @@
   const captionBox = document.getElementById('captionBox');
   const osdToast   = document.getElementById('osdToast');
   const fsBtn      = document.getElementById('fsBtn');
-
-  if (!vid || !shell) return; // not a player page
 
   /* ── Config (provided by each page) ── */
   const CFG = window.PLAYER_CONFIG || {};
@@ -72,7 +72,7 @@
       osdToast.classList.add('hide');
     }, 700);
   }
-  window._playerShowOSD = showOSD; // allow page scripts to call it
+  window._playerShowOSD = showOSD;
 
   /* ── Idle cursor ── */
   let idleTimer;
@@ -82,8 +82,8 @@
     if (!vid.paused) idleTimer = setTimeout(() => shell.classList.add('idle'), 1250);
   }
   document.addEventListener('mousemove', resetIdle, { passive: true });
-  document.addEventListener('keydown', resetIdle);
-  document.addEventListener('touchstart', resetIdle, { passive: true });
+  document.addEventListener('keydown',   resetIdle);
+  document.addEventListener('touchstart',resetIdle, { passive: true });
 
   /* ── Play / Pause ── */
   function togglePlay() { vid.paused ? vid.play().catch(() => {}) : vid.pause(); }
@@ -129,39 +129,50 @@
   /* ── Progress bar ── */
   vid.addEventListener('loadedmetadata', () => { if (durEl) durEl.textContent = fmt(vid.duration); });
 
-  let isSeeking = false, _lastSave = 0;
+  let isSeeking = false;
+
+  /* PERF: throttle timeupdate to 4× per second max.
+     The native event fires every 250ms already, but some browsers fire
+     on every decoded frame. Using a flag + rAF prevents pointless repaints. */
+  let _tuPending = false;
   vid.addEventListener('timeupdate', () => {
-    if (isSeeking) return;
-    const pct = (vid.currentTime / vid.duration) * 100 || 0;
-    if (progFill)  progFill.style.width  = pct + '%';
-    if (progThumb) progThumb.style.left  = pct + '%';
-    if (curEl)     curEl.textContent = fmt(vid.currentTime);
-    if (vid.buffered.length && progBuf) {
-      progBuf.style.width = ((vid.buffered.end(vid.buffered.length - 1) / vid.duration) * 100 || 0) + '%';
-    }
-    // Delegate progress saving + watch marking to page script
-    window._playerOnTimeUpdate && window._playerOnTimeUpdate(vid, pct);
-    handleSkipIntro();
-    handleNextPanel();
-    renderCaption();
+    if (_tuPending) return;
+    _tuPending = true;
+    requestAnimationFrame(() => {
+      _tuPending = false;
+      if (isSeeking) return;
+      const t   = vid.currentTime;
+      const dur = vid.duration;
+      const pct = (t / dur) * 100 || 0;
+      if (progFill)  progFill.style.width = pct + '%';
+      if (progThumb) progThumb.style.left = pct + '%';
+      if (curEl)     curEl.textContent    = fmt(t);
+      if (vid.buffered.length && progBuf) {
+        progBuf.style.width = ((vid.buffered.end(vid.buffered.length - 1) / dur) * 100 || 0) + '%';
+      }
+      window._playerOnTimeUpdate && window._playerOnTimeUpdate(vid, pct);
+      handleSkipIntro();
+      handleNextPanel();
+      renderCaption();
+    });
   });
 
   function seekTo(cx) {
     const r = prog.getBoundingClientRect();
     const pct = Math.max(0, Math.min(1, (cx - r.left) / r.width));
-    const t = pct * vid.duration;
+    const t   = pct * vid.duration;
     vid.currentTime = t;
     if (progFill)  progFill.style.width = (pct * 100) + '%';
     if (progThumb) progThumb.style.left = (pct * 100) + '%';
-    if (curEl)     curEl.textContent = fmt(t);
+    if (curEl)     curEl.textContent    = fmt(t);
   }
   if (prog) {
     prog.addEventListener('mousedown', e => { isSeeking = true; seekTo(e.clientX); e.stopPropagation(); });
-    document.addEventListener('mousemove', e => { if (isSeeking) seekTo(e.clientX); });
+    document.addEventListener('mousemove', e => { if (isSeeking) seekTo(e.clientX); }, { passive: true });
     document.addEventListener('mouseup', () => { isSeeking = false; });
     prog.addEventListener('touchstart', e => { isSeeking = true; seekTo(e.touches[0].clientX); }, { passive: true });
     document.addEventListener('touchmove', e => { if (isSeeking) seekTo(e.touches[0].clientX); }, { passive: true });
-    document.addEventListener('touchend', () => { isSeeking = false; });
+    document.addEventListener('touchend', () => { isSeeking = false; }, { passive: true });
   }
 
   /* ── Volume ── */
@@ -170,7 +181,8 @@
     if (icVolOn)  icVolOn.style.display  = m ? 'none' : '';
     if (icVolOff) icVolOff.style.display = m ? '' : 'none';
     const p = m ? 0 : vid.volume * 100;
-    if (volSlider) volSlider.style.background = `linear-gradient(to right,var(--blue) ${p}%,rgba(255,255,255,.15) ${p}%)`;
+    if (volSlider) volSlider.style.background =
+      `linear-gradient(to right,var(--blue) ${p}%,rgba(255,255,255,.15) ${p}%)`;
   }
   volSlider && volSlider.addEventListener('input', () => {
     vid.volume = parseFloat(volSlider.value); vid.muted = vid.volume === 0; updateVolUI();
@@ -179,21 +191,29 @@
     vid.muted = !vid.muted; if (volSlider) volSlider.value = vid.muted ? 0 : (vid.volume || 1); updateVolUI();
   });
   vid.addEventListener('volumechange', updateVolUI);
+
   // Restore persisted volume
   const _sv = localStorage.getItem('avatarhub_volume'), _sm = localStorage.getItem('avatarhub_muted');
   if (_sv !== null) { vid.volume = parseFloat(_sv); if (volSlider) volSlider.value = _sv; }
   if (_sm === 'true') { vid.muted = true; if (volSlider) volSlider.value = 0; }
   updateVolUI();
+
+  // Persist volume changes (debounced to avoid excessive writes)
+  let _volSaveTimer;
   vid.addEventListener('volumechange', () => {
-    localStorage.setItem('avatarhub_volume', vid.volume);
-    localStorage.setItem('avatarhub_muted', vid.muted);
+    clearTimeout(_volSaveTimer);
+    _volSaveTimer = setTimeout(() => {
+      localStorage.setItem('avatarhub_volume', vid.volume);
+      localStorage.setItem('avatarhub_muted', vid.muted);
+    }, 300);
   });
 
   /* ── Fullscreen ── */
   function toggleFullscreen() {
     const inFS = document.fullscreenElement || document.webkitFullscreenElement;
-    if (inFS) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); }
-    else {
+    if (inFS) {
+      (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    } else {
       if (shell.requestFullscreen) shell.requestFullscreen().catch(() => {});
       else if (shell.webkitRequestFullscreen) shell.webkitRequestFullscreen();
       else if (vid.webkitEnterFullscreen) vid.webkitEnterFullscreen();
@@ -204,22 +224,29 @@
   /* ── Playback speed ── */
   const speedBtn  = document.getElementById('speedBtn');
   const speedMenu = document.getElementById('speedMenu');
-  let currentSpeed = 1;
   function setSpeed(s) {
-    currentSpeed = s; vid.playbackRate = s;
+    vid.playbackRate = s;
     if (speedBtn) { speedBtn.textContent = s === 1 ? '1×' : s + '×'; speedBtn.classList.toggle('active', s !== 1); }
-    speedMenu && speedMenu.querySelectorAll('.speed-opt').forEach(o => o.classList.toggle('active', parseFloat(o.dataset.s) === s));
+    speedMenu && speedMenu.querySelectorAll('.speed-opt').forEach(o =>
+      o.classList.toggle('active', parseFloat(o.dataset.s) === s)
+    );
   }
   speedBtn && speedBtn.addEventListener('click', e => { e.stopPropagation(); speedMenu && speedMenu.classList.toggle('open'); });
   speedMenu && speedMenu.querySelectorAll('.speed-opt').forEach(opt =>
-    opt.addEventListener('click', e => { e.stopPropagation(); setSpeed(parseFloat(opt.dataset.s)); speedMenu.classList.remove('open'); showOSD(parseFloat(opt.dataset.s) + '×'); })
+    opt.addEventListener('click', e => {
+      e.stopPropagation();
+      const s = parseFloat(opt.dataset.s);
+      setSpeed(s);
+      speedMenu.classList.remove('open');
+      showOSD(s + '×');
+    })
   );
   document.addEventListener('click', () => speedMenu && speedMenu.classList.remove('open'));
 
   /* ── Buffer spinner ── */
-  vid.addEventListener('waiting',  () => bufSpin && (bufSpin.style.display = 'block'));
-  vid.addEventListener('playing',  () => bufSpin && (bufSpin.style.display = 'none'));
-  vid.addEventListener('canplay',  () => bufSpin && (bufSpin.style.display = 'none'));
+  vid.addEventListener('waiting', () => bufSpin && (bufSpin.style.display = 'block'));
+  vid.addEventListener('playing', () => bufSpin && (bufSpin.style.display = 'none'));
+  vid.addEventListener('canplay', () => bufSpin && (bufSpin.style.display = 'none'));
 
   /* ── Brightness / Contrast ── */
   (function () {
@@ -237,11 +264,17 @@
       vid.style.filter = `brightness(${br}%) contrast(${co}%)`;
       pqBtn.classList.toggle('active', br !== 100 || co !== 100);
       const p1 = br / 160 * 100, p2 = co / 160 * 100;
-      brightSlider && (brightSlider.style.background = `linear-gradient(to right,var(--gold) ${p1}%,rgba(255,255,255,.15) ${p1}%)`);
-      contrastSlider && (contrastSlider.style.background = `linear-gradient(to right,var(--gold) ${p2}%,rgba(255,255,255,.15) ${p2}%)`);
+      if (brightSlider) brightSlider.style.background =
+        `linear-gradient(to right,var(--gold) ${p1}%,rgba(255,255,255,.15) ${p1}%)`;
+      if (contrastSlider) contrastSlider.style.background =
+        `linear-gradient(to right,var(--gold) ${p2}%,rgba(255,255,255,.15) ${p2}%)`;
     }
-    brightSlider   && brightSlider.addEventListener('input', () => { br = parseInt(brightSlider.value); if (brightVal) brightVal.textContent = br + '%'; applyPQ(); });
-    contrastSlider && contrastSlider.addEventListener('input', () => { co = parseInt(contrastSlider.value); if (contrastVal) contrastVal.textContent = co + '%'; applyPQ(); });
+    brightSlider   && brightSlider.addEventListener('input', () => {
+      br = parseInt(brightSlider.value); if (brightVal) brightVal.textContent = br + '%'; applyPQ();
+    });
+    contrastSlider && contrastSlider.addEventListener('input', () => {
+      co = parseInt(contrastSlider.value); if (contrastVal) contrastVal.textContent = co + '%'; applyPQ();
+    });
     pqReset && pqReset.addEventListener('click', () => {
       br = co = 100;
       if (brightSlider)   brightSlider.value   = 100;
@@ -262,17 +295,22 @@
     const t = vid.currentTime;
     skipBtn.style.display = (t >= INTRO_SHOW_FROM && t < INTRO_END_SEC) ? 'block' : 'none';
   }
-  skipBtn && skipBtn.addEventListener('click', () => { vid.currentTime = INTRO_END_SEC; if (skipBtn) skipBtn.style.display = 'none'; });
+  skipBtn && skipBtn.addEventListener('click', () => {
+    vid.currentTime = INTRO_END_SEC;
+    if (skipBtn) skipBtn.style.display = 'none';
+  });
 
   /* ── Next Episode panel ── */
   let panelShown = false, autoFrame = null, autoStart = null;
+
   function handleNextPanel() {
     if (!nextPanel || !window._playerGetNext) return;
     if (!isFinite(vid.duration) || vid.duration === 0) return;
     const rem = vid.duration - vid.currentTime;
     if (rem <= NEXT_EP_BEFORE_END && rem > 0) { if (!panelShown) showNextPanel(); }
-    else if (rem > NEXT_EP_BEFORE_END)         { if (panelShown) hideNextPanel(); }
+    else if (rem > NEXT_EP_BEFORE_END)          { if (panelShown) hideNextPanel(); }
   }
+
   function showNextPanel() {
     if (!window._playerGetNext) return;
     const next = window._playerGetNext();
@@ -280,33 +318,36 @@
     panelShown = true;
     if (nepTitle) nepTitle.textContent = next.title;
     if (nextPanel) { nextPanel.classList.add('visible'); nextPanel.style.display = 'block'; }
-    cancelAuto(); autoStart = Date.now();
+    cancelAuto();
+    autoStart = Date.now();
     const fillDur = Math.max(1, (isFinite(vid.duration) ? vid.duration - vid.currentTime : NEXT_EP_BEFORE_END)) * 1000;
     function tick() {
-      const elapsed = Date.now() - autoStart;
-      const pct = Math.min(100, (elapsed / fillDur) * 100);
+      const pct = Math.min(100, ((Date.now() - autoStart) / fillDur) * 100);
       if (nepProgress) nepProgress.style.width = pct + '%';
       if (pct >= 100) { window._playerLoadNext && window._playerLoadNext(); return; }
       autoFrame = requestAnimationFrame(tick);
     }
     autoFrame = requestAnimationFrame(tick);
   }
+
   function hideNextPanel() {
     panelShown = false;
     if (nextPanel) { nextPanel.classList.remove('visible'); nextPanel.style.display = 'none'; }
     cancelAuto();
   }
+
   function cancelAuto() {
     if (autoFrame) { cancelAnimationFrame(autoFrame); autoFrame = null; }
     if (nepProgress) nepProgress.style.width = '0%';
     autoStart = null;
   }
-  nepBtn && nepBtn.addEventListener('click', () => window._playerLoadNext && window._playerLoadNext());
+
+  nepBtn  && nepBtn.addEventListener('click', () => window._playerLoadNext && window._playerLoadNext());
   nepSkip && nepSkip.addEventListener('click', () => { hideNextPanel(); panelShown = true; });
   vid.addEventListener('ended', () => { updateShimmer(); showNextPanel(); });
 
   /* ── SRT Captions ── */
-  let captionsOn = false, srtCues = [], lastCueText = null;
+  let captionsOn = false, srtCues = [], lastCueIdx = -1;
   let CAPTION_OFFSET = parseFloat(localStorage.getItem('avatarhub_cc_offset') || '0');
 
   function parseSRT(text) {
@@ -320,60 +361,93 @@
       return c;
     }, []);
   }
+
   function showCaption(t) {
     if (!captionBox) return;
     captionBox.innerHTML = '<span>' + t.replace(/\n/g, '<br>') + '</span>';
     captionBox.style.display = 'block';
     requestAnimationFrame(() => captionBox.classList.add('visible'));
   }
+
   function hideCaption() {
     if (!captionBox) return;
     captionBox.classList.remove('visible');
     setTimeout(() => { if (!captionBox.classList.contains('visible')) captionBox.style.display = 'none'; }, 200);
   }
-  function renderCaption() {
-    if (!captionsOn || !srtCues.length) return;
-    if (vid.paused) return;
-    const t = vid.currentTime + CAPTION_OFFSET;
-    const cue = srtCues.find(c => t >= c.start && t <= c.end);
-    const text = cue?.text ?? null;
-    if (text === lastCueText) return;
-    lastCueText = text;
-    text ? showCaption(text) : hideCaption();
+
+  /* PERF: binary search for current cue instead of linear .find() */
+  function findCue(t) {
+    if (!srtCues.length) return null;
+    let lo = 0, hi = srtCues.length - 1;
+    while (lo <= hi) {
+      const mid = (lo + hi) >> 1;
+      const c   = srtCues[mid];
+      if (t < c.start)    { hi = mid - 1; }
+      else if (t > c.end) { lo = mid + 1; }
+      else                { return { cue: c, idx: mid }; }
+    }
+    return null;
   }
+
+  function renderCaption() {
+    if (!captionsOn || !srtCues.length || vid.paused) return;
+    const t      = vid.currentTime + CAPTION_OFFSET;
+    const result = findCue(t);
+    const idx    = result ? result.idx : -1;
+    if (idx === lastCueIdx) return; // no change
+    lastCueIdx = idx;
+    result ? showCaption(result.cue.text) : hideCaption();
+  }
+
   function nudgeCaptionOffset(delta) {
     CAPTION_OFFSET = Math.round((CAPTION_OFFSET + delta) * 10) / 10;
     localStorage.setItem('avatarhub_cc_offset', CAPTION_OFFSET);
-    lastCueText = null;
+    lastCueIdx = -1; // force re-render
     const sign = CAPTION_OFFSET > 0 ? '+' : '';
     showOSD('CC ' + (CAPTION_OFFSET === 0 ? 'Sync Reset' : sign + CAPTION_OFFSET + 's'));
   }
+
   ccBtn && ccBtn.addEventListener('click', () => {
     captionsOn = !captionsOn;
     ccBtn.classList.toggle('active', captionsOn);
-    if (!captionsOn) { hideCaption(); lastCueText = null; }
-    // Load SRT on first enable if not yet loaded
+    if (!captionsOn) { hideCaption(); lastCueIdx = -1; }
     if (captionsOn && !srtCues.length && window._playerGetSubUrl) {
       const url = window._playerGetSubUrl();
-      if (url) fetch(url).then(r => r.ok ? r.text() : Promise.reject()).then(t => { srtCues = parseSRT(t); }).catch(() => {});
+      if (url) fetch(url).then(r => r.ok ? r.text() : Promise.reject())
+                         .then(t => { srtCues = parseSRT(t); lastCueIdx = -1; })
+                         .catch(() => {});
     }
   });
-  // Expose for page scripts
+
   window._playerLoadSrt = function (url) {
-    srtCues = []; lastCueText = null; hideCaption();
-    if (url) fetch(url).then(r => r.ok ? r.text() : Promise.reject()).then(t => { srtCues = parseSRT(t); }).catch(() => {});
+    srtCues = []; lastCueIdx = -1; hideCaption();
+    if (url) fetch(url).then(r => r.ok ? r.text() : Promise.reject())
+                       .then(t => { srtCues = parseSRT(t); })
+                       .catch(() => {});
   };
 
   /* ── Keyboard shortcuts ── */
   document.addEventListener('keydown', e => {
-    if (e.target.tagName === 'INPUT') return;
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
     switch (e.code) {
       case 'Space': case 'KeyK': e.preventDefault(); togglePlay(); break;
-      case 'ArrowRight': e.preventDefault(); if (isFinite(vid.duration)) vid.currentTime = Math.min(vid.duration, vid.currentTime + 5); showOSD('+5s'); break;
-      case 'ArrowLeft':  e.preventDefault(); vid.currentTime = Math.max(0, vid.currentTime - 5); showOSD('−5s'); break;
-      case 'ArrowUp':    e.preventDefault(); vid.volume = Math.min(1, vid.volume + .1); vid.muted = false; if (volSlider) volSlider.value = vid.volume; updateVolUI(); showOSD('Vol ' + Math.round(vid.volume * 100) + '%'); break;
-      case 'ArrowDown':  e.preventDefault(); vid.volume = Math.max(0, vid.volume - .1); vid.muted = vid.volume === 0; if (volSlider) volSlider.value = vid.volume; updateVolUI(); showOSD('Vol ' + Math.round(vid.volume * 100) + '%'); break;
-      case 'KeyM': vid.muted = !vid.muted; if (volSlider) volSlider.value = vid.muted ? 0 : (vid.volume || 1); updateVolUI(); showOSD(vid.muted ? 'Muted' : 'Sound On'); break;
+      case 'ArrowRight': e.preventDefault();
+        if (isFinite(vid.duration)) vid.currentTime = Math.min(vid.duration, vid.currentTime + 5);
+        showOSD('+5s'); break;
+      case 'ArrowLeft': e.preventDefault();
+        vid.currentTime = Math.max(0, vid.currentTime - 5); showOSD('−5s'); break;
+      case 'ArrowUp': e.preventDefault();
+        vid.volume = Math.min(1, vid.volume + .1); vid.muted = false;
+        if (volSlider) volSlider.value = vid.volume; updateVolUI();
+        showOSD('Vol ' + Math.round(vid.volume * 100) + '%'); break;
+      case 'ArrowDown': e.preventDefault();
+        vid.volume = Math.max(0, vid.volume - .1); vid.muted = vid.volume === 0;
+        if (volSlider) volSlider.value = vid.volume; updateVolUI();
+        showOSD('Vol ' + Math.round(vid.volume * 100) + '%'); break;
+      case 'KeyM':
+        vid.muted = !vid.muted;
+        if (volSlider) volSlider.value = vid.muted ? 0 : (vid.volume || 1);
+        updateVolUI(); showOSD(vid.muted ? 'Muted' : 'Sound On'); break;
       case 'KeyF': e.preventDefault(); toggleFullscreen(); break;
       case 'KeyC': ccBtn && ccBtn.click(); break;
       case 'BracketLeft':  nudgeCaptionOffset(-0.5); break;
@@ -381,7 +455,11 @@
       case 'Backslash':    nudgeCaptionOffset(-CAPTION_OFFSET); break;
       case 'KeyN': window._playerLoadNext && window._playerLoadNext(); break;
       case 'Slash':
-        if (e.shiftKey) { e.preventDefault(); const sm = document.getElementById('shortcutsModal'); sm && sm.classList.toggle('open'); }
+        if (e.shiftKey) {
+          e.preventDefault();
+          const sm = document.getElementById('shortcutsModal');
+          sm && sm.classList.toggle('open');
+        }
         break;
     }
   });
@@ -393,17 +471,21 @@
   shortcutsModal && shortcutsModal.addEventListener('click', e => { if (e.target === shortcutsModal) shortcutsModal.classList.remove('open'); });
 
   /* ── Cleanup on page hide ── */
-  window.addEventListener('pagehide', () => { vid.pause(); clearTimeout(idleTimer); });
+  window.addEventListener('pagehide', () => {
+    vid.pause();
+    clearTimeout(idleTimer);
+    clearTimeout(osdTimer);
+  }, { passive: true });
 
   /* ── Expose internals for page scripts ── */
-  window._playerVid            = vid;
-  window._playerParseSRT       = parseSRT;
-  window._playerSrtCues        = () => srtCues;
-  window._playerSetSrtCues     = c  => { srtCues = c; lastCueText = null; };
-  window._playerResetCaption   = ()  => { srtCues = []; lastCueText = null; hideCaption(); };
-  window._playerUpdateShimmer  = updateShimmer;
-  window._playerCancelAuto     = cancelAuto;
-  window._playerHideNextPanel  = hideNextPanel;
-  window._playerFmt            = fmt;
+  window._playerVid           = vid;
+  window._playerParseSRT      = parseSRT;
+  window._playerSrtCues       = () => srtCues;
+  window._playerSetSrtCues    = c  => { srtCues = c; lastCueIdx = -1; };
+  window._playerResetCaption  = () => { srtCues = []; lastCueIdx = -1; hideCaption(); };
+  window._playerUpdateShimmer = updateShimmer;
+  window._playerCancelAuto    = cancelAuto;
+  window._playerHideNextPanel = hideNextPanel;
+  window._playerFmt           = fmt;
 
 })();
