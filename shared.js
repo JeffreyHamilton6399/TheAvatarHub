@@ -301,7 +301,8 @@
 /* ══════════════════════════════════════════
    5. UI SFX — synthesised click + hover ticks
 ══════════════════════════════════════════ */
-(function () {
+(function() {
+  const _run = function() { (function () {
   let _sfxCtx = null;
 
   function getSfxCtx() {
@@ -351,7 +352,13 @@
       setTimeout(() => { _hoverCooldown = false; }, 80);
     }
   }, { passive: true });
-})();
+})() };
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(_run, { timeout: 1500 });
+  } else {
+    setTimeout(_run, 100);
+  }
+})();;
 
 
 /* ══════════════════════════════════════════
@@ -376,7 +383,8 @@
    7. AMBIENT PARTICLES
    Runs on any page that has #particleCanvas.
 ══════════════════════════════════════════ */
-(function () {
+(function() {
+  const _run = function() { (function () {
   const canvas = document.getElementById('particleCanvas');
   if (!canvas) return;
 
@@ -453,7 +461,13 @@
     if (document.hidden) cancelAnimationFrame(rafId);
     else rafId = requestAnimationFrame(draw);
   });
-})();
+})() };
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(_run, { timeout: 2000 });
+  } else {
+    setTimeout(_run, 200);
+  }
+})();;
 
 
 /* ══════════════════════════════════════════
@@ -482,11 +496,56 @@
 
   if ('serviceWorker' in navigator) {
     const swCode = `
-const CACHE='avatar-archive-v3';
-const SHELL=['./index.html','./atla.html','./kora.html','./movie2026.html','./movie2010.html','./liveshow.html','./books.html','./games.html','./merch.html','./shared.css','./shared.js'];
-self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL).catch(()=>{})));self.skipWaiting();});
-self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim();});
-self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>caches.match('./index.html'))));});
+const CACHE = 'avatar-v4';
+const SHELL = ['./index.html','./atla.html','./kora.html','./movie2026.html','./movie2010.html','./liveshow.html','./books.html','./games.html','./merch.html','./shared.css','./shared.js','./player-engine.js'];
+
+// Install: pre-cache shell
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL).catch(() => {})));
+  self.skipWaiting();
+});
+
+// Activate: purge old caches
+self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))));
+  self.clients.claim();
+});
+
+// Fetch: strategy varies by resource type
+self.addEventListener('fetch', e => {
+  const url = new URL(e.request.url);
+  
+  // HTML: network-first (always fresh page structure)
+  if (e.request.destination === 'document') {
+    e.respondWith(fetch(e.request).then(r => {
+      if (r.ok) { const clone = r.clone(); caches.open(CACHE).then(c => c.put(e.request, clone)); }
+      return r;
+    }).catch(() => caches.match(e.request).then(r => r || caches.match('./index.html'))));
+    return;
+  }
+  
+  // JS/CSS: stale-while-revalidate
+  if (e.request.destination === 'script' || e.request.destination === 'style') {
+    e.respondWith(caches.open(CACHE).then(async cache => {
+      const cached = await cache.match(e.request);
+      const fetchPromise = fetch(e.request).then(r => { if (r.ok) cache.put(e.request, r.clone()); return r; }).catch(() => null);
+      return cached || fetchPromise;
+    }));
+    return;
+  }
+  
+  // Images: cache-first (content-addressed, rarely changes)
+  if (e.request.destination === 'image') {
+    e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => {
+      if (res.ok) { const clone = res.clone(); caches.open(CACHE).then(c => c.put(e.request, clone)); }
+      return res;
+    }).catch(() => new Response('', { status: 404 }))));
+    return;
+  }
+  
+  // Everything else: cache-first fallback
+  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)).catch(() => {}));
+});
 `;
     const swBlob = new Blob([swCode], { type: 'application/javascript' });
     navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});

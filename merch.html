@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="referrer" content="no-referrer-when-downgrade">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Avatar Merch — AvatarArchive</title>
   <meta name="theme-color" content="#04070d">
@@ -10,37 +11,17 @@
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="images/favicon.png">
   <link rel="icon" type="image/jpeg" href="images/favicon.png">
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="image" href="images/storebg.png" fetchpriority="high">
+  <style>/* critical: prevent FOUC */body{background:#04070d;color:#f0f4ff;margin:0}</style>
+  <link rel="preload" as="script" href="shared.js">
   <link rel="stylesheet" href="shared.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cinzel+Decorative:wght@400;700;900&family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cinzel+Decorative:wght@400;700;900&family=Philosopher:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    @keyframes slideUp  { from{opacity:0;transform:translateY(32px)} to{opacity:1;transform:translateY(0)} }
     @keyframes pulseGold{ 0%,100%{filter:drop-shadow(0 0 4px #c9a84c)} 50%{filter:drop-shadow(0 0 16px #c9a84c)} }
-    @keyframes shimmer  { 0%{background-position:-300% center} 100%{background-position:300% center} }
-
-    body {
-      background: var(--deep);
-      color: var(--white);
-      font-family: 'Philosopher', Georgia, serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    .bg-layer {
-      position: fixed; inset: 0;
-      background-image: url('images/storebg.png');
-      background-size: cover; background-position: center top;
-      filter: blur(8px) brightness(.18) saturate(1.3);
-      transform: scale(1.04); z-index: 0;
-    }
-    .bg-layer::after {
-      content:''; position:absolute; inset:0;
-      background: linear-gradient(to bottom,rgba(4,7,13,.55) 0%,transparent 35%,transparent 65%,rgba(4,7,13,.7) 100%);
-    }
-
     .page { position:relative; z-index:1; min-height:100vh; display:flex; flex-direction:column; }
 
     /* Header */
@@ -212,15 +193,6 @@
     .notice-text strong { color:var(--white); font-style:normal; }
 
     /* Jeffrey watermark */
-    .jeffrey-watermark {
-      position:fixed; bottom:14px; right:18px; z-index:50;
-      display:inline-flex; align-items:center; gap:5px;
-      text-decoration:none; font-family:'Cinzel',serif;
-      font-size:.42rem; letter-spacing:.2em; text-transform:uppercase;
-      color:rgba(107,138,171,.45); transition:color .2s,opacity .2s; opacity:.6;
-    }
-    .jeffrey-watermark:hover { color:rgba(240,244,255,.7); opacity:1; }
-
     footer { height:4rem; }
   </style>
 </head>

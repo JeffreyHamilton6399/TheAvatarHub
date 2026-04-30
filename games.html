@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="referrer" content="no-referrer-when-downgrade">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>ATLA Games — AvatarArchive</title>
   <meta name="theme-color" content="#04070d">
@@ -10,80 +11,20 @@
   <meta name="apple-mobile-web-app-title" content="ATLA Games">
   <link rel="apple-touch-icon" href="images/favicon.png">
   <link rel="icon" type="image/jpeg" href="images/favicon.png">
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="image" href="images/gamesbg.png" fetchpriority="high">
+  <style>/* critical: prevent FOUC */body{background:#04070d;color:#f0f4ff;margin:0}</style>
+  <link rel="preload" as="script" href="shared.js">
   <link rel="stylesheet" href="shared.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cinzel+Decorative:wght@400;700;900&family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cinzel+Decorative:wght@400;700;900&family=Philosopher:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    @keyframes slideUp    { from{opacity:0;transform:translateY(36px)} to{opacity:1;transform:translateY(0)} }
-    @keyframes overlayOut { from{opacity:1} to{opacity:0} }
     @keyframes pulseGreen { 0%,100%{filter:drop-shadow(0 0 5px #3ddc84)} 50%{filter:drop-shadow(0 0 18px #3ddc84)} }
-    @keyframes pulseGlowAir   { 0%,100%{filter:drop-shadow(0 0 5px #f5c518)} 50%{filter:drop-shadow(0 0 18px #f5c518)} }
-    @keyframes pulseGlowWater { 0%,100%{filter:drop-shadow(0 0 5px #4db8ff)} 50%{filter:drop-shadow(0 0 18px #4db8ff)} }
-    @keyframes pulseGlowEarth { 0%,100%{filter:drop-shadow(0 0 5px #6abf69)} 50%{filter:drop-shadow(0 0 18px #6abf69)} }
-    @keyframes pulseGlowFire  { 0%,100%{filter:drop-shadow(0 0 5px #f97316)} 50%{filter:drop-shadow(0 0 18px #f97316)} }
-    @keyframes cardIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
     @keyframes shimmerBar { 0%{background-position:-200% center} 100%{background-position:200% center} }
-
-    body {
-      background: var(--deep);
-      color: var(--white);
-      font-family: 'Philosopher', Georgia, serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
     /* ── Background ── */
-    .bg-layer {
-      position: fixed; inset: 0;
-      background-image: url('images/gamesbg.png');
-      background-size: cover; background-position: center top;
-      filter: blur(8px) brightness(0.18) saturate(1.5) hue-rotate(100deg);
-      transform: scale(1.04); z-index: 0;
-    }
-    .bg-layer::after {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(to bottom,rgba(4,7,13,.65) 0%,transparent 30%,transparent 65%,rgba(4,7,13,.8) 100%);
-    }
-
-    /* ── Intro overlay ── */
-    #introOverlay {
-      position: fixed; inset: 0; z-index: 100;
-      background: rgba(4,7,13,.75); backdrop-filter: blur(2px);
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem;
-      cursor: pointer;
-    }
-    #introOverlay.fade-out { animation: overlayOut .65s ease forwards; pointer-events: none; }
-    .intro-tagline {
-      font-family: 'Philosopher', serif; font-size: clamp(.6rem,1.6vw,.8rem);
-      font-style: italic; letter-spacing: .5em; text-transform: uppercase;
-      color: rgba(61,220,132,.6); opacity: 0; transition: opacity .6s ease .15s;
-    }
-    #introOverlay.symbols-in .intro-tagline { opacity: 1; }
-    .symbols-grid {
-      display: grid; grid-template-columns: repeat(4,1fr);
-      gap: clamp(2rem,5vw,5rem); align-items: center; justify-items: center;
-    }
-    @media(max-width:600px){ .symbols-grid{ grid-template-columns:repeat(2,1fr); gap:2rem } }
-    .sym-item {
-      display: flex; flex-direction: column; align-items: center; gap: .9rem;
-      opacity: 0; transform: scale(.78);
-      transition: opacity .55s ease, transform .55s cubic-bezier(.22,1,.36,1);
-    }
-    #introOverlay.symbols-in .sym-item { opacity:1; transform:scale(1); }
-    .sym-img { width: clamp(64px,8vw,100px); height: clamp(64px,8vw,100px); object-fit: contain; }
-    .sym-item.air   .sym-img { animation: pulseGlowAir   2.6s ease-in-out infinite 0s; }
-    .sym-item.water .sym-img { animation: pulseGlowWater 2.6s ease-in-out infinite .4s; }
-    .sym-item.earth .sym-img { animation: pulseGlowEarth 2.6s ease-in-out infinite .8s; }
-    .sym-item.fire  .sym-img { animation: pulseGlowFire  2.6s ease-in-out infinite 1.2s; }
-    .sym-label { font-family:'Philosopher',serif; font-size:clamp(.55rem,1.3vw,.7rem); letter-spacing:.3em; text-transform:uppercase; }
-    .sym-item.air   .sym-label { color:var(--air); }
-    .sym-item.water .sym-label { color:var(--water); }
-    .sym-item.earth .sym-label { color:var(--earth); }
-    .sym-item.fire  .sym-label { color:var(--fire); }
-    .intro-hint {
+    /* ── Intro overlay ── */    #introOverlay.symbols-in    @media(max-width:600px){ }    #introOverlay.symbols-in    .sym-item.air    .sym-item.water    .sym-item.earth    .sym-item.fire    .sym-item.air    .sym-item.water    .sym-item.earth    .sym-item.fire    .intro-hint {
       font-family: 'Cinzel', serif; font-size: clamp(.38rem,.9vw,.48rem);
       letter-spacing: .35em; text-transform: uppercase; color: rgba(61,220,132,.35);
       opacity: 0; transition: opacity .6s ease 1.2s;
@@ -263,15 +204,6 @@
     .steam-badge svg { width: 10px; height: 10px; opacity: .6; }
 
     /* ── Jeffrey watermark ── */
-    .jeffrey-watermark {
-      position: fixed; bottom: 14px; right: 18px; z-index: 50;
-      display: inline-flex; align-items: center; gap: 5px;
-      text-decoration: none; font-family: 'Cinzel', serif;
-      font-size: .42rem; letter-spacing: .2em; text-transform: uppercase;
-      color: rgba(107,138,171,.45); transition: color .2s, opacity .2s; opacity: .6;
-    }
-    .jeffrey-watermark:hover { color: rgba(240,244,255,.7); opacity: 1; }
-
     /* ── Particles ── */
     #particleCanvas { position:fixed;top:0;left:0;z-index:0;pointer-events:none;opacity:0.4;width:100%;height:100%; }
 
@@ -416,7 +348,6 @@
         </a>
       </div>
     </div>
-
 
   </div>
 </div>

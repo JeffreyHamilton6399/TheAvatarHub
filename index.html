@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="referrer" content="no-referrer-when-downgrade">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>AvatarArchive</title>
   <meta name="theme-color" content="#04070d">
@@ -11,48 +12,15 @@
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="images/favicon.png">
   <link rel="icon" type="image/jpeg" href="images/favicon.png">
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>/* critical: prevent FOUC */body{background:#04070d;color:#f0f4ff;margin:0}</style>
+  <link rel="preload" as="script" href="shared.js">
   <link rel="stylesheet" href="shared.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cinzel+Decorative:wght@400;700;900&family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --deep:   #04070d;
-      --panel:  #0a111c;
-      --blue:   #4db8ff;
-      --white:  #f0f4ff;
-      --muted:  #6b8aab;
-      --dim:    #2d3f56;
-      --border: rgba(255,255,255,0.06);
-      --gold:   #c9a84c;
-      --air:    #f5c518;
-      --water:  #4db8ff;
-      --earth:  #6abf69;
-      --fire:   #f97316;
-      --card-bg: linear-gradient(160deg,rgba(10,17,28,.95) 0%,rgba(6,11,20,.98) 100%);
-    }
-
-    /* ── Light themes ── */
-    body.theme-parchment {
-      --deep:#f5efe0; --panel:#ede4ce; --white:#1a1008; --muted:#7a6040;
-      --dim:#b8a880; --border:rgba(0,0,0,0.10); --gold:#9a6820;
-      --card-bg: linear-gradient(160deg,rgba(255,250,235,.97) 0%,rgba(245,238,215,.99) 100%);
-    }
-    body.theme-water {
-      --deep:#dff0f8; --panel:#c8e4f2; --white:#0a1a2e; --muted:#3a6080;
-      --dim:#7ab0cc; --border:rgba(0,0,0,0.09);
-      --card-bg: linear-gradient(160deg,rgba(220,240,252,.97) 0%,rgba(200,228,245,.99) 100%);
-    }
-    body.theme-earth {
-      --deep:#f0f4e8; --panel:#e2ead0; --white:#1a2008; --muted:#5a7040;
-      --dim:#a0b878; --border:rgba(0,0,0,0.09);
-      --card-bg: linear-gradient(160deg,rgba(238,245,220,.97) 0%,rgba(224,235,200,.99) 100%);
-    }
-    body.theme-parchment .bg-layer { filter: blur(8px) brightness(0.45) saturate(.7); }
-    body.theme-water    .bg-layer  { filter: blur(8px) brightness(0.4) saturate(1.2) hue-rotate(190deg); }
-    body.theme-earth    .bg-layer  { filter: blur(8px) brightness(0.4) saturate(1.1) hue-rotate(55deg); }
-    body.theme-parchment .hero-main,
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cinzel+Decorative:wght@400;700;900&family=Philosopher:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>    /* ── Light themes ── */    body.theme-parchment .hero-main,
     body.theme-water    .hero-main,
     body.theme-earth    .hero-main { background: linear-gradient(135deg,var(--white) 0%,var(--muted) 50%,var(--gold,#c9a84c) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
     body.theme-parchment .search-results,
@@ -161,7 +129,6 @@
       transform-origin: bottom left;
       animation: panelIn .2s cubic-bezier(.22,1,.36,1) both;
     }
-    @keyframes panelIn { from{opacity:0;transform:scale(.93) translateY(6px)} to{opacity:1;transform:scale(1) translateY(0)} }
     #settingsPanel.open { display: flex; }
 
     .sp-section-label {
@@ -197,8 +164,6 @@
     }
     .sp-ambient-row.active .sp-toggle { background: rgba(201,168,76,.35); border-color: rgba(201,168,76,.55); }
     .sp-ambient-row.active .sp-toggle::after { transform: translateX(13px); background: var(--gold); }
-    @keyframes waveBar { from { height: 3px; } to { height: 11px; } }
-
     /* Theme options inside panel */
     .theme-opt {
       font-family: 'Cinzel', serif; font-size: .42rem; letter-spacing: .2em; text-transform: uppercase;
@@ -239,35 +204,7 @@
       #settingsBtn { left: 14px; bottom: 14px; }
       #settingsPanel { left: 10px; bottom: 60px; }
     }
-
-    @keyframes slideUp    { from{opacity:0;transform:translateY(36px)} to{opacity:1;transform:translateY(0)} }
-    @keyframes overlayOut { from{opacity:1} to{opacity:0} }
-    @keyframes pulseGlowAir   { 0%,100%{filter:drop-shadow(0 0 5px #f5c518)} 50%{filter:drop-shadow(0 0 18px #f5c518)} }
-    @keyframes pulseGlowWater { 0%,100%{filter:drop-shadow(0 0 5px #4db8ff)} 50%{filter:drop-shadow(0 0 18px #4db8ff)} }
-    @keyframes pulseGlowEarth { 0%,100%{filter:drop-shadow(0 0 5px #6abf69)} 50%{filter:drop-shadow(0 0 18px #6abf69)} }
-    @keyframes pulseGlowFire  { 0%,100%{filter:drop-shadow(0 0 5px #f97316)} 50%{filter:drop-shadow(0 0 18px #f97316)} }
-
-    body {
-      background: var(--deep);
-      color: var(--white);
-      font-family: 'Philosopher', Georgia, serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
     /* ── Background ── */
-    .bg-layer {
-      position: fixed; inset: 0;
-      background-image: url('images/mainbg.png');
-      background-size: cover; background-position: center top;
-      filter: blur(8px) brightness(0.2) saturate(1.4);
-      transform: scale(1.04); z-index: 0;
-    }
-    .bg-layer::after {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(to bottom,rgba(4,7,13,.6) 0%,transparent 30%,transparent 70%,rgba(4,7,13,.75) 100%);
-    }
-
     /* ── Page ── */
     .page {
       position: relative; z-index: 1;
@@ -385,7 +322,6 @@
       background: linear-gradient(to bottom,rgba(4,7,13,.1) 0%,rgba(4,7,13,.05) 25%,rgba(4,7,13,.5) 65%,rgba(4,7,13,.88) 100%);
     }
 
-
     /* Body */
     .card-body {
       position: relative; z-index: 2;
@@ -431,15 +367,6 @@
     .hub-card:hover .card-cta svg { transform: translateX(4px); }
 
     /* ── Jeffrey Creates ── */
-    .jeffrey-watermark {
-      position: fixed; bottom: 14px; right: 18px; z-index: 50;
-      display: inline-flex; align-items: center; gap: 5px;
-      text-decoration: none; font-family: 'Cinzel', serif;
-      font-size: .42rem; letter-spacing: .2em; text-transform: uppercase;
-      color: rgba(107,138,171,.45); transition: color .2s, opacity .2s; opacity: .6;
-    }
-    .jeffrey-watermark:hover { color: rgba(240,244,255,.7); opacity: 1; }
-
     /* ── World-map splash ── */
     #mapSplash {
       position: fixed; inset: 0; z-index: 200;
@@ -529,8 +456,6 @@
     .sr-meta  { font-family: 'Cinzel', serif; font-size: .42rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-top: .15rem; }
     .sr-empty { padding: 1.2rem 1.1rem; font-family: 'Philosopher', serif; font-style: italic; font-size: .88rem; color: var(--muted); }
 
-
-
     /* ── Continue-watching progress strip on hub cards ── */
     .card-progress-strip {
       position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
@@ -583,12 +508,10 @@
 <!-- ── World-map splash (shown first) ── -->
 <div id="mapSplash">
   <p class="map-title">The Avatar World</p>
-  <img id="mapSvg" src="images/worldmap.png" alt="Avatar World Map">
+  <img loading="lazy" decoding="async" id="mapSvg" src="images/worldmap.png" alt="Avatar World Map">
   <p class="map-sub">The Four Nations</p>
   <p class="map-hint">Tap anywhere to enter</p>
 </div>
-
-
 
 <!-- ── Background + particles ── -->
 <div class="bg-layer"></div>
@@ -796,7 +719,6 @@
     </a>
 
   </div>
-
 
 </div>
 
@@ -1104,10 +1026,10 @@
   loader.innerHTML = `
     <div class="ls-logo">AvatarArchive</div>
     <div class="ls-syms">
-      <img class="ls-sym" src="images/air.png"   alt="">
-      <img class="ls-sym" src="images/water.png" alt="">
-      <img class="ls-sym" src="images/earth.png" alt="">
-      <img class="ls-sym" src="images/fire.png"  alt="">
+      <img loading="lazy" decoding="async" class="ls-sym" src="images/air.png"   alt="">
+      <img loading="lazy" decoding="async" class="ls-sym" src="images/water.png" alt="">
+      <img loading="lazy" decoding="async" class="ls-sym" src="images/earth.png" alt="">
+      <img loading="lazy" decoding="async" class="ls-sym" src="images/fire.png"  alt="">
     </div>
     <div class="ls-msg" id="loaderMsg">Entering the Avatar World…</div>
     <div class="ls-track"><div class="ls-fill" id="loaderFill"></div></div>
@@ -1286,7 +1208,6 @@ searchInput.addEventListener('keydown', e => { if (e.key === 'Escape') { searchI
 document.addEventListener('click', e => { if (!e.target.closest('.search-bar-wrap')) searchResults.classList.remove('open'); });
 searchInput.addEventListener('focus', () => { if (searchInput.value.trim()) runSearch(searchInput.value); });
 
-
 /* ══════════════════════════════════════════
    PWA — register service worker + manifest
 ══════════════════════════════════════════ */
@@ -1388,7 +1309,6 @@ self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>
   modal.addEventListener('click', e => { if(e.target===modal) modal.classList.remove('open'); });
   window.addEventListener('appinstalled', () => { if(btn) btn.style.display='none'; });
 })();
-
 
 </script>
 
