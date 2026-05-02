@@ -414,6 +414,7 @@
     .hub-card.books           { --accent:#a87ccc;      --accent-rgb:168,124,204;  }
     .hub-card.games           { --accent:#3ddc84;      --accent-rgb:61,220,132;   }
     .hub-card.merch           { --accent:#c9a84c;      --accent-rgb:201,168,76;   }
+    .hub-card.timeline        { --accent:#9b7fe8;      --accent-rgb:155,127,232;  }
     .hub-card:hover {
       box-shadow: 0 16px 55px rgba(var(--accent-rgb),.2), 0 0 0 1px rgba(var(--accent-rgb),.32);
       border-color: rgba(var(--accent-rgb),.38);
@@ -1105,6 +1106,39 @@ body.theme-earth    .install-banner-title { color: var(--white); }
         <div class="card-cta">
           Browse Games
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- In-Universe Timeline -->
+    <a href="timeline.html" class="hub-card timeline">
+      <div class="card-poster">
+        <div class="card-poster-bg" style="background-image:url('images/mainbg.png');filter:brightness(.38) saturate(1.1) hue-rotate(220deg)"></div>
+        <div class="card-poster-overlay"></div>
+        <!-- Mini timeline SVG decoration -->
+        <svg style="position:absolute;bottom:18px;left:50%;transform:translateX(-50%);z-index:3;opacity:.55;width:min(88%,360px)" viewBox="0 0 360 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="18" x2="360" y2="18" stroke="rgba(155,127,232,.5)" stroke-width="1"/>
+          <circle cx="18"  cy="18" r="5" fill="#f5c518" opacity=".9"/>
+          <circle cx="80"  cy="18" r="4" fill="#4db8ff" opacity=".9"/>
+          <circle cx="155" cy="18" r="4" fill="#6abf69" opacity=".9"/>
+          <circle cx="220" cy="18" r="5" fill="#f97316" opacity=".9"/>
+          <circle cx="290" cy="18" r="4" fill="#4db8ff" opacity=".9"/>
+          <circle cx="342" cy="18" r="5" fill="#9b7fe8" opacity=".9"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <span class="card-label">In-Universe · History</span>
+        <div class="card-title">The Avatar Timeline</div>
+        <div class="card-sub">20,000 Years of History</div>
+        <div class="card-meta">
+          <span class="card-tag">All Eras</span>
+          <span class="card-tag">BG → AG</span>
+          <span class="card-tag">Wan → Korra</span>
+        </div>
+        <div class="card-divider"></div>
+        <div class="card-cta">
+          Explore
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
         </div>
       </div>
     </a>

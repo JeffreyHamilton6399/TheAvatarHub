@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Avatar Timeline · AvatarArchive</title>
+  <meta name="theme-color" content="#04070d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="images/favicon.png">
+  <link rel="icon" type="image/jpeg" href="images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cinzel+Decorative:wght@400;700;900&family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+
+  .page {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 0 clamp(1rem,5vw,3rem);
+  }
+
+  /* Back */
+  .back-link {
+    position: fixed; top: 18px; left: 18px; z-index: 50;
+    display: inline-flex; align-items: center; gap: 7px;
+    font-family: 'Cinzel', serif; font-size: .4rem; letter-spacing: .22em; text-transform: uppercase;
+    color: rgba(155,127,232,.75); background: rgba(4,7,13,.72);
+    border: 1px solid rgba(155,127,232,.2); border-radius: 30px;
+    padding: .48em 1em; text-decoration: none;
+    transition: color .2s, border-color .2s, background .2s;
+    backdrop-filter: blur(14px);
+  }
+  .back-link:hover { color: #b89ff4; border-color: rgba(155,127,232,.5); background: rgba(155,127,232,.08); }
+  .back-link svg { width: 12px; height: 12px; fill: currentColor; }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    padding: clamp(4.5rem,9vh,7rem) 2rem clamp(1.2rem,2vh,2rem);
+    width: 100%; max-width: 640px;
+    animation: tl-in .7s cubic-bezier(.22,1,.36,1) both;
+  }
+  .hero-eyebrow {
+    font-family: 'Cinzel', serif; font-size: clamp(.38rem,.9vw,.5rem);
+    letter-spacing: .45em; text-transform: uppercase; color: rgba(155,127,232,.55);
+    margin-bottom: .9rem;
+  }
+  .hero-main {
+    font-family: 'Cinzel Decorative', serif; font-weight: 900;
+    font-size: clamp(1.4rem,3vw,2.5rem); letter-spacing: .06em;
+    background: linear-gradient(135deg,#d4c6ff 0%,#9b7fe8 55%,#6b47d4 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    line-height: 1.15; padding: .1em .3em .15em; display: inline-block;
+    margin-bottom: .4rem;
+  }
+  .hero-sub {
+    font-family: 'Philosopher', serif; font-style: italic;
+    font-size: clamp(.82rem,1.6vw,1rem); color: var(--muted); letter-spacing: .1em;
+  }
+  .hero-rule {
+    width: 60px; height: 1px;
+    background: linear-gradient(to right,transparent,rgba(155,127,232,.45),transparent);
+    margin: 1.2rem auto 0;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex; flex-wrap: wrap; gap: .45rem; justify-content: center;
+    padding: .6rem 0 1.6rem;
+    animation: tl-in .6s cubic-bezier(.22,1,.36,1) .12s both;
+  }
+  .leg { display: inline-flex; align-items: center; gap: .38rem; font-family:'Cinzel',serif; font-size:.34rem; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .leg-dot { width:8px;height:8px;border-radius:50%;flex-shrink:0; }
+
+  /* Outer wrapper */
+  .tl-outer {
+    width: 100%; max-width: 780px;
+    padding-bottom: clamp(4rem,8vh,6rem);
+    animation: tl-in .7s cubic-bezier(.22,1,.36,1) .2s both;
+  }
+
+  /* Spine */
+  .tl-spine {
+    position: relative;
+    padding-left: 48px;
+  }
+  .tl-spine::before {
+    content: '';
+    position: absolute; left: 16px; top: 0; bottom: 0; width: 1px;
+    background: linear-gradient(to bottom,
+      transparent 0%,
+      rgba(155,127,232,.2) 4%,
+      rgba(155,127,232,.2) 96%,
+      transparent 100%
+    );
+  }
+
+  /* Era block */
+  .era { position: relative; margin-bottom: 4px; }
+  .era::before {
+    content: '';
+    position: absolute; left: -38px; top: 22px;
+    width: 11px; height: 11px; border-radius: 50%;
+    background: var(--ec,#9b7fe8);
+    box-shadow: 0 0 0 3px rgba(4,7,13,1), 0 0 0 4px var(--ec,#9b7fe8), 0 0 10px var(--ec,#9b7fe8);
+    z-index: 2; transition: box-shadow .25s;
+  }
+  .era.open::before { box-shadow: 0 0 0 3px rgba(4,7,13,1), 0 0 0 4px var(--ec,#9b7fe8), 0 0 22px var(--ec,#9b7fe8); }
+
+  /* Era header */
+  .era-hd {
+    display: flex; align-items: center;
+    padding: .6rem .9rem .6rem 1rem;
+    background: rgba(10,17,28,.65);
+    border: 1px solid rgba(255,255,255,.05);
+    border-radius: 10px;
+    cursor: pointer; user-select: none;
+    transition: background .2s, border-color .2s;
+    position: relative; overflow: hidden;
+  }
+  .era-hd::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--ec,#9b7fe8); opacity: .6; border-radius: 3px 0 0 3px;
+    transition: opacity .2s;
+  }
+  .era.open .era-hd, .era-hd:hover { background: rgba(14,22,38,.8); border-color: rgba(255,255,255,.09); }
+  .era.open .era-hd::before { opacity: 1; }
+
+  .era-hd-left { flex:1; min-width:0; }
+  .era-avatar-label {
+    font-family: 'Cinzel', serif; font-size: .35rem; letter-spacing: .26em; text-transform: uppercase;
+    color: var(--ec,#9b7fe8); opacity: .7; margin-bottom: .18rem;
+  }
+  .era-name {
+    font-family: 'Cinzel', serif; font-weight: 700;
+    font-size: clamp(.62rem,1.3vw,.78rem); letter-spacing: .1em; text-transform: uppercase;
+    color: var(--white); line-height: 1.3;
+  }
+  .era-dates {
+    font-family: 'Philosopher', serif; font-style: italic;
+    font-size: clamp(.62rem,1.1vw,.74rem); color: var(--muted); margin-top: .1rem;
+  }
+
+  .era-hd-right {
+    display: flex; align-items: center; gap: .75rem; flex-shrink: 0; margin-left: .8rem;
+  }
+  .era-nation {
+    font-family: 'Cinzel', serif; font-size: .33rem; letter-spacing: .16em; text-transform: uppercase;
+    padding: .28em .65em; border-radius: 20px; border: 1px solid; flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .era-count { font-family:'Cinzel',serif; font-size:.33rem; letter-spacing:.15em; color:var(--muted); text-transform:uppercase; white-space:nowrap; }
+  .era-arrow {
+    width: 16px; height: 16px; color: var(--muted); flex-shrink: 0;
+    transition: transform .3s cubic-bezier(.22,1,.36,1), color .2s;
+  }
+  .era.open .era-arrow { transform: rotate(180deg); color: var(--ec,#9b7fe8); }
+
+  /* Era body */
+  .era-body { display:grid; grid-template-rows:0fr; transition:grid-template-rows .35s cubic-bezier(.22,1,.36,1); margin-top:2px; }
+  .era.open .era-body { grid-template-rows:1fr; }
+  .era-body-inner { overflow:hidden; }
+
+  /* Events */
+  .events {
+    border: 1px solid rgba(255,255,255,.05); border-top:none;
+    border-radius: 0 0 10px 10px;
+    background: rgba(6,10,20,.6);
+    backdrop-filter: blur(8px); overflow:hidden;
+  }
+  .ev {
+    display: grid; grid-template-columns: 76px 1fr;
+    border-bottom: 1px solid rgba(255,255,255,.04);
+    cursor: pointer; transition: background .15s; position: relative;
+  }
+  .ev:last-child { border-bottom: none; }
+  .ev:hover { background: rgba(var(--era-rgb,155,127,232),.05); }
+  .ev.major { background: rgba(var(--era-rgb,155,127,232),.04); }
+
+  .ev-year {
+    font-family: 'Cinzel', serif; font-size: .31rem; letter-spacing: .1em;
+    color: var(--ec,#9b7fe8); opacity: .55;
+    padding: .65rem .5rem .65rem .75rem;
+    display: flex; align-items: center; justify-content: flex-end;
+    border-right: 1px solid rgba(255,255,255,.05);
+    text-align: right; line-height: 1.45;
+  }
+  .ev.major .ev-year { opacity: 1; font-weight: 700; }
+
+  .ev-body {
+    padding: .6rem .85rem .6rem .8rem;
+    display: flex; align-items: center; gap: .55rem; min-width: 0;
+  }
+  .ev-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--ec,#9b7fe8); opacity: .35; flex-shrink: 0;
+  }
+  .ev.major .ev-dot { opacity: 1; box-shadow: 0 0 6px var(--ec,#9b7fe8); }
+
+  .ev-title {
+    font-family: 'Philosopher', serif;
+    font-size: clamp(.76rem,1.35vw,.88rem); color: rgba(220,228,244,.85);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    line-height: 1.4; flex: 1; min-width: 0;
+  }
+  .ev.major .ev-title { font-weight: 700; color: var(--white); }
+
+  .ev-tags { display:flex; gap:.28rem; flex-shrink:0; }
+  .ev-tag {
+    font-family:'Cinzel',serif; font-size:.28rem; letter-spacing:.12em; text-transform:uppercase;
+    padding:.2em .5em; border-radius:20px; border:1px solid; white-space:nowrap;
+  }
+  .tag-air    { color:var(--air);   border-color:rgba(245,197,24,.3);  background:rgba(245,197,24,.07); }
+  .tag-water  { color:var(--water); border-color:rgba(77,184,255,.3);  background:rgba(77,184,255,.07); }
+  .tag-earth  { color:var(--earth); border-color:rgba(106,191,105,.3); background:rgba(106,191,105,.07); }
+  .tag-fire   { color:var(--fire);  border-color:rgba(249,115,22,.3);  background:rgba(249,115,22,.07); }
+  .tag-spirit { color:#c9b3ff;      border-color:rgba(155,127,232,.3); background:rgba(155,127,232,.07); }
+  .tag-avatar { color:var(--gold);  border-color:rgba(201,168,76,.3);  background:rgba(201,168,76,.07); }
+
+  @media(max-width:560px){
+    .ev-tags { display:none; }
+    .ev-year { padding:.6rem .4rem; font-size:.28rem; }
+    .ev-title { font-size:.76rem; }
+    .era-nation { display:none; }
+  }
+
+  /* Detail panel */
+  #detailPanel {
+    position: fixed; bottom:0; left:0; right:0; z-index:200;
+    background: rgba(6,10,20,.97);
+    border-top: 1px solid rgba(155,127,232,.18);
+    border-radius: 20px 20px 0 0;
+    padding: 1.1rem 1.4rem env(safe-area-inset-bottom,1.4rem);
+    padding-bottom: calc(1.4rem + env(safe-area-inset-bottom,0px));
+    max-height: 48vh; overflow-y: auto;
+    backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+    box-shadow: 0 -10px 50px rgba(0,0,0,.6);
+    transform: translateY(100%);
+    transition: transform .36s cubic-bezier(.22,1,.36,1);
+    display: flex; flex-direction: column; gap: .6rem;
+  }
+  #detailPanel.open { transform: translateY(0); }
+  #detailPanel::-webkit-scrollbar { width:3px; }
+  #detailPanel::-webkit-scrollbar-thumb { background:rgba(155,127,232,.2); border-radius:3px; }
+
+  .dp-handle { width:36px;height:3px;border-radius:3px;background:rgba(255,255,255,.13);margin:0 auto .3rem;cursor:pointer;flex-shrink:0; }
+  .dp-meta { display:flex; align-items:center; gap:.8rem; flex-wrap:wrap; }
+  .dp-era-tag { font-family:'Cinzel',serif;font-size:.36rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dp-color,#9b7fe8); }
+  .dp-year { font-family:'Cinzel',serif;font-size:.34rem;letter-spacing:.14em;color:var(--muted); }
+  .dp-title { font-family:'Philosopher',serif;font-weight:700;font-size:clamp(.98rem,2.1vw,1.18rem);color:var(--white);line-height:1.35; }
+  .dp-desc { font-family:'Philosopher',serif;font-style:italic;font-size:clamp(.79rem,1.45vw,.91rem);color:rgba(172,188,208,.85);line-height:1.72; }
+  .dp-close {
+    position:absolute;top:1rem;right:1.1rem;
+    background:none;border:none;cursor:pointer;
+    color:var(--muted);padding:.25em;display:flex;align-items:center;
+    transition:color .15s;
+  }
+  .dp-close:hover { color:var(--white); }
+  .dp-close svg { width:18px;height:18px;fill:currentColor; }
+
+  body.panel-open .page { padding-bottom:52vh; }
+
+  /* Light themes */
+  body.theme-parchment .era-hd,body.theme-water .era-hd,body.theme-earth .era-hd { background:rgba(255,255,255,.55);border-color:rgba(0,0,0,.08); }
+  body.theme-parchment .era-hd:hover,body.theme-water .era-hd:hover,body.theme-earth .era-hd:hover { background:rgba(255,255,255,.72); }
+  body.theme-parchment .events,body.theme-water .events,body.theme-earth .events { background:rgba(255,255,255,.35);border-color:rgba(0,0,0,.07); }
+  body.theme-parchment .ev,body.theme-water .ev,body.theme-earth .ev { border-bottom-color:rgba(0,0,0,.05); }
+  body.theme-parchment .ev-year,body.theme-water .ev-year,body.theme-earth .ev-year { border-right-color:rgba(0,0,0,.05); }
+  body.theme-parchment .ev-title,body.theme-water .ev-title,body.theme-earth .ev-title { color:var(--white); }
+  body.theme-parchment #detailPanel,body.theme-water #detailPanel,body.theme-earth #detailPanel { background:rgba(242,236,220,.98);border-top-color:rgba(0,0,0,.1); }
+  body.theme-parchment .dp-desc,body.theme-water .dp-desc,body.theme-earth .dp-desc { color:var(--muted); }
+  body.theme-parchment .dp-title,body.theme-water .dp-title,body.theme-earth .dp-title { color:var(--white); }
+
+  @keyframes tl-in { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+  </style>
+</head>
+<body>
+
+<script>(function(){var t=localStorage.getItem('avatarhub_theme');if(t&&t!=='dark')document.body.classList.add(t);})();</script>
+<script src="player-shared.js"></script>
+
+<div class="bg-layer" style="background-image:url('images/timelinebg.png')"></div>
+<canvas id="particleCanvas" style="position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.25;width:100%;height:100%;"></canvas>
+
+<a href="index.html" class="back-link">
+  <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+  Home
+</a>
+
+<button id="settingsBtn" aria-label="Settings">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+</button>
+<div id="settingsPanel">
+  <div class="sp-section">
+    <div class="sp-section-label">Theme</div>
+    <button class="theme-opt" data-theme="dark"><span class="theme-swatch" style="background:#04070d;border:1px solid rgba(255,255,255,.2)"></span>Dark</button>
+    <button class="theme-opt" data-theme="theme-parchment"><span class="theme-swatch" style="background:#f5efe0"></span>Parchment</button>
+    <button class="theme-opt" data-theme="theme-water"><span class="theme-swatch" style="background:#4db8ff"></span>Water</button>
+    <button class="theme-opt" data-theme="theme-earth"><span class="theme-swatch" style="background:#6abf69"></span>Earth</button>
+  </div>
+  <div class="sp-divider"></div>
+  <div class="sp-section">
+    <div class="sp-ambient-row" id="ambientRow">
+      <span class="sp-ambient-label"><span class="ambient-wave"><span></span><span></span><span></span></span>Ambient</span>
+      <span class="sp-toggle"></span>
+    </div>
+  </div>
+</div>
+<div class="watermark">AvatarArchive</div>
+
+<!-- Detail panel -->
+<div id="detailPanel">
+  <div class="dp-handle" id="dpHandle"></div>
+  <button class="dp-close" id="dpClose"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+  <div class="dp-meta">
+    <span class="dp-era-tag" id="dpEra"></span>
+    <span class="dp-year" id="dpYear"></span>
+  </div>
+  <div class="dp-title" id="dpTitle"></div>
+  <div class="dp-desc"  id="dpDesc"></div>
+</div>
+
+<div class="page">
+
+  <div class="hero">
+    <p class="hero-eyebrow">In-Universe Chronology · All Eras</p>
+    <h1 class="hero-main">The Avatar Timeline</h1>
+    <p class="hero-sub">Every known Avatar — from Wan to Korra · Tap any event for details</p>
+    <div class="hero-rule"></div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <span class="leg"><span class="leg-dot" style="background:#f5c518"></span>Air</span>
+    <span class="leg"><span class="leg-dot" style="background:#4db8ff"></span>Water</span>
+    <span class="leg"><span class="leg-dot" style="background:#6abf69"></span>Earth</span>
+    <span class="leg"><span class="leg-dot" style="background:#f97316"></span>Fire</span>
+    <span class="leg"><span class="leg-dot" style="background:#9b7fe8"></span>Spirit</span>
+    <span class="leg"><span class="leg-dot" style="background:#c9a84c;box-shadow:0 0 6px #c9a84c"></span>Major Event</span>
+  </div>
+
+  <div class="tl-outer">
+   <div class="tl-spine">
+
+    <!-- ══════════════════════════════════════════
+         BEFORE THE AVATAR — ERA OF RAAVA
+    ══════════════════════════════════════════ -->
+    <div class="era open" id="era-raava" style="--ec:#9b7fe8;--era-rgb:155,127,232">
+      <div class="era-hd" data-target="era-raava">
+        <div class="era-hd-left">
+          <div class="era-avatar-label">Before the Avatar</div>
+          <div class="era-name">Era of Raava</div>
+          <div class="era-dates">c. 19,829 BG and earlier</div>
+        </div>
+        <div class="era-hd-right">
+          <span class="era-nation tag-spirit" style="border-color:rgba(155,127,232,.35);color:#c9b3ff;background:rgba(155,127,232,.1)">Spirit World</span>
+          <span class="era-count">3 events</span>
+          <svg class="era-arrow" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+        </div>
+      </div>
+      <div class="era-body">
+       <div class="era-body-inner">
+        <div class="events" style="--ec:#9b7fe8;--era-rgb:155,127,232">
+
+          <div class="ev major"
+            data-era="Era of Raava" data-year="c. 19,829 BG"
+            data-title="The First Harmonic Convergence"
+            data-desc="The spirits of light and darkness — Raava and Vaatu — wage their eternal battle. The first known Harmonic Convergence occurs, binding their conflict to a ten-thousand-year cosmic cycle. Every Harmonic Convergence that follows will either lock Vaatu away or give him the chance to run free and plunge the world into chaos.">
+            <div class="ev-year">~19,829 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">First Harmonic Convergence — Raava vs. Vaatu</div><div class="ev-tags"><span class="ev-tag tag-spirit">Spirits</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Era of Raava" data-year="Ancient"
+            data-title="Humanity Shelters on Lion Turtles"
+            data-desc="Humans build cities on the shells of great lion turtles, the only safe shelter from the dangerous Spirit Wilds. The turtles grant bending powers — fire, water, earth, or air — to those venturing out to gather food, to be returned upon re-entry. Humans are utterly dependent on these ancient beings for survival.">
+            <div class="ev-year">Ancient</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Humanity shelters on lion turtle cities</div><div class="ev-tags"><span class="ev-tag tag-spirit">Ancient</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Era of Raava" data-year="Ancient"
+            data-title="Vaatu Breaks the Barrier Between Worlds"
+            data-desc="The spirit of chaos, Vaatu, tears through the barriers separating the mortal world from the Spirit World, allowing both humans and spirits to cross between them freely. The resulting chaos forces Raava to battle dark spirits constantly to maintain what little balance remains — until Avatar Wan finally settles things.">
+            <div class="ev-year">Ancient</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Vaatu breaks the barrier between worlds</div><div class="ev-tags"><span class="ev-tag tag-spirit">Spirit World</span></div></div>
+          </div>
+
+        </div>
+       </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         AVATAR WAN — THE FIRST AVATAR
+    ══════════════════════════════════════════ -->
+    <div class="era" id="era-wan" style="--ec:#f5c518;--era-rgb:245,197,24">
+      <div class="era-hd" data-target="era-wan">
+        <div class="era-hd-left">
+          <div class="era-avatar-label">1st Avatar · Air Nation</div>
+          <div class="era-name">Avatar Wan</div>
+          <div class="era-dates">c. 9,832 – 9,829 BG · The First Avatar</div>
+        </div>
+        <div class="era-hd-right">
+          <span class="era-nation tag-air">Air</span>
+          <span class="era-count">5 events</span>
+          <svg class="era-arrow" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+        </div>
+      </div>
+      <div class="era-body">
+       <div class="era-body-inner">
+        <div class="events" style="--ec:#f5c518;--era-rgb:245,197,24">
+
+          <div class="ev"
+            data-era="Avatar Wan" data-year="9,850 BG"
+            data-title="Wan Born on a Fire Lion Turtle City"
+            data-desc="Born into the lowest caste of a fire lion turtle city, under the thumb of the wealthy Chou family who control all food and resources. From childhood, Wan dreams of escaping into the Spirit Wilds and living freely — a dream considered suicidal by everyone around him.">
+            <div class="ev-year">9,850 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Wan born on a fire lion turtle city</div><div class="ev-tags"><span class="ev-tag tag-fire">Fire</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Avatar Wan" data-year="c. 9,832 BG"
+            data-title="Wan Steals Fire — Cast into the Spirit Wilds"
+            data-desc="Wan steals fire from the lion turtle to spark a rebellion against the Chou family and is banished into the Spirit Wilds as punishment. Rather than dying, he befriends the spirits, spends years learning from them, and masters the Dancing Dragon firebending form — the same technique the Sun Warriors will preserve for thousands of years.">
+            <div class="ev-year">9,832 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Wan steals fire — banished into the Spirit Wilds</div><div class="ev-tags"><span class="ev-tag tag-fire">Fire</span><span class="ev-tag tag-spirit">Spirits</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Avatar Wan" data-year="c. 9,830 BG"
+            data-title="Wan Frees Vaatu — Chaos Is Unleashed"
+            data-desc="Believing he is freeing an innocent spirit, Wan severs the link binding Raava and Vaatu together — releasing the spirit of chaos into the world. Dark spirits immediately begin terrorizing humans across all lands. Wan, overcome with guilt, bonds with Raava and spends years traveling between lion turtle cities to master all four elements, trying to undo the damage he caused.">
+            <div class="ev-year">9,830 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Wan frees Vaatu — chaos unleashed</div><div class="ev-tags"><span class="ev-tag tag-spirit">Spirit World</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Avatar Wan" data-year="9,829 BG"
+            data-title="Second Harmonic Convergence — Wan Becomes the First Avatar"
+            data-desc="At the second Harmonic Convergence, Wan and Raava permanently bond, making Wan the first Avatar. He defeats Vaatu and seals him within the Tree of Time inside the South Pole spirit portal. Wan then orders all spirits back to their world and seals both polar portals. The lion turtles, seeing humanity can now protect itself, renounce their role as guardians forever. Wan spends the rest of his life traveling the world trying — and largely failing — to bring peace.">
+            <div class="ev-year">9,829 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Second Harmonic Convergence — Wan becomes the first Avatar</div><div class="ev-tags"><span class="ev-tag tag-avatar">Avatar</span><span class="ev-tag tag-spirit">Spirits</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Avatar Wan" data-year="After 9,829 BG"
+            data-title="The Four Nations Begin to Form"
+            data-desc="Freed from the lion turtles, humanity spreads across the world. Different peoples meet, clash, and slowly form into the four nations: the Air Nomads, the Water Tribes, the Earth Kingdom, and the Fire Nation. The Avatar Cycle begins — a new Avatar is reborn after each death, carrying Raava through every lifetime.">
+            <div class="ev-year">After 9,829 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">The four nations begin to form</div><div class="ev-tags"><span class="ev-tag tag-air">Air</span><span class="ev-tag tag-water">Water</span><span class="ev-tag tag-earth">Earth</span><span class="ev-tag tag-fire">Fire</span></div></div>
+          </div>
+
+        </div>
+       </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         EARLY AVATARS — UNNAMED ERA
+         Cycle after Wan: Water → Earth → Fire → Air → Water...
+         Many avatars are unnamed. Known ones: Salai, Gun, Szeto (all Fire), then Yangchen (Air)
+    ══════════════════════════════════════════ -->
+    <div class="era" id="era-early" style="--ec:#6b8aab;--era-rgb:107,138,171">
+      <div class="era-hd" data-target="era-early">
+        <div class="era-hd-left">
+          <div class="era-avatar-label">Multiple Avatars · Ages Unknown</div>
+          <div class="era-name">The Early Avatars</div>
+          <div class="era-dates">c. 9,829 BG — before 345 BG · Thousands of Years</div>
+        </div>
+        <div class="era-hd-right">
+          <span class="era-nation" style="color:var(--muted);border:1px solid rgba(107,138,171,.3);border-radius:20px;padding:.28em .65em;font-family:'Cinzel',serif;font-size:.33rem;letter-spacing:.14em;text-transform:uppercase">All Nations</span>
+          <span class="era-count">6 events</span>
+          <svg class="era-arrow" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+        </div>
+      </div>
+      <div class="era-body">
+       <div class="era-body-inner">
+        <div class="events" style="--ec:#6b8aab;--era-rgb:107,138,171">
+
+          <div class="ev"
+            data-era="The Early Avatars" data-year="Thousands of years"
+            data-title="The Four Nations Consolidate and Grow"
+            data-desc="Over thousands of years, the four nations develop distinct cultures, governments, and bending arts. The Air Nomads learn airbending from the flying bison, the Water Tribes from the tides and the moon, the Earth Kingdom from the badgermoles, and the Fire Nation originally from the dragons. Each Avatar works to maintain balance across this growing, often fractious world.">
+            <div class="ev-year">Thousands of years</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">The four nations develop distinct bending arts and cultures</div><div class="ev-tags"><span class="ev-tag tag-air">Air</span><span class="ev-tag tag-water">Water</span><span class="ev-tag tag-earth">Earth</span><span class="ev-tag tag-fire">Fire</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="The Early Avatars" data-year="c. 3,829 BG"
+            data-title="Guru Laghima Achieves Weightlessness"
+            data-desc="The legendary Air Nomad philosopher and airbending master Guru Laghima lets go of all earthly attachment and achieves weightlessness — spending the last forty years of his life without ever touching the ground. His philosophical rival Guru Shoken advocates a contradictory path. Laghima's poetry will inspire the Red Lotus's Zaheer thousands of years later.">
+            <div class="ev-year">c. 3,829 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Guru Laghima achieves weightlessness</div><div class="ev-tags"><span class="ev-tag tag-air">Air Nomads</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="The Early Avatars" data-year="Ancient"
+            data-title="Avatar Salai — One of the Greatest"
+            data-desc="Avatar Salai is remembered across the ages as one of the greatest Avatars to ever live. Little is recorded of their specific deeds, but their legacy endures in the collective memory of the Avatar cycle — a benchmark for what an Avatar can achieve.">
+            <div class="ev-year">Ancient</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Avatar Salai — remembered as one of the greatest Avatars</div><div class="ev-tags"><span class="ev-tag tag-avatar">Avatar</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="The Early Avatars" data-year="Ancient"
+            data-title="Avatar Gun — Temporarily Retires"
+            data-desc="Avatar Gun serves the world faithfully until the death of someone close to them, known as Mesose, causes Gun to temporarily retire from Avatar duties — a rare and controversial choice in the history of the Avatar. Gun eventually returns to service, but the incident is remembered as a moment when the world's protector stepped back from their calling.">
+            <div class="ev-year">Ancient</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Avatar Gun temporarily retires after the death of Mesose</div><div class="ev-tags"><span class="ev-tag tag-avatar">Avatar</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="The Early Avatars" data-year="Era of Szeto"
+            data-title="Avatar Szeto — The Administrator"
+            data-desc="Avatar Szeto is born in the Fire Nation. In his early life, a major crisis threatens to fracture the Fire Nation entirely. Rather than fighting wars, Szeto works from within the system as a government official — becoming one of the most effective administrators in Fire Nation history. He ends the conflict between the noble clans, restores the economy, and ushers in a long era of political stability and prosperity. He is celebrated with the Festival of Szeto, still observed in Roku's time.">
+            <div class="ev-year">Era of Szeto</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Avatar Szeto unifies the Fire Nation through governance</div><div class="ev-tags"><span class="ev-tag tag-fire">Fire Nation</span><span class="ev-tag tag-avatar">Avatar</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="The Early Avatars" data-year="Era of Szeto"
+            data-title="Lady Tienhai Falls in Love and Dies — Old Iron Awakens"
+            data-desc="The spirit Lady Tienhai, who centuries earlier vowed to protect a group of human settlers and watched their small camp grow into the coastal city of Tienhaishi, falls in love and marries the city's ruler. She gives up her immortal spirit nature to live a mortal life with him — and eventually dies. Her death enrages the ancient armored spirit General Old Iron, who had loved her, setting up the confrontation Avatar Yangchen will eventually have to face.">
+            <div class="ev-year">Era of Szeto</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Lady Tienhai dies — Old Iron's grief begins</div><div class="ev-tags"><span class="ev-tag tag-spirit">Spirits</span></div></div>
+          </div>
+
+        </div>
+       </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         AVATAR YANGCHEN
+    ══════════════════════════════════════════ -->
+    <div class="era" id="era-yangchen" style="--ec:#f5c518;--era-rgb:245,197,24">
+      <div class="era-hd" data-target="era-yangchen">
+        <div class="era-hd-left">
+          <div class="era-avatar-label">Air Nomad Avatar · Western Air Temple</div>
+          <div class="era-name">Avatar Yangchen</div>
+          <div class="era-dates">Before 345 BG</div>
+        </div>
+        <div class="era-hd-right">
+          <span class="era-nation tag-air">Air</span>
+          <span class="era-count">6 events</span>
+          <svg class="era-arrow" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+        </div>
+      </div>
+      <div class="era-body">
+       <div class="era-body-inner">
+        <div class="events" style="--ec:#f5c518;--era-rgb:245,197,24">
+
+          <div class="ev"
+            data-era="Avatar Yangchen" data-year="Year 0 of her era"
+            data-title="Yangchen Born and Raised at the Western Air Temple"
+            data-desc="Born an Air Nomad following Avatar Szeto's death, Yangchen is raised at the Western Air Temple and guided spiritually by her sister and companion Jetsun. She masters all four elements and the Avatar State. Though trained in Air Nomad detachment from the world, she becomes famous for doing the opposite — diving deeply into the messy, political realities of keeping humanity safe, even at the cost of her spiritual practice.">
+            <div class="ev-year">Year 0</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Yangchen born at the Western Air Temple</div><div class="ev-tags"><span class="ev-tag tag-air">Air Nomads</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Avatar Yangchen" data-year="Year 11"
+            data-title="Jetsun Sacrifices Her Life for Yangchen"
+            data-desc="On Yangchen's first journey into the Spirit World, guided by her sister Jetsun, two shishi spirits turn dark during their passage. Yangchen escapes back to the physical world — but Jetsun does not make it out. Her body is left empty of its spirit, and she soon dies. Yangchen carries the grief of her guide's sacrifice for the rest of her life.">
+            <div class="ev-year">Year 11</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Jetsun sacrifices her life guiding Yangchen through the Spirit World</div><div class="ev-tags"><span class="ev-tag tag-spirit">Spirit World</span><span class="ev-tag tag-air">Air</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Avatar Yangchen" data-year="Year 17"
+            data-title="Yangchen Halts General Old Iron — Tienhaishi Abandoned"
+            data-desc="General Old Iron, an ancient armored spirit grieving the death of Lady Tienhai, rampages toward Tienhaishi to destroy it. Yangchen meets him and strikes a deal: she will ensure the city is abandoned and returned to nature if he stops. She keeps her word — a painful sacrifice that haunts her, as she must watch humans lose their home to honor the agreement. It is the first of many hard choices that define her legacy.">
+            <div class="ev-year">Year 17</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Yangchen halts General Old Iron — Tienhaishi abandoned</div><div class="ev-tags"><span class="ev-tag tag-spirit">Spirits</span><span class="ev-tag tag-earth">Earth Kingdom</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Avatar Yangchen" data-year="Year 17"
+            data-title="The Unanimity Project — Combustionbending Discovered"
+            data-desc="Wealthy shang city merchants secretly develop three human combustionbenders — people who generate lethal explosive blasts through their minds — as weapons to seize political leverage over all four nations. The operation is called the Unanimity Project. Yangchen exposes and dismantles the Zongdu network behind it. As a result, she becomes the de facto protector-ruler of all shang cities, reshaping international trade and diplomacy in a way no Avatar had before.">
+            <div class="ev-year">Year 17</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">The Unanimity Project — combustionbending discovered</div><div class="ev-tags"><span class="ev-tag tag-fire">Fire</span><span class="ev-tag tag-earth">Earth Kingdom</span><span class="ev-tag tag-water">Water</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Avatar Yangchen" data-year="Late era"
+            data-title="Yangchen's Spirit Pacts — A Legacy That Poisons Her Successors"
+            data-desc="Throughout her lifetime, Yangchen negotiates dozens of treaties with spirits across the world, binding them to agreements that keep the peace. It works — while she is alive. But many pacts are broken by humans after her death, causing the spirits to turn dark and vengeful. Her successor Kuruk will spend his entire life fighting the consequences of her broken deals.">
+            <div class="ev-year">Late era</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Yangchen's spirit pacts — a poisoned inheritance</div><div class="ev-tags"><span class="ev-tag tag-spirit">Spirits</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Avatar Yangchen" data-year="Before 345 BG"
+            data-title="Yangchen Signs the Fifth Nation Treaty — Then Dies"
+            data-desc="One of Yangchen's last acts is signing a treaty with the pirate confederation known as the Fifth Nation, protecting the southern Earth Kingdom coast. Shortly after, Yangchen dies, passing the Avatar spirit to a new life in the Northern Water Tribe — Avatar Kuruk.">
+            <div class="ev-year">Before 345 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Yangchen signs the Fifth Nation treaty — then dies</div><div class="ev-tags"><span class="ev-tag tag-water">Water</span><span class="ev-tag tag-earth">Earth Kingdom</span></div></div>
+          </div>
+
+        </div>
+       </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         AVATAR KURUK
+    ══════════════════════════════════════════ -->
+    <div class="era" id="era-kuruk" style="--ec:#4db8ff;--era-rgb:77,184,255">
+      <div class="era-hd" data-target="era-kuruk">
+        <div class="era-hd-left">
+          <div class="era-avatar-label">Water Tribe Avatar · Northern Water Tribe</div>
+          <div class="era-name">Avatar Kuruk</div>
+          <div class="era-dates">345 – 312 BG · Died Age 33</div>
+        </div>
+        <div class="era-hd-right">
+          <span class="era-nation tag-water">Water</span>
+          <span class="era-count">5 events</span>
+          <svg class="era-arrow" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+        </div>
+      </div>
+      <div class="era-body">
+       <div class="era-body-inner">
+        <div class="events" style="--ec:#4db8ff;--era-rgb:77,184,255">
+
+          <div class="ev"
+            data-era="Avatar Kuruk" data-year="345 BG"
+            data-title="Kuruk Born in the Northern Water Tribe"
+            data-desc="Born a gifted and naturally powerful waterbender, Kuruk inherits a world spiritually destabilized by Yangchen's broken spirit pacts. From the outside, he appears carefree, reckless, and disengaged from his Avatar duties. The truth is quieter and sadder: he fights a constant, largely secret war against dark spirits that the world doesn't even know is happening.">
+            <div class="ev-year">345 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Kuruk born in the Northern Water Tribe</div><div class="ev-tags"><span class="ev-tag tag-water">Water</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Avatar Kuruk" data-year="Early – mid era"
+            data-title="Kuruk Accidentally Destroys an Island in the Avatar State"
+            data-desc="During Kuruk's first attempt to master the Avatar State, he loses control and accidentally destroys an entire island. There are no fatal casualties, but the incident underscores the dangerous power sleeping inside him — and why maintaining emotional balance as an Avatar is never just a philosophical concept.">
+            <div class="ev-year">Early era</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Kuruk accidentally destroys an island in the Avatar State</div><div class="ev-tags"><span class="ev-tag tag-avatar">Avatar</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Avatar Kuruk" data-year="Early – mid era"
+            data-title="Kuruk's Private War Against Dark Spirits"
+            data-desc="Honoring Yangchen's broken pacts, Kuruk wages a secret war against increasingly powerful dark spirits across the world — the Heartwalker of Yaoping Mountain, the phoenix-eel spirits under Ma'inka Island, and others. He never tells anyone. Each battle spiritually corrupts him a little more. His friends and advisors read his declining mood as irresponsibility; it is actually quiet sacrifice.">
+            <div class="ev-year">Early – mid era</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Kuruk's secret war against dark spirits</div><div class="ev-tags"><span class="ev-tag tag-spirit">Spirits</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Avatar Kuruk" data-year="c. 316 BG"
+            data-title="Koh the Face Stealer Takes Ummi"
+            data-desc="The ancient Face Stealer Koh tears the face from Kuruk's beloved fiancée Ummi during a spirit journey, exploiting the single moment Kuruk shows emotion in the Spirit World. Kuruk attempts to fight Koh in the Spirit World to get her back — but cannot defeat the immortal entity. The grief and guilt define the rest of his short life. Centuries later, Koh will warn Avatar Aang that Kuruk came very close.">
+            <div class="ev-year">c. 316 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Koh the Face Stealer takes Ummi</div><div class="ev-tags"><span class="ev-tag tag-spirit">Spirit World</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Avatar Kuruk" data-year="312 BG"
+            data-title="Kuruk Dies at 33 — the Youngest Avatar"
+            data-desc="Weakened by years of spirit combat, spiritual corruption, and private grief, Kuruk dies at just 33 years old — one of the youngest Avatars in history. The Earth Kingdom destabilizes significantly in the power vacuum that follows, with the Fifth Nation pirates rising to terrorize the coasts and internal conflicts threatening the continent's order.">
+            <div class="ev-year">312 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Kuruk dies at 33 — youngest Avatar in recorded history</div><div class="ev-tags"><span class="ev-tag tag-water">Water</span></div></div>
+          </div>
+
+        </div>
+       </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         AVATAR KYOSHI
+    ══════════════════════════════════════════ -->
+    <div class="era" id="era-kyoshi" style="--ec:#6abf69;--era-rgb:106,191,105">
+      <div class="era-hd" data-target="era-kyoshi">
+        <div class="era-hd-left">
+          <div class="era-avatar-label">Earth Kingdom Avatar · Yokoya / Kyoshi Island</div>
+          <div class="era-name">Avatar Kyoshi</div>
+          <div class="era-dates">312 – 82 BG · Lived 230 Years</div>
+        </div>
+        <div class="era-hd-right">
+          <span class="era-nation tag-earth">Earth</span>
+          <span class="era-count">8 events</span>
+          <svg class="era-arrow" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+        </div>
+      </div>
+      <div class="era-body">
+       <div class="era-body-inner">
+        <div class="events" style="--ec:#6abf69;--era-rgb:106,191,105">
+
+          <div class="ev"
+            data-era="Avatar Kyoshi" data-year="312 BG"
+            data-title="Kyoshi Born — Abandoned in Yokoya"
+            data-desc="Born to rogue Avatar spirit keepers who immediately abandon her, Kyoshi is left destitute in the village of Yokoya where the locals cast her into the streets. She nearly starves before being taken in by Avatar hunter Jianzhu and the Air Nomad monk Kelsang. She grows up not even knowing she is the Avatar.">
+            <div class="ev-year">312 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Kyoshi born — abandoned and nearly starves in Yokoya</div><div class="ev-tags"><span class="ev-tag tag-earth">Earth Kingdom</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Avatar Kyoshi" data-year="305 BG"
+            data-title="Yun Falsely Identified as the Avatar"
+            data-desc="Jianzhu and Kelsang falsely identify the charismatic young earthbender Yun as the Avatar during a trip to Makapu Village. Yun trains as the Avatar for years, believing it himself, while the true Avatar — Kyoshi — works as his servant.">
+            <div class="ev-year">305 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Yun falsely identified as the Avatar</div><div class="ev-tags"><span class="ev-tag tag-earth">Earth Kingdom</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Avatar Kyoshi" data-year="296 BG"
+            data-title="Kyoshi Revealed as the True Avatar — Yun Sacrificed, Kelsang Murdered"
+            data-desc="The spirit Father Glowworm reveals that Kyoshi — not Yun — is the true Avatar. Jianzhu sacrifices Yun to the spirit to confirm this. Kyoshi refuses Jianzhu as her teacher and flees with her companion Rangi. Kelsang, who raised her, is killed by Jianzhu while trying to protect her escape. Kyoshi joins the outlaw Flying Opera Company and begins her true training — outside the system.">
+            <div class="ev-year">296 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Kyoshi revealed as Avatar — Yun sacrificed, Kelsang murdered</div><div class="ev-tags"><span class="ev-tag tag-earth">Earth Kingdom</span><span class="ev-tag tag-spirit">Spirits</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Avatar Kyoshi" data-year="296 BG"
+            data-title="Fall of the Fifth Nation — Tagaka Defeated"
+            data-desc="Kyoshi and her companions defeat the feared pirate queen Tagaka and her Fifth Nation fleet, ending years of coastal terror. Tagaka is imprisoned. The battle resolves the Avatar succession crisis — but Jianzhu's crimes remain hidden, and Kyoshi must now pursue him while also taking up the duties of the Avatar on a world stage she never asked for.">
+            <div class="ev-year">296 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Fall of the Fifth Nation — Tagaka defeated</div><div class="ev-tags"><span class="ev-tag tag-water">Water</span><span class="ev-tag tag-earth">Earth</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Avatar Kyoshi" data-year="295 BG"
+            data-title="Kyoshi Warriors Founded — Dai Li Established"
+            data-desc="Kyoshi trains the first Kyoshi Warriors on her home island — skilled non-bending fighters in her image. She also creates the Dai Li as a cultural protection force for Ba Sing Se, binding their loyalty to the Earth King in exchange for training them herself. The Dai Li will one day betray everything Kyoshi stood for, handing Ba Sing Se to the Fire Nation in Avatar Aang's time.">
+            <div class="ev-year">295 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Kyoshi Warriors &amp; the Dai Li founded</div><div class="ev-tags"><span class="ev-tag tag-earth">Earth Kingdom</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Avatar Kyoshi" data-year="~270 BG"
+            data-title="Chin the Conqueror Defeated — Kyoshi Island Created"
+            data-desc="The warlord Chin the Conqueror marches to complete his conquest of the Earth Kingdom, arriving at Kyoshi's home peninsula on the day he expects to claim it. Kyoshi kills him — and uses earthbending to rip the peninsula away from the mainland, creating Kyoshi Island. The act is celebrated on the island and mourned in Chin Village, which still holds Avatar Day as a day of condemnation.">
+            <div class="ev-year">~270 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Chin the Conqueror defeated — Kyoshi Island created</div><div class="ev-tags"><span class="ev-tag tag-earth">Earth Kingdom</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Avatar Kyoshi" data-year"~270 BG"
+            data-year="~270 BG"
+            data-title="The Dai Li and Ba Sing Se's Constitution"
+            data-desc="In exchange for training the Dai Li, Kyoshi forces the 46th Earth King to agree to a new constitution empowering Ba Sing Se's commoners. A statue in her honor is erected on Kyoshi Island. She also helps found the Order of the White Lotus, the secret society of masters who guard universal knowledge and peace across national boundaries.">
+            <div class="ev-year">~270 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Kyoshi forces a new constitution and trains the Dai Li</div><div class="ev-tags"><span class="ev-tag tag-earth">Earth Kingdom</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Avatar Kyoshi" data-year="82 BG"
+            data-title="Kyoshi Dies at 230 — The Longest-Lived Avatar"
+            data-desc="Avatar Kyoshi dies at 230 years old — the longest-lived Avatar in recorded history. Her death triggers the simultaneous birth of Avatar Roku and his childhood best friend Sozin in the Fire Nation on the same day. Her Kyoshi Warriors continue to protect her island centuries after her death. Kyoshi is often quoted as saying: 'I am not here to be gentle with the world.'">
+            <div class="ev-year">82 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Kyoshi dies at 230 — Roku &amp; Sozin born the same day</div><div class="ev-tags"><span class="ev-tag tag-earth">Earth Kingdom</span><span class="ev-tag tag-fire">Fire Nation</span></div></div>
+          </div>
+
+        </div>
+       </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         AVATAR ROKU
+    ══════════════════════════════════════════ -->
+    <div class="era" id="era-roku" style="--ec:#f97316;--era-rgb:249,115,22">
+      <div class="era-hd" data-target="era-roku">
+        <div class="era-hd-left">
+          <div class="era-avatar-label">Fire Nation Avatar · Fire Nation Capital</div>
+          <div class="era-name">Avatar Roku</div>
+          <div class="era-dates">82 – 12 BG · Died Age 70</div>
+        </div>
+        <div class="era-hd-right">
+          <span class="era-nation tag-fire">Fire</span>
+          <span class="era-count">6 events</span>
+          <svg class="era-arrow" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+        </div>
+      </div>
+      <div class="era-body">
+       <div class="era-body-inner">
+        <div class="events" style="--ec:#f97316;--era-rgb:249,115,22">
+
+          <div class="ev"
+            data-era="Avatar Roku" data-year="82 BG"
+            data-title="Roku and Sozin Born on the Same Day"
+            data-desc="The Avatar and the future Fire Lord grow up together as best friends in the Fire Nation — equals in every way that matters to them. Their bond is genuine, deep, and eventually becomes one of the most tragic relationships in Avatar history. Without understanding each other's ambitions, they slowly drift into opposite directions without ever quite breaking.">
+            <div class="ev-year">82 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Roku and Sozin born on the same day — lifelong friends</div><div class="ev-tags"><span class="ev-tag tag-fire">Fire Nation</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Avatar Roku" data-year="66 BG"
+            data-title="Roku Confirmed as Avatar — Twelve Years Away from Home"
+            data-desc="At sixteen, Roku is revealed as the Avatar and must immediately leave the Fire Nation to spend twelve years traveling the world and mastering all four elements. He trains under some of the greatest masters alive — including a young Air Nomad monk named Gyatso. Without Roku's moderating presence, Sozin — now Fire Lord — begins his slow, quiet descent into expansionist ideology.">
+            <div class="ev-year">66 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Roku confirmed as Avatar — leaves Fire Nation for twelve years</div><div class="ev-tags"><span class="ev-tag tag-fire">Fire Nation</span><span class="ev-tag tag-avatar">Avatar</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Avatar Roku" data-year="55 BG"
+            data-title="Roku Destroys the Crescent Island Fire Temple"
+            data-desc="While training his firebending at the Crescent Island Fire Temple on the winter solstice, Roku gets stuck in the Avatar State and accidentally destroys the temple and activates a nearby volcano. He spends considerable time personally helping locals rebuild. The incident demonstrates both the raw power of the Avatar State and how much work it takes to master it safely.">
+            <div class="ev-year">55 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Roku destroys the Crescent Island temple in the Avatar State</div><div class="ev-tags"><span class="ev-tag tag-fire">Fire</span><span class="ev-tag tag-avatar">Avatar</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Avatar Roku" data-year="54 BG"
+            data-title="Roku Returns — Marries Ta Min"
+            data-desc="A fully realized Avatar, Roku returns to the Fire Nation after twelve years and marries Ta Min, a diplomat and noblewoman. He settles into his life as the world's most powerful and respected figure — but underestimates how far Sozin's private ambitions have already grown. Roku assumes their friendship is unchanged. It is not.">
+            <div class="ev-year">54 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Roku returns — marries Ta Min</div><div class="ev-tags"><span class="ev-tag tag-fire">Fire Nation</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Avatar Roku" data-year="37 BG"
+            data-title="Roku Confronts Sozin — Spares His Life"
+            data-desc="Roku discovers the first Fire Nation colonies planted in the Earth Kingdom — a direct violation of the peace Roku believed they shared. He confronts Sozin in the royal palace. They fight. Roku wins, destroys the throne room, and has Sozin completely at his mercy. Then he spares his life — out of love for their old friendship. It is the decision that will doom the world.">
+            <div class="ev-year">37 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Roku confronts Sozin over the colonies — and spares his life</div><div class="ev-tags"><span class="ev-tag tag-fire">Fire Nation</span><span class="ev-tag tag-earth">Earth Kingdom</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Avatar Roku" data-year="12 BG"
+            data-title="Sozin Lets Roku Die — Aang Is Born"
+            data-desc="A catastrophic volcanic eruption strikes Roku's home island. Sozin arrives and works alongside Roku briefly — then sees his opportunity. He withdraws his forces and watches through the toxic fumes as his oldest friend suffocates and dies at age seventy. With Roku gone, Sozin is free. Twelve years later he will use his comet to launch the war. Avatar Aang is born the same day Roku dies — in the Southern Air Temple.">
+            <div class="ev-year">12 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Sozin lets Roku die — Aang born that same day</div><div class="ev-tags"><span class="ev-tag tag-fire">Fire Nation</span><span class="ev-tag tag-air">Air</span></div></div>
+          </div>
+
+        </div>
+       </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         THE HUNDRED YEAR WAR
+    ══════════════════════════════════════════ -->
+    <div class="era" id="era-war" style="--ec:#e53935;--era-rgb:229,57,53">
+      <div class="era-hd" data-target="era-war">
+        <div class="era-hd-left">
+          <div class="era-avatar-label">Avatar Aang · Air Nomad — Childhood &amp; the War</div>
+          <div class="era-name">The Hundred Year War</div>
+          <div class="era-dates">0 – 100 AG · Fire Lord Sozin's Conquest</div>
+        </div>
+        <div class="era-hd-right">
+          <span class="era-nation tag-fire">Fire</span>
+          <span class="era-count">9 events</span>
+          <svg class="era-arrow" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+        </div>
+      </div>
+      <div class="era-body">
+       <div class="era-body-inner">
+        <div class="events" style="--ec:#e53935;--era-rgb:229,57,53">
+
+          <div class="ev"
+            data-era="Hundred Year War" data-year="12 BG"
+            data-title="Aang Born at the Southern Air Temple"
+            data-desc="Avatar Aang is born on the same day Roku dies, beginning the next Avatar life immediately. He is raised at the Southern Air Temple by the monks, who recognize him as the Avatar earlier than usual — at age twelve, four years ahead of the traditional reveal age — because they sense war coming.">
+            <div class="ev-year">12 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Aang born at the Southern Air Temple</div><div class="ev-tags"><span class="ev-tag tag-air">Air Nomads</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Hundred Year War" data-year="~2 BG"
+            data-title="Aang Invents the Air Scooter — Youngest Airbending Master"
+            data-desc="At age ten, Aang invents the air scooter technique — a new airbending form — making him the youngest airbending master in recorded history and earning his tattoos. He also befriends children in the Fire Nation, including a boy named Kuzon, and plays with a baby dragon. He has no idea a war is coming.">
+            <div class="ev-year">~2 BG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Aang invents the air scooter — youngest airbending master ever</div><div class="ev-tags"><span class="ev-tag tag-air">Air Nomads</span><span class="ev-tag tag-avatar">Avatar</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Hundred Year War" data-year="0 AG"
+            data-title="The Air Nomad Genocide — Sozin's Comet"
+            data-desc="Fire Lord Sozin uses the power of a passing comet — a celestial event that dramatically enhances firebending — to launch simultaneous attacks on all four Air Temples. Every Air Nomad in the world is slaughtered in an attempt to kill the next Avatar before they can master all four elements. The genocide kills thousands. Only Aang survives — because he has already fled.">
+            <div class="ev-year">0 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">The Air Nomad Genocide — Sozin's Comet</div><div class="ev-tags"><span class="ev-tag tag-fire">Fire Nation</span><span class="ev-tag tag-air">Air Nomads</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Hundred Year War" data-year="0 AG"
+            data-title="Aang Frozen in the Iceberg"
+            data-desc="Told he will be separated from his family and sent to the Eastern Air Temple, twelve-year-old Aang flees the Southern Air Temple on his sky bison Appa. Caught in a terrible storm over the South Pole ocean, Aang enters the Avatar State instinctively and encases himself and Appa in a perfectly preserved sphere of ice. He will not wake up for one hundred years.">
+            <div class="ev-year">0 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Aang frozen in the iceberg at the South Pole</div><div class="ev-tags"><span class="ev-tag tag-air">Air</span><span class="ev-tag tag-water">South Pole</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Hundred Year War" data-year="0–100 AG"
+            data-title="A Century of War"
+            data-desc="The Fire Nation advances steadily across the Earth Kingdom. The Southern Water Tribe is raided over decades for its waterbenders, leaving only a handful of survivors. The world lives under occupation, fear, and the endless shadow of a war with no visible end — and no Avatar to stop it.">
+            <div class="ev-year">0–100 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">A century of war — the world without its Avatar</div><div class="ev-tags"><span class="ev-tag tag-fire">Fire Nation</span><span class="ev-tag tag-earth">Earth Kingdom</span><span class="ev-tag tag-water">Water Tribes</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Hundred Year War" data-year="99 AG"
+            data-title="Aang Awakens — Team Avatar Forms"
+            data-desc="Siblings Katara and Sokka of the Southern Water Tribe crack open an iceberg while fishing and free Aang and Appa after one hundred years. Aang, who thinks it has been one night, learns the devastating truth: everyone he knew is dead. His nation is gone. Together, they form Team Avatar and begin a race against time to master the remaining three elements before Sozin's Comet returns.">
+            <div class="ev-year">99 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Aang awakens — Team Avatar forms</div><div class="ev-tags"><span class="ev-tag tag-air">Air</span><span class="ev-tag tag-water">Water</span><span class="ev-tag tag-avatar">Avatar</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Hundred Year War" data-year="100 AG"
+            data-title="Ba Sing Se Falls — Aang Killed by Azula"
+            data-desc="Princess Azula orchestrates an internal coup using the Dai Li — Kyoshi's own institution turned against everything it was built to protect. The great walled city of Ba Sing Se falls to the Fire Nation without a single wall being breached. Azula then strikes Aang with lightning; he dies. Katara uses her spirit water to revive him, narrowly restarting the Avatar cycle — but for a terrifying moment, the Avatar is gone.">
+            <div class="ev-year">100 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Ba Sing Se falls — Aang killed and revived</div><div class="ev-tags"><span class="ev-tag tag-earth">Earth Kingdom</span><span class="ev-tag tag-fire">Fire Nation</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Hundred Year War" data-year="100 AG"
+            data-title="Sozin's Comet Returns — Ozai Defeated by Energybending"
+            data-desc="With the comet enhancing all firebenders a hundredfold, Fire Lord Ozai crowns himself Phoenix King and sends an airship armada to burn the entire Earth Kingdom. Aang — who has refused to kill — learns energybending from the world's last living lion turtle and uses it to strip Ozai permanently of his firebending. The Hundred Year War ends. The world breathes again.">
+            <div class="ev-year">100 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Sozin's Comet — Ozai defeated by energybending</div><div class="ev-tags"><span class="ev-tag tag-fire">Fire Nation</span><span class="ev-tag tag-avatar">Avatar</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Hundred Year War" data-year="100 AG"
+            data-title="Zuko Becomes Fire Lord"
+            data-desc="Prince Zuko — who spent three years hunting the Avatar before switching sides to join him — ascends the throne as Fire Lord. He vows before the assembled nations to spend his reign undoing a century of war and work alongside Aang to rebuild the world. The comet that once enabled the genocide now witnesses the beginning of something different.">
+            <div class="ev-year">100 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Zuko becomes Fire Lord</div><div class="ev-tags"><span class="ev-tag tag-fire">Fire Nation</span></div></div>
+          </div>
+
+        </div>
+       </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         AANG'S ERA — RECONSTRUCTION
+    ══════════════════════════════════════════ -->
+    <div class="era" id="era-aang" style="--ec:#4db8ff;--era-rgb:77,184,255">
+      <div class="era-hd" data-target="era-aang">
+        <div class="era-hd-left">
+          <div class="era-avatar-label">Avatar Aang · Air Nomad — Post-War</div>
+          <div class="era-name">Aang's Era — Reconstruction</div>
+          <div class="era-dates">100 – 153 AG</div>
+        </div>
+        <div class="era-hd-right">
+          <span class="era-nation tag-air">Air</span>
+          <span class="era-count">7 events</span>
+          <svg class="era-arrow" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+        </div>
+      </div>
+      <div class="era-body">
+       <div class="era-body-inner">
+        <div class="events" style="--ec:#4db8ff;--era-rgb:77,184,255">
+
+          <div class="ev major"
+            data-era="Aang's Era" data-year="100 AG"
+            data-title="The Harmony Restoration Movement"
+            data-desc="Aang and Zuko launch a joint effort to remove Fire Nation colonies from the Earth Kingdom and restore the pre-war borders. The process proves far more complicated than expected — generations of mixed Fire Nation and Earth Kingdom families have built entire lives together in these colonies, and many refuse to be simply separated. The movement eventually gives way to the more nuanced Treaty of Yu Dao.">
+            <div class="ev-year">100 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">The Harmony Restoration Movement</div><div class="ev-tags"><span class="ev-tag tag-fire">Fire Nation</span><span class="ev-tag tag-earth">Earth Kingdom</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Aang's Era" data-year="100 AG"
+            data-title="Aang and Zuko Search for Ursa"
+            data-desc="Zuko embarks on a search for his mother, Ursa, who was banished from the Fire Nation when Zuko was young. With Team Avatar's help — and the unpredictable participation of a mentally unstable Azula — they eventually find Ursa living a new life in the town of Hira'a under an assumed identity. She returns to the palace.">
+            <div class="ev-year">101 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Zuko finds his mother Ursa in Hira'a</div><div class="ev-tags"><span class="ev-tag tag-fire">Fire Nation</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Aang's Era" data-year="101 AG"
+            data-title="Toph Founds the Beifong Metalbending Academy"
+            data-desc="Toph Beifong — who invented metalbending entirely on her own by sensing the trace earth still inside refined metal — establishes a school to pass her technique on to others. Metalbending will become one of the most important forces in the next generation's law enforcement, construction, and warfare.">
+            <div class="ev-year">101 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Toph founds the Beifong Metalbending Academy</div><div class="ev-tags"><span class="ev-tag tag-earth">Earth Kingdom</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Aang's Era" data-year="102–115 AG"
+            data-title="The United Republic of Nations Founded — Republic City Rises"
+            data-desc="Aang and Zuko establish a fifth nation — the United Republic of Nations — built on the radical idea that people of all nations can live together in peace. Republic City is built on the western shores of the former Earth Kingdom and grows into the most modern metropolis in the world. Toph becomes its first Chief of Police, commanding the world's first metalbending police force.">
+            <div class="ev-year">102–115 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">United Republic of Nations founded — Republic City rises</div><div class="ev-tags"><span class="ev-tag tag-avatar">Avatar</span><span class="ev-tag tag-fire">Fire</span><span class="ev-tag tag-earth">Earth</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Aang's Era" data-year="119 AG"
+            data-title="Tenzin Born — Last Natural-Born Airbender"
+            data-desc="Aang and Katara's youngest child Tenzin is born an airbender — the only one of their three children. For decades, Tenzin and his father are the last two practicing airbenders in the world, carrying the entire Air Nomad culture between them. Tenzin will spend his adult life trying to rebuild something that was nearly erased entirely.">
+            <div class="ev-year">119 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Tenzin born — the last natural-born airbender</div><div class="ev-tags"><span class="ev-tag tag-air">Air Nomads</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Aang's Era" data-year="128 AG"
+            data-title="Aang Strips Yakone of His Bending"
+            data-desc="Republic City's most dangerous crime lord, Yakone, is put on trial for bloodbending civilians in broad daylight. When he tries to escape by bloodbending the entire courtroom, Aang enters the Avatar State and uses energybending to permanently remove Yakone's bending. Yakone flees and secretly trains his two sons — Noatak and Tarrlok — to carry out his revenge on the Avatar. It will take a generation to surface.">
+            <div class="ev-year">128 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Aang strips Yakone of his bending via energybending</div><div class="ev-tags"><span class="ev-tag tag-water">Water</span><span class="ev-tag tag-avatar">Avatar</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Aang's Era" data-year="153 AG"
+            data-title="Aang Dies — Korra Born That Same Day"
+            data-desc="Avatar Aang passes away. The man who survived a genocide, ended a hundred-year war, founded a new nation, and spent his life trying to bridge the old world with the new — is gone. Korra is born the same day in the Southern Water Tribe, inheriting the world he rebuilt and all the wounds it still quietly carries.">
+            <div class="ev-year">153 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Aang dies — Korra born that same day</div><div class="ev-tags"><span class="ev-tag tag-avatar">Avatar</span><span class="ev-tag tag-water">Water</span></div></div>
+          </div>
+
+        </div>
+       </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         AVATAR KORRA — ERA OF CHANGE
+    ══════════════════════════════════════════ -->
+    <div class="era" id="era-korra" style="--ec:#9b7fe8;--era-rgb:155,127,232">
+      <div class="era-hd" data-target="era-korra">
+        <div class="era-hd-left">
+          <div class="era-avatar-label">Water Tribe Avatar · Southern Water Tribe</div>
+          <div class="era-name">Avatar Korra — The Era of Change</div>
+          <div class="era-dates">153 AG and beyond</div>
+        </div>
+        <div class="era-hd-right">
+          <span class="era-nation tag-water">Water</span>
+          <span class="era-count">10 events</span>
+          <svg class="era-arrow" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+        </div>
+      </div>
+      <div class="era-body">
+       <div class="era-body-inner">
+        <div class="events" style="--ec:#9b7fe8;--era-rgb:155,127,232">
+
+          <div class="ev"
+            data-era="Era of Korra" data-year="153–170 AG"
+            data-title="Korra Masters Three Elements as a Child"
+            data-desc="Under the protection of the Order of the White Lotus at a compound in the Southern Water Tribe, Korra masters fire, water, and earth at an unnaturally young age — but struggles deeply with airbending and with the spiritual and philosophical dimensions of being the Avatar. The Order keeps her locked away from the world for her entire childhood.">
+            <div class="ev-year">153–170 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Korra masters three elements in isolation</div><div class="ev-tags"><span class="ev-tag tag-water">Southern WT</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Era of Korra" data-year="158 AG"
+            data-title="Zaheer and His Team Try to Kidnap Korra — Captured"
+            data-desc="An anarchist named Zaheer, along with Ming-Hua, Ghazan, and P'Li, attempt to kidnap the young Korra from her compound. They are stopped by Chief Sokka, Tenzin, Tonraq, and Fire Lord Zuko. Each member of the team is imprisoned in a specialized facility designed to neutralize their bending — with Zaheer, a non-bender, locked away simply because of what they believe he could become.">
+            <div class="ev-year">158 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Zaheer's team attempts to kidnap Korra — all captured</div><div class="ev-tags"><span class="ev-tag tag-avatar">Avatar</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Era of Korra" data-year="170 AG"
+            data-title="The Anti-Bending Revolution — Amon Unmasked"
+            data-desc="A masked revolutionary called Amon emerges in Republic City rallying non-benders with the ability to permanently remove bending through bloodbending — framed as a spiritual gift. His Equalist movement nearly takes the entire city. Korra ultimately exposes him as a waterbender named Noatak — the elder son of Yakone, trained from childhood for this very moment. He escapes and dies with his brother Tarrlok when Tarrlok ignites their boat's fuel tank in a final act of ending his family's cycle of hatred.">
+            <div class="ev-year">170 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">The Anti-Bending Revolution — Amon unmasked and destroyed</div><div class="ev-tags"><span class="ev-tag tag-water">Water</span><span class="ev-tag tag-avatar">Avatar</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Era of Korra" data-year="170 AG"
+            data-title="Aang's Spirit Restores Korra's Bending"
+            data-desc="Amon removes Korra's bending during his victory rally. In the aftermath, pushed to her lowest point, Korra unlocks her airbending through emotional desperation. Aang's spirit appears and restores all of her bending through energybending — and passes the ability on to her so she can do the same for others.">
+            <div class="ev-year">170 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Aang's spirit restores Korra's bending — and passes on energybending</div><div class="ev-tags"><span class="ev-tag tag-spirit">Spirit</span><span class="ev-tag tag-avatar">Avatar</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Era of Korra" data-year="171 AG"
+            data-title="Third Harmonic Convergence — Unalaq Becomes the Dark Avatar"
+            data-desc="Korra's uncle Unalaq, the chief of the Northern Water Tribe, opens both polar spirit portals and fuses with the freed Vaatu during the third known Harmonic Convergence — becoming a Dark Avatar. He purges Raava from Korra and destroys her. Korra defeats Unalaq using his own cleansing technique. She restarts the Avatar Cycle — but permanently loses her connection to all past Avatars. She chooses to leave both spirit portals open forever, ending the separation of the two worlds.">
+            <div class="ev-year">171 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Third Harmonic Convergence — Unalaq becomes the Dark Avatar</div><div class="ev-tags"><span class="ev-tag tag-spirit">Spirit World</span><span class="ev-tag tag-water">Water</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Era of Korra" data-year="171 AG"
+            data-title="Airbenders Reborn Across the World"
+            data-desc="In the immediate wake of Harmonic Convergence, dozens of people across all four nations suddenly develop airbending — the first new Air Nomads in over a century. Non-benders, earthbenders, even a retired military commander (Bumi, Aang's eldest son) spontaneously gain the ability. Tenzin leads the effort to rebuild Air Nomad culture across the world.">
+            <div class="ev-year">171 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Airbenders reborn worldwide — the Air Nation is restored</div><div class="ev-tags"><span class="ev-tag tag-air">Air Nomads</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Era of Korra" data-year="171 AG"
+            data-title="The Red Lotus — Zaheer Kills the Earth Queen"
+            data-desc="Harmonic Convergence grants Zaheer — a non-bender imprisoned for twelve years — the power of airbending. He escapes, frees his team, and the Red Lotus anarchist group resurfaces. Zaheer assassinates Earth Queen Hou-Ting by removing the air from her lungs, plunging the Earth Kingdom into chaos. He then captures Korra and poisons her with a substance meant to force her into the Avatar State permanently — which would kill her and end the Avatar Cycle. She barely survives. Zaheer achieves true flight and is imprisoned again.">
+            <div class="ev-year">171 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">The Red Lotus — Zaheer kills the Earth Queen, nearly ends the cycle</div><div class="ev-tags"><span class="ev-tag tag-air">Air</span><span class="ev-tag tag-earth">Earth Kingdom</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Era of Korra" data-year="171–174 AG"
+            data-title="Korra's Recovery and the Fragmented Earth Kingdom"
+            data-desc="Severely traumatized by the Red Lotus's attack, Korra spends nearly three years recovering at the Southern Water Tribe compound while haunted by visions of herself in chains. She eventually sets out on a solitary journey to reconnect with Raava. Meanwhile, the Earth Kingdom fractures without a monarch, and a military commander named Kuvira begins uniting the splintered states by force.">
+            <div class="ev-year">171–174 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">Korra's three-year recovery — the Earth Kingdom fractures</div><div class="ev-tags"><span class="ev-tag tag-earth">Earth Kingdom</span><span class="ev-tag tag-avatar">Avatar</span></div></div>
+          </div>
+
+          <div class="ev major"
+            data-era="Era of Korra" data-year="174 AG"
+            data-title="The Earth Empire — Kuvira's Rise and Fall"
+            data-desc="Commander Kuvira announces the dissolution of the Earth Kingdom monarchy at Wu's coronation, declaring herself leader of the new Earth Empire. She builds a massive spirit energy cannon using vines from the Republic City spirit portal and marches on the city itself. Korra enters the spirit portal in the explosion to pull Kuvira out, talks her down, and a second spirit portal opens permanently in the heart of Republic City.">
+            <div class="ev-year">174 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">The Earth Empire — Kuvira's rise and fall</div><div class="ev-tags"><span class="ev-tag tag-earth">Earth Kingdom</span><span class="ev-tag tag-spirit">Spirits</span></div></div>
+          </div>
+
+          <div class="ev"
+            data-era="Era of Korra" data-year="174 AG"
+            data-title="The Earth Kingdom Becomes Democratic States"
+            data-desc="With the monarchy abolished after Kuvira's surrender, the Earth Kingdom — the oldest and largest nation in the world — begins transitioning to democratically elected governments across its many states and provinces. The United Republic also elects a new President. The world Aang built continues to change — shaped now by Korra's choices, her losses, and the new era she is still in the middle of writing.">
+            <div class="ev-year">174 AG</div>
+            <div class="ev-body"><div class="ev-dot"></div><div class="ev-title">The Earth Kingdom transitions to democratic governance</div><div class="ev-tags"><span class="ev-tag tag-earth">Earth Kingdom</span></div></div>
+          </div>
+
+        </div>
+       </div>
+      </div>
+    </div>
+
+   </div><!-- end tl-spine -->
+  </div><!-- end tl-outer -->
+</div><!-- end page -->
+
+<script>
+/* Settings */
+(function(){
+  const btn=document.getElementById('settingsBtn'),panel=document.getElementById('settingsPanel');
+  if(!btn||!panel)return;
+  btn.addEventListener('click',()=>{const o=panel.classList.toggle('open');btn.classList.toggle('open',o);});
+  document.addEventListener('click',e=>{if(!panel.contains(e.target)&&!btn.contains(e.target)){panel.classList.remove('open');btn.classList.remove('open');}});
+  document.querySelectorAll('.theme-opt').forEach(o=>{
+    o.addEventListener('click',()=>{
+      const t=o.dataset.theme;
+      document.body.className=document.body.className.replace(/\btheme-\S+/g,'').trim();
+      if(t!=='dark')document.body.classList.add(t);
+      localStorage.setItem('avatarhub_theme',t==='dark'?'dark':t);
+      document.querySelectorAll('.theme-opt').forEach(x=>x.classList.remove('active'));
+      o.classList.add('active');
+    });
+  });
+  const cur=localStorage.getItem('avatarhub_theme')||'dark';
+  document.querySelectorAll('.theme-opt').forEach(o=>{if((cur==='dark'&&o.dataset.theme==='dark')||(o.dataset.theme===cur))o.classList.add('active');});
+  const ambRow=document.getElementById('ambientRow');
+  if(ambRow){
+    ambRow.classList.toggle('active',localStorage.getItem('avatarhub_ambient_off')!=='1');
+    ambRow.addEventListener('click',()=>{const on=!ambRow.classList.contains('active');ambRow.classList.toggle('active',on);localStorage.setItem('avatarhub_ambient_off',on?'0':'1');});
+  }
+})();
+
+/* Accordion */
+(function(){
+  document.querySelectorAll('.era-hd').forEach(hd=>{
+    hd.addEventListener('click',()=>{
+      const era=document.getElementById(hd.dataset.target);
+      if(!era)return;
+      const wasOpen=era.classList.contains('open');
+      document.querySelectorAll('.era.open').forEach(e=>e.classList.remove('open'));
+      if(!wasOpen)era.classList.add('open');
+    });
+  });
+})();
+
+/* Detail panel */
+(function(){
+  const panel=document.getElementById('detailPanel');
+  const dpEra=document.getElementById('dpEra');
+  const dpYear=document.getElementById('dpYear');
+  const dpTitle=document.getElementById('dpTitle');
+  const dpDesc=document.getElementById('dpDesc');
+  const dpClose=document.getElementById('dpClose');
+  const dpHandle=document.getElementById('dpHandle');
+
+  function openPanel(ev){
+    const ec=getComputedStyle(ev.closest('.events')).getPropertyValue('--ec').trim()||'#9b7fe8';
+    panel.style.setProperty('--dp-color',ec);
+    dpEra.textContent=ev.dataset.era||'';
+    dpYear.textContent=ev.dataset.year||'';
+    dpTitle.innerHTML=ev.dataset.title||'';
+    dpDesc.textContent=ev.dataset.desc||'';
+    panel.classList.add('open');
+    document.body.classList.add('panel-open');
+  }
+  function closePanel(){
+    panel.classList.remove('open');
+    document.body.classList.remove('panel-open');
+  }
+  document.querySelectorAll('.ev').forEach(ev=>ev.addEventListener('click',()=>openPanel(ev)));
+  dpClose.addEventListener('click',closePanel);
+  dpHandle.addEventListener('click',closePanel);
+  let sy=0;
+  panel.addEventListener('touchstart',e=>{sy=e.touches[0].clientY;},{passive:true});
+  panel.addEventListener('touchend',e=>{if(e.changedTouches[0].clientY-sy>55)closePanel();},{passive:true});
+})();
+
+/* Particles */
+(function(){
+  const canvas=document.getElementById('particleCanvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  let W,H;
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  const syms=['\u{1F701}','\u{1F704}','\u{1F703}','\u{1F702}'];
+  const cols=['rgba(245,197,24,','rgba(77,184,255,','rgba(106,191,105,','rgba(249,115,22,'];
+  const pts=Array.from({length:14},(_,i)=>({x:Math.random()*1400,y:Math.random()*900,vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.2,sz:Math.random()*8+6,sym:syms[i%4],col:cols[i%4],al:Math.random()*.15+.04,ph:Math.random()*Math.PI*2}));
+  let fr=0;
+  function draw(){ctx.clearRect(0,0,W,H);fr++;pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<-30)p.x=W+30;if(p.x>W+30)p.x=-30;if(p.y<-30)p.y=H+30;if(p.y>H+30)p.y=-30;ctx.font=`${p.sz}px serif`;ctx.fillStyle=p.col+(p.al*(0.6+0.4*Math.sin(fr*.011+p.ph)))+')';ctx.fillText(p.sym,p.x,p.y);});requestAnimationFrame(draw);}
+  draw();
+})();
+</script>
+</body>
+</html>
