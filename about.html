@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>About · AvatarArchive</title>
+  <meta name="theme-color" content="#04070d">
+  <link rel="apple-touch-icon" href="images/favicon.png">
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cinzel+Decorative:wght@400;700;900&family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    /* ── Page layout ── */
+    .page {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+    }
+
+    /* ── Back link ── */
+    .back-link {
+      position: fixed; top: 18px; left: 18px; z-index: 50;
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'Cinzel', serif; font-size: .42rem; letter-spacing: .22em; text-transform: uppercase;
+      color: rgba(107,138,171,.65); background: rgba(4,7,13,.72);
+      border: 1px solid rgba(255,255,255,.1); border-radius: 30px;
+      padding: .5em 1.1em; text-decoration: none;
+      transition: color .2s, border-color .2s, background .2s;
+      backdrop-filter: blur(14px); opacity: .8;
+    }
+    .back-link:hover { color: var(--white); border-color: rgba(255,255,255,.25); opacity: 1; }
+    .back-link svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+    /* ── Hero ── */
+    .about-hero {
+      text-align: center;
+      padding: clamp(5rem, 10vh, 8rem) 2rem clamp(2.5rem, 4vh, 3rem);
+      max-width: 680px; width: 100%;
+      animation: slideUp .9s cubic-bezier(.22,1,.36,1) .05s both;
+    }
+    .about-eyebrow {
+      font-family: 'Cinzel', serif; font-size: clamp(.44rem, 1.1vw, .56rem);
+      letter-spacing: .45em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.1rem;
+    }
+    .about-title {
+      font-family: 'Cinzel Decorative', serif; font-weight: 900;
+      font-size: clamp(1.6rem, 3.5vw, 2.8rem); letter-spacing: .06em;
+      background: linear-gradient(135deg,#fff 0%,#d4e8ff 40%,#4db8ff 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: .5rem; display: inline-block; padding: 0.1em 0.3em 0.15em;
+    }
+    .about-sub {
+      font-family: 'Philosopher', serif; font-style: italic;
+      font-size: clamp(1rem, 2vw, 1.25rem); color: var(--muted); letter-spacing: .15em;
+    }
+    .about-divider {
+      width: 80px; height: 1px;
+      background: linear-gradient(to right,transparent,rgba(201,168,76,.5),transparent);
+      margin: 1.8rem auto 0;
+    }
+
+    /* ── Content card ── */
+    .about-content {
+      width: 100%; max-width: 680px;
+      margin: 0 0 clamp(4rem, 8vh, 7rem);
+      display: flex; flex-direction: column; gap: 1.4rem;
+      animation: slideUp .9s cubic-bezier(.22,1,.36,1) .15s both;
+    }
+
+    .about-block {
+      background: rgba(10,17,28,.8); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 18px; padding: 1.8rem 2rem;
+      backdrop-filter: blur(12px);
+    }
+    body.theme-parchment .about-block,
+    body.theme-water    .about-block,
+    body.theme-earth    .about-block { background: rgba(255,255,255,.6); border-color: rgba(0,0,0,.08); }
+
+    .about-block-label {
+      font-family: 'Cinzel', serif; font-size: .42rem; letter-spacing: .35em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: .6rem;
+    }
+    .about-block-label::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(to right, rgba(201,168,76,.2), transparent);
+    }
+
+    .about-block p {
+      font-family: 'Philosopher', serif; font-size: clamp(.9rem,1.6vw,1rem);
+      color: rgba(240,244,255,.75); line-height: 1.85; margin-bottom: .9rem;
+    }
+    .about-block p:last-child { margin-bottom: 0; }
+    body.theme-parchment .about-block p,
+    body.theme-water    .about-block p,
+    body.theme-earth    .about-block p { color: var(--white); }
+
+    /* ── Stat row ── */
+    .about-stats {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem;
+    }
+    @media(max-width:520px){ .about-stats { grid-template-columns: repeat(2,1fr); } }
+    .stat-item {
+      text-align: center; padding: 1.1rem .8rem;
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06);
+      border-radius: 12px;
+    }
+    body.theme-parchment .stat-item,
+    body.theme-water    .stat-item,
+    body.theme-earth    .stat-item { background: rgba(0,0,0,.04); border-color: rgba(0,0,0,.08); }
+    .stat-number {
+      font-family: 'Cinzel Decorative', serif; font-size: clamp(1.2rem,2.5vw,1.6rem);
+      background: linear-gradient(135deg,#fff 0%,#d4e8ff 40%,#4db8ff 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      display: block; margin-bottom: .3rem;
+    }
+    .stat-label {
+      font-family: 'Cinzel', serif; font-size: .4rem; letter-spacing: .25em; text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── Element symbols ── */
+    .about-elements {
+      display: flex; justify-content: center; gap: clamp(1.5rem, 4vw, 2.5rem); margin: .5rem 0;
+    }
+    .about-elements img {
+      width: clamp(28px, 4vw, 40px); height: clamp(28px, 4vw, 40px);
+      object-fit: contain; opacity: .55;
+    }
+
+    /* ── Feedback CTA ── */
+    .feedback-cta {
+      display: inline-flex; align-items: center; gap: .55rem;
+      font-family: 'Cinzel', serif; font-size: .46rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--gold); background: rgba(201,168,76,.1);
+      border: 1px solid rgba(201,168,76,.3); border-radius: 30px;
+      padding: .65em 1.5em; cursor: pointer; margin-top: .3rem;
+      transition: background .2s, border-color .2s, color .2s;
+    }
+    .feedback-cta:hover { background: rgba(201,168,76,.18); border-color: rgba(201,168,76,.55); }
+    .feedback-cta svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+    /* ── Jeffrey link ── */
+    .jeffrey-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      text-decoration: none; font-family: 'Cinzel', serif;
+      font-size: .44rem; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--muted); transition: color .2s;
+    }
+    .jeffrey-link:hover { color: var(--white); }
+    .jeffrey-link svg { width: 10px; height: 10px; flex-shrink: 0; }
+
+    @keyframes slideUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+  </style>
+</head>
+<body>
+<script>
+(function(){
+  var t=localStorage.getItem('avatarhub_theme');
+  if(t&&t!=='dark') document.body.classList.add(t);
+})();
+</script>
+
+<!-- Password gate -->
+<script src="player-shared.js"></script>
+
+<!-- Background -->
+<div class="bg-layer" style="background-image:url('images/mainbg.png')"></div>
+<canvas id="particleCanvas" style="position:fixed;top:0;left:0;z-index:0;pointer-events:none;opacity:0.35;width:100%;height:100%;"></canvas>
+
+<!-- Back -->
+<a class="back-link" href="index.html">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+  Back
+</a>
+
+<div class="page">
+
+  <!-- Hero -->
+  <div class="about-hero">
+    <p class="about-eyebrow">AvatarArchive</p>
+    <h1 class="about-title">About This Site</h1>
+    <p class="about-sub">Built with passion, powered by AI</p>
+    <div class="about-divider"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="about-content">
+
+    <!-- The story -->
+    <div class="about-block">
+      <div class="about-block-label">The Story</div>
+      <p>This site was created entirely using Claude AI. While I prompted Claude to fix things up, I came up with new creative ideas to add — and Claude helped bring them to life. This project proves that anyone can build something without knowing anything about coding.</p>
+      <p>It took about a month to create, and I'm a very big Avatar fan. I've tried to include everything Avatar-related — but if something's missing, your feedback helps make it better.</p>
+      <div class="about-elements">
+        <img src="images/air.png" alt="Air">
+        <img src="images/water.png" alt="Water">
+        <img src="images/earth.png" alt="Earth">
+        <img src="images/fire.png" alt="Fire">
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="about-block">
+      <div class="about-block-label">By the Numbers</div>
+      <div class="about-stats">
+        <div class="stat-item">
+          <span class="stat-number">113+</span>
+          <span class="stat-label">Episodes</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">2</span>
+          <span class="stat-label">Films</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~1 Month</span>
+          <span class="stat-label">To Build</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">0</span>
+          <span class="stat-label">Lines Typed</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">100%</span>
+          <span class="stat-label">Claude AI</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">∞</span>
+          <span class="stat-label">Avatar Love</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feedback -->
+    <div class="about-block">
+      <div class="about-block-label">Your Feedback Matters</div>
+      <p>Encountered a bug? Found missing content? Have an idea? The feedback button is how this site keeps improving. Every report goes directly to the creator, and your suggestions shape what gets added next.</p>
+      <p>Thanks for visiting — and I hope you keep coming back.</p>
+      <button class="feedback-cta" id="aboutFeedbackBtn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+        Give Feedback
+      </button>
+    </div>
+
+    <!-- Creator -->
+    <div class="about-block" style="text-align:center; padding:1.4rem 2rem;">
+      <div style="margin-bottom:.9rem;">
+        <a class="jeffrey-link" href="https://www.youtube.com/@Jeffrey_Creates" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" style="fill:#ff1c1c;width:11px;height:11px;flex-shrink:0"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          Jeffrey Creates
+        </a>
+      </div>
+      <p style="font-size:.78rem;color:var(--muted);line-height:1.7;margin:0;font-family:'Philosopher',serif;font-style:italic;">
+        Fan-made · Built with care and a lot of prompting
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<!-- Feedback modal (same as index) -->
+<div id="feedbackModal" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(4,7,13,.75);backdrop-filter:blur(12px);align-items:center;justify-content:center;">
+  <div id="fbBox" style="position:relative;overflow:hidden;background:rgba(8,14,26,.97);border:1px solid rgba(201,168,76,.25);border-radius:20px;padding:2rem 1.8rem;max-width:420px;width:90%;display:flex;flex-direction:column;gap:1rem;box-shadow:0 16px 60px rgba(0,0,0,.7);">
+    <div id="fbSuccess" style="display:none;position:absolute;inset:0;border-radius:20px;background:rgba(8,14,26,.98);flex-direction:column;align-items:center;justify-content:center;gap:1.1rem;text-align:center;padding:2rem;z-index:2;">
+      <div style="width:52px;height:52px;border-radius:50%;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.35);display:flex;align-items:center;justify-content:center;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2.5" style="width:24px;height:24px"><polyline points="4 12 9 17 20 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div style="font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:#c9a84c;">Feedback Sent!</div>
+      <p style="font-family:'Philosopher',serif;font-size:.82rem;color:#6b8aab;line-height:1.6;">Thanks for helping improve AvatarArchive.</p>
+    </div>
+    <div style="font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:#c9a84c;">Give Feedback</div>
+    <p style="font-size:.6rem;color:#6b8aab;line-height:1.6;">Have an idea to improve AvatarArchive? Found a bug? Let us know.</p>
+    <select id="fbType" style="background:#0d1826;border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:.6em .8em;color:#f0f4ff;font-family:'Philosopher',serif;font-size:.65rem;cursor:pointer;outline:none;">
+      <option value="Bug">Bug Report</option>
+      <option value="Feature">Feature Request</option>
+      <option value="Content">Missing Content</option>
+      <option value="Other">Other</option>
+    </select>
+    <textarea id="fbText" rows="4" placeholder="Describe your feedback..." style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:.7em .9em;color:#f0f4ff;font-family:'Philosopher',serif;font-size:.65rem;resize:vertical;outline:none;line-height:1.5;"></textarea>
+    <div style="display:flex;gap:.7rem;justify-content:flex-end;">
+      <button id="fbCancel" style="background:none;border:1px solid rgba(255,255,255,.1);color:#6b8aab;border-radius:10px;padding:.5em 1.2em;font-family:'Cinzel',serif;font-size:.42rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;">Cancel</button>
+      <button id="fbSend" style="background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.35);color:#c9a84c;border-radius:10px;padding:.5em 1.4em;font-family:'Cinzel',serif;font-size:.42rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;">Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- Settings -->
+<button id="settingsBtn" title="Settings">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94zM12,15.6c-1.98,0-3.6-1.62-3.6-3.6s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
+</button>
+<div id="settingsPanel">
+  <div class="sp-section">
+    <div class="sp-section-label">Theme</div>
+    <button class="theme-opt active" data-theme="dark"><span class="theme-swatch" style="background:#04070d;border:1px solid rgba(255,255,255,.2)"></span>Dark</button>
+    <button class="theme-opt" data-theme="theme-parchment"><span class="theme-swatch" style="background:#c9a84c"></span>Parchment</button>
+    <button class="theme-opt" data-theme="theme-water"><span class="theme-swatch" style="background:#4db8ff"></span>Water</button>
+    <button class="theme-opt" data-theme="theme-earth"><span class="theme-swatch" style="background:#6abf69"></span>Earth</button>
+  </div>
+</div>
+
+<script>
+/* Settings panel */
+(function(){
+  const btn   = document.getElementById('settingsBtn');
+  const panel = document.getElementById('settingsPanel');
+  const opts  = panel.querySelectorAll('.theme-opt');
+  const THEMES = ['dark','theme-parchment','theme-water','theme-earth'];
+  const saved  = localStorage.getItem('avatarhub_theme') || 'dark';
+  function applyTheme(t){
+    THEMES.forEach(th=>document.body.classList.remove(th));
+    if(t!=='dark') document.body.classList.add(t);
+    opts.forEach(o=>o.classList.toggle('active',o.dataset.theme===t));
+    localStorage.setItem('avatarhub_theme',t);
+  }
+  applyTheme(saved);
+  btn.addEventListener('click',e=>{e.stopPropagation();panel.classList.toggle('open');btn.classList.toggle('open',panel.classList.contains('open'));});
+  opts.forEach(o=>o.addEventListener('click',()=>applyTheme(o.dataset.theme)));
+  document.addEventListener('click',e=>{if(!e.target.closest('#settingsBtn')&&!e.target.closest('#settingsPanel')){panel.classList.remove('open');btn.classList.remove('open');}});
+})();
+
+/* Feedback modal */
+(function(){
+  const modal   = document.getElementById('feedbackModal');
+  const fbText  = document.getElementById('fbText');
+  const fbType  = document.getElementById('fbType');
+  const fbSend  = document.getElementById('fbSend');
+  const fbCancel= document.getElementById('fbCancel');
+  const fbSuccess=document.getElementById('fbSuccess');
+  const openBtns = [document.getElementById('aboutFeedbackBtn')].filter(Boolean);
+
+  function openFb(){ modal.style.display='flex'; fbText.value=''; fbSend.textContent='Send'; fbSend.disabled=false; fbCancel.disabled=false; if(fbSuccess) fbSuccess.style.display='none'; }
+  function closeFb(){ modal.style.display='none'; }
+
+  openBtns.forEach(b=>b.addEventListener('click',openFb));
+  fbCancel.addEventListener('click',closeFb);
+  modal.addEventListener('click',e=>{ if(e.target===modal) closeFb(); });
+
+  fbSend.addEventListener('click', async()=>{
+    const msg = fbText.value.trim();
+    if(!msg){ fbText.focus(); return; }
+    const all = JSON.parse(localStorage.getItem('aa_feedback')||'[]');
+    all.push({type:fbType.value,msg,ts:new Date().toISOString()});
+    localStorage.setItem('aa_feedback',JSON.stringify(all));
+    fbSend.textContent='Sending…'; fbSend.disabled=true; fbCancel.disabled=true;
+    const EMAILJS_PUBLIC_KEY='2gn3Wt4jXxkkwP8iX';
+    const EMAILJS_SERVICE_ID='service_4y4r3d6';
+    const EMAILJS_TEMPLATE_ID='template_bx0lxum';
+    try {
+      if(!window.emailjs){
+        await new Promise((res,rej)=>{ const s=document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js'; s.onload=res; s.onerror=rej; document.head.appendChild(s); });
+        emailjs.init({publicKey:EMAILJS_PUBLIC_KEY});
+      }
+      await emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,{from_type:fbType.options[fbType.selectedIndex].text,message:msg,sent_at:new Date().toLocaleString()});
+      if(fbSuccess){ fbSuccess.style.display='flex'; }
+      setTimeout(closeFb,2400);
+    } catch(err){
+      fbSend.textContent='Error — retry?'; fbSend.disabled=false; fbCancel.disabled=false;
+    }
+  });
+})();
+
+/* Minimal particles */
+(function(){
+  const canvas = document.getElementById('particleCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const imgs = ['air','water','earth','fire'].map(n=>{ const i=new Image(); i.src='images/'+n+'.png'; return i; });
+  let W, H, particles=[];
+  function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
+  resize(); window.addEventListener('resize',()=>resize(),{passive:true});
+  function rand(a,b){ return a+Math.random()*(b-a); }
+  for(let i=0;i<30;i++){
+    const angle=rand(0,Math.PI*2), sp=rand(.05,.18);
+    particles.push({img:imgs[Math.floor(Math.random()*4)],x:rand(0,W),y:rand(0,H),alpha:rand(.03,.08),size:rand(8,18),rot:rand(0,Math.PI*2),vrot:rand(-.003,.003),vx:Math.cos(angle)*sp,vy:Math.sin(angle)*sp});
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(const p of particles){
+      p.x+=p.vx; p.y+=p.vy; p.rot+=p.vrot;
+      if(p.x<-30||p.x>W+30||p.y<-30||p.y>H+30){ p.x=rand(0,W); p.y=rand(0,H); }
+      if(!p.img.complete||!p.img.naturalWidth) continue;
+      ctx.save(); ctx.globalAlpha=p.alpha; ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      ctx.drawImage(p.img,-p.size/2,-p.size/2,p.size,p.size); ctx.restore();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+
+</body>
+</html>
