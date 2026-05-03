@@ -25,8 +25,21 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--white);font-family:'Philosopher',serif;overflow:hidden;}
 
+/* ── Background ── */
+.bg-layer{
+  position:fixed;inset:0;
+  background-image:url('images/mainbg.png');
+  background-size:cover;background-position:center top;
+  filter:blur(8px) brightness(0.15) saturate(1.2);
+  transform:scale(1.04);z-index:0;pointer-events:none;
+}
+.bg-layer::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(4,7,13,.65) 0%,transparent 30%,transparent 70%,rgba(4,7,13,.8) 100%);
+}
+
 /* ── Canvas ── */
-#canvasOuter{position:fixed;inset:0;overflow:hidden;cursor:grab;touch-action:none;}
+#canvasOuter{position:fixed;inset:0;overflow:hidden;cursor:grab;touch-action:none;z-index:1;}
 #canvasOuter.drag{cursor:grabbing;}
 #canvasInner{position:absolute;top:0;left:0;transform-origin:0 0;will-change:transform;}
 #bridgeSvg{position:absolute;top:0;left:0;pointer-events:none;overflow:visible;z-index:2;}
@@ -172,6 +185,8 @@ body.searching .pn.search-match .pname{color:#f0dfa0;}
 </style>
 </head>
 <body>
+
+<div class="bg-layer"></div>
 
 <div class="header">
   <div>
@@ -892,7 +907,7 @@ document.getElementById('ph').onclick     = () => panel.classList.remove('open')
 /* ══ PAN + ZOOM ══ */
 const outer = document.getElementById('canvasOuter');
 let tx=0, ty=0, currentScale=0.62;
-const MIN_SC=0.12, MAX_SC=2.2;
+const MIN_SC=0.28, MAX_SC=2.2;
 
 function applyT(anim){
   inner.style.transition = anim ? 'transform .28s cubic-bezier(.22,1,.36,1)' : 'none';
