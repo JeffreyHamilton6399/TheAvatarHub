@@ -278,17 +278,39 @@
   /* ── Light themes ── */
   body.theme-parchment .era-hd,body.theme-water .era-hd,body.theme-earth .era-hd{background:rgba(255,255,255,.55);border-color:rgba(0,0,0,.08);}
   body.theme-parchment .era-hd:hover,body.theme-water .era-hd:hover,body.theme-earth .era-hd:hover{background:rgba(255,255,255,.72);}
+  body.theme-parchment .era.open .era-hd,body.theme-water .era.open .era-hd,body.theme-earth .era.open .era-hd{background:rgba(255,255,255,.75);border-color:rgba(0,0,0,.12);}
   body.theme-parchment .era-name,body.theme-water .era-name,body.theme-earth .era-name{color:var(--white);}
-  body.theme-parchment .sub-name,body.theme-water .sub-name,body.theme-earth .sub-name{color:var(--white);}
+  body.theme-parchment .era-dates,body.theme-water .era-dates,body.theme-earth .era-dates{color:var(--muted);}
+  body.theme-parchment .era-count,body.theme-water .era-count,body.theme-earth .era-count{color:var(--muted);}
+  body.theme-parchment .era-arrow,body.theme-water .era-arrow,body.theme-earth .era-arrow{color:var(--muted);}
   body.theme-parchment .ev.major .ev-title,body.theme-water .ev.major .ev-title,body.theme-earth .ev.major .ev-title{color:var(--white);}
   body.theme-parchment .subfolders,body.theme-water .subfolders,body.theme-earth .subfolders{background:rgba(255,255,255,.35);border-color:rgba(0,0,0,.07);}
-  body.theme-parchment .sub-hd,body.theme-water .sub-hd,body.theme-earth .sub-hd{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.07);}
+  /* Subfolder header — base + open states */
+  body.theme-parchment .sub-hd,body.theme-water .sub-hd,body.theme-earth .sub-hd{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.08);}
+  body.theme-parchment .sub-hd:hover,body.theme-water .sub-hd:hover,body.theme-earth .sub-hd:hover{background:rgba(0,0,0,.07);}
+  body.theme-parchment .subfolder.open .sub-hd,body.theme-water .subfolder.open .sub-hd,body.theme-earth .subfolder.open .sub-hd{background:rgba(0,0,0,.06);border-color:rgba(0,0,0,.12);}
+  /* Sub text — always use CSS var which resolves to dark on light themes */
+  body.theme-parchment .sub-name,body.theme-water .sub-name,body.theme-earth .sub-name{color:var(--white);}
+  body.theme-parchment .subfolder.open .sub-name,body.theme-water .subfolder.open .sub-name,body.theme-earth .subfolder.open .sub-name{color:var(--white);}
+  body.theme-parchment .sub-meta,body.theme-water .sub-meta,body.theme-earth .sub-meta{color:var(--muted);}
+  body.theme-parchment .sub-count,body.theme-water .sub-count,body.theme-earth .sub-count{color:var(--muted);}
+  body.theme-parchment .sub-arrow,body.theme-water .sub-arrow,body.theme-earth .sub-arrow{color:var(--muted);}
+  body.theme-parchment .subfolder.open .sub-arrow,body.theme-water .subfolder.open .sub-arrow,body.theme-earth .subfolder.open .sub-arrow{color:var(--muted);}
+  /* Events */
   body.theme-parchment .events,body.theme-water .events,body.theme-earth .events{background:rgba(255,255,255,.3);}
   body.theme-parchment .ev,body.theme-water .ev,body.theme-earth .ev{border-bottom-color:rgba(0,0,0,.05);}
-  body.theme-parchment .ev-year,body.theme-water .ev-year,body.theme-earth .ev-year{border-right-color:rgba(0,0,0,.05);}
+  body.theme-parchment .ev-year,body.theme-water .ev-year,body.theme-earth .ev-year{border-right-color:rgba(0,0,0,.05);color:var(--muted);}
   body.theme-parchment .ev-title,body.theme-water .ev-title,body.theme-earth .ev-title{color:var(--white);}
+  body.theme-parchment .ev-btn,body.theme-water .ev-btn,body.theme-earth .ev-btn{color:var(--muted);}
+  body.theme-parchment .ev-btn:hover,body.theme-water .ev-btn:hover,body.theme-earth .ev-btn:hover{color:var(--white);}
+  /* Detail panel */
   body.theme-parchment #detailPanel,body.theme-water #detailPanel,body.theme-earth #detailPanel{background:rgba(242,236,220,.98);}
   body.theme-parchment .dp-desc,body.theme-water .dp-desc,body.theme-earth .dp-desc{color:var(--muted);}
+  body.theme-parchment .dp-title,body.theme-water .dp-title,body.theme-earth .dp-title{color:var(--white);}
+  body.theme-parchment .dp-close,body.theme-water .dp-close,body.theme-earth .dp-close{color:var(--muted);}
+  body.theme-parchment .dp-close:hover,body.theme-water .dp-close:hover,body.theme-earth .dp-close:hover{color:var(--white);}
+  /* Era nation tags — force readable color on light bg */
+  body.theme-parchment .era-nation,body.theme-water .era-nation,body.theme-earth .era-nation{color:var(--muted)!important;border-color:rgba(0,0,0,.15)!important;background:rgba(0,0,0,.05)!important;}
 
   @keyframes tl-in{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
   </style>
@@ -1284,6 +1306,7 @@
     era.classList.add('has-dot-img');
   });
 })();
+
 </script>
 </body>
 </html>

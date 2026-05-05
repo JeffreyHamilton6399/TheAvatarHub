@@ -200,6 +200,22 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
       min-width: 2ch; text-align: center;
     }
+    body.theme-parchment .hcd-num,
+    body.theme-water     .hcd-num,
+    body.theme-earth     .hcd-num {
+      background: none;
+      -webkit-background-clip: unset; -webkit-text-fill-color: var(--white);
+      background-clip: unset; color: var(--white);
+    }
+    body.theme-parchment .hcd-unit-label,
+    body.theme-water     .hcd-unit-label,
+    body.theme-earth     .hcd-unit-label { color: var(--muted); }
+    body.theme-parchment .header-countdown,
+    body.theme-water     .header-countdown,
+    body.theme-earth     .header-countdown {
+      background: rgba(255,255,255,.55);
+      border-color: rgba(0,0,0,.12);
+    }
     .hcd-unit-label {
       font-family: 'Cinzel', serif; font-size: 0.38rem;
       letter-spacing: 0.15em; text-transform: uppercase;
@@ -998,7 +1014,7 @@
         <span class="hcd-sep">:</span>
         <span class="hcd-unit"><span class="hcd-num" id="cdMins">--</span><span class="hcd-unit-label">m</span></span>
         <span class="hcd-sep">:</span>
-        <span class="hcd-unit"><span class="hcd-num" id="cdSecs">--</span><span class="hcd-unit-label">s</span></span>
+        <span class="hcd-unit"><span class="hcd-num" id="cdSecs">--</span></span>
       </div>
       <span class="hcd-platform">Paramount+</span>
     </div>

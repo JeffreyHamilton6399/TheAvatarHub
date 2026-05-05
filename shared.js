@@ -219,13 +219,92 @@
 
 /* ══════════════════════════════════════════
    2. SETTINGS PANEL
-   Theme selector + ambient and SFX volume
-   sliders. Opens/closes on gear icon click.
+   Self-injecting: creates the gear button and
+   full panel on every page if not already
+   present in the HTML. Handles theme, ambient
+   volume, SFX volume with polished sliders.
 ══════════════════════════════════════════ */
 (function () {
+
+  /* ── Inject button + panel if page doesn't have them ── */
+  if (!document.getElementById('settingsBtn')) {
+    const btn = document.createElement('button');
+    btn.id    = 'settingsBtn';
+    btn.title = 'Settings';
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>`;
+    document.body.appendChild(btn);
+  }
+
+  if (!document.getElementById('settingsPanel')) {
+    const panel = document.createElement('div');
+    panel.id = 'settingsPanel';
+    const hasAmbient = !!document.getElementById('ambientRow') ||
+                       sessionStorage.getItem('avatarhub_ambient_active') === '1' ||
+                       !document.getElementById('mapSplash');
+    panel.innerHTML = `
+      <div class="sp-section">
+        <div class="sp-section-label">Sound</div>
+        ${hasAmbient ? `
+        <div class="sp-ambient-row" id="ambientRow" title="Toggle ambient sound">
+          <div class="sp-ambient-label">
+            <div class="ambient-wave">
+              <span style="height:5px"></span><span style="height:9px"></span>
+              <span style="height:7px"></span><span style="height:11px"></span>
+            </div>
+            Ambient
+          </div>
+          <div class="sp-toggle"></div>
+        </div>` : ''}
+        <div class="sp-vol-row">
+          <span class="sp-vol-label">Music</span>
+          <div class="sp-slider-wrap">
+            <input class="sp-vol-slider" id="ambientVolSlider" type="range" min="0" max="100" value="55" title="Ambient volume">
+            <div class="sp-slider-fill" id="ambientVolFill"></div>
+            <div class="sp-slider-tooltip" id="ambientVolTip">55%</div>
+          </div>
+        </div>
+        <div class="sp-vol-row">
+          <span class="sp-vol-label">SFX</span>
+          <div class="sp-slider-wrap">
+            <input class="sp-vol-slider" id="sfxVolSlider" type="range" min="0" max="100" value="100" title="UI sound effects volume">
+            <div class="sp-slider-fill" id="sfxVolFill"></div>
+            <div class="sp-slider-tooltip" id="sfxVolTip">100%</div>
+          </div>
+        </div>
+      </div>
+      <div class="sp-divider"></div>
+      <div class="sp-section">
+        <div class="sp-section-label">Theme</div>
+        <button class="theme-opt active" data-theme="dark">
+          <span class="theme-swatch" style="background:#04070d;border:1px solid rgba(255,255,255,.2)"></span> Dark
+        </button>
+        <button class="theme-opt" data-theme="theme-parchment">
+          <span class="theme-swatch" style="background:#c9a84c"></span> Parchment
+        </button>
+        <button class="theme-opt" data-theme="theme-water">
+          <span class="theme-swatch" style="background:#4db8ff"></span> Water
+        </button>
+        <button class="theme-opt" data-theme="theme-earth">
+          <span class="theme-swatch" style="background:#6abf69"></span> Earth
+        </button>
+      </div>`;
+    document.body.appendChild(panel);
+  }
+
   const settingsBtn = document.getElementById('settingsBtn');
   const panel       = document.getElementById('settingsPanel');
-  if (!settingsBtn || !panel) return;
+
+  /* ── Polished slider update helper ── */
+  function updateSlider(slider, fillEl, tipEl, pct) {
+    if (fillEl) fillEl.style.width = pct + '%';
+    if (tipEl) {
+      tipEl.textContent = Math.round(pct) + '%';
+      // Position tooltip over the thumb
+      tipEl.style.left = `calc(${pct}% + ${8 - pct * 0.16}px)`;
+    }
+    // Also drive --range-pct CSS variable for fill gradient
+    slider.style.setProperty('--rp', pct + '%');
+  }
 
   /* ── Theme ── */
   const THEMES    = ['dark', 'theme-parchment', 'theme-water', 'theme-earth'];
@@ -243,26 +322,51 @@
 
   /* ── Ambient volume ── */
   const ambientSlider = document.getElementById('ambientVolSlider');
+  const ambientFill   = document.getElementById('ambientVolFill');
+  const ambientTip    = document.getElementById('ambientVolTip');
   if (ambientSlider) {
     const savedVol = parseFloat(localStorage.getItem('avatarhub_ambient_vol') ?? '0.55');
-    ambientSlider.value = Math.round(savedVol * 100);
+    const initPct  = Math.round(savedVol * 100);
+    ambientSlider.value = initPct;
+    updateSlider(ambientSlider, ambientFill, ambientTip, initPct);
+
     ambientSlider.addEventListener('input', () => {
-      const vol = ambientSlider.value / 100;
+      const pct = parseFloat(ambientSlider.value);
+      const vol = pct / 100;
+      updateSlider(ambientSlider, ambientFill, ambientTip, pct);
       localStorage.setItem('avatarhub_ambient_vol', vol.toFixed(2));
-      window._avatarSetAmbientVol?.(vol);
+      // Drive the live engine if it's running
+      if (typeof window._avatarSetAmbientVol === 'function') {
+        window._avatarSetAmbientVol(vol);
+      }
     });
+
+    // Show tooltip on drag
+    ambientSlider.addEventListener('pointerdown', () => { if (ambientTip) ambientTip.classList.add('show'); });
+    document.addEventListener('pointerup', () => { if (ambientTip) ambientTip.classList.remove('show'); }, { once: false, passive: true });
   }
 
   /* ── SFX volume ── */
   const sfxSlider = document.getElementById('sfxVolSlider');
+  const sfxFill   = document.getElementById('sfxVolFill');
+  const sfxTip    = document.getElementById('sfxVolTip');
   if (sfxSlider) {
     const savedSfx = parseFloat(localStorage.getItem('avatarhub_sfx_vol') ?? '1');
-    sfxSlider.value = Math.round(savedSfx * 100);
+    const initPct  = Math.round(savedSfx * 100);
+    sfxSlider.value = initPct;
+    updateSlider(sfxSlider, sfxFill, sfxTip, initPct);
+
     sfxSlider.addEventListener('input', () => {
-      const vol = sfxSlider.value / 100;
+      const pct = parseFloat(sfxSlider.value);
+      const vol = pct / 100;
+      updateSlider(sfxSlider, sfxFill, sfxTip, pct);
       localStorage.setItem('avatarhub_sfx_vol', vol.toFixed(2));
-      window._avatarSetSfxVol?.(vol);
+      if (typeof window._avatarSetSfxVol === 'function') {
+        window._avatarSetSfxVol(vol);
+      }
     });
+
+    sfxSlider.addEventListener('pointerdown', () => { if (sfxTip) sfxTip.classList.add('show'); });
   }
 
   /* ── Open / close ── */
@@ -272,13 +376,18 @@
     settingsBtn.classList.toggle('open', isOpen);
   });
 
-  // Close on outside click
   document.addEventListener('click', e => {
     if (!e.target.closest('#settingsBtn') && !e.target.closest('#settingsPanel')) {
       panel.classList.remove('open');
       settingsBtn.classList.remove('open');
     }
   });
+
+  // Persist tooltip hide on pointerup globally
+  document.addEventListener('pointerup', () => {
+    document.getElementById('ambientVolTip')?.classList.remove('show');
+    document.getElementById('sfxVolTip')?.classList.remove('show');
+  }, { passive: true });
 })();
 
 
@@ -438,85 +547,332 @@
 
 /* ══════════════════════════════════════════
    5. UI SOUND EFFECTS
-   Synthesised click + hover ticks using the
-   Web Audio API — no audio files needed.
-   Deferred via requestIdleCallback so it
-   never competes with first paint.
+   Rich synthesised sound library — 8 distinct
+   tones for different interaction types.
+   All pure Web Audio API, no files needed.
+   Deferred via requestIdleCallback.
+
+   Sound palette:
+   • hover      — soft high whisper tick
+   • click      — warm mid tap
+   • nav        — deeper navigation thud
+   • open       — bright ascending chime
+   • close      — descending soft close
+   • success    — two-tone success ding
+   • error      — low buzz shake
+   • slider     — gentle frequency sweep
+   • card-enter — soft water-drop blip
+   • star        — sparkle shimmer
 ══════════════════════════════════════════ */
 (function () {
   let _sfxVol = parseFloat(localStorage.getItem('avatarhub_sfx_vol') ?? '1');
-
-  // Expose live control for the settings slider
   window._avatarSetSfxVol = v => { _sfxVol = Math.max(0, Math.min(1, v)); };
 
   const _run = function () {
-    let _sfxCtx = null;
+    let _ctx = null;
 
-    function getSfxCtx() {
-      if (_sfxCtx && _sfxCtx.state !== 'closed') return _sfxCtx;
-      try { _sfxCtx = new (window.AudioContext || window.webkitAudioContext)(); }
-      catch { /* unsupported */ }
-      return _sfxCtx;
+    function getCtx() {
+      if (_ctx && _ctx.state !== 'closed') return _ctx;
+      try { _ctx = new (window.AudioContext || window.webkitAudioContext)(); }
+      catch { return null; }
+      return _ctx;
     }
 
-    // Synthesise a short filtered-noise tick at a given frequency
-    function playTick(freq, durationSec, baseVol, Q) {
-      if (_sfxVol <= 0) return;
-      const ctx = getSfxCtx();
-      if (!ctx) return;
+    function prep() {
+      const ctx = getCtx();
+      if (!ctx) return null;
       if (ctx.state === 'suspended') ctx.resume();
-      if (ctx.state !== 'running')   return;
+      if (ctx.state !== 'running')   return null;
+      return ctx;
+    }
 
-      const len  = Math.floor(ctx.sampleRate * durationSec);
+    /* ── Noise burst (filtered white noise) ── */
+    function noiseBurst(ctx, freq, Q, dur, vol, decay = 4) {
+      const len  = Math.floor(ctx.sampleRate * dur);
       const buf  = ctx.createBuffer(1, len, ctx.sampleRate);
       const data = buf.getChannelData(0);
-      // Decaying white noise — sounds like a soft click
       for (let i = 0; i < len; i++) {
-        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 4);
+        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay);
       }
-
       const src  = ctx.createBufferSource();
       const bp   = ctx.createBiquadFilter();
       const gain = ctx.createGain();
-      bp.type          = 'bandpass';
-      bp.frequency.value = freq;
-      bp.Q.value         = Q;
-      gain.gain.setValueAtTime(baseVol * _sfxVol, ctx.currentTime);
-
+      bp.type = 'bandpass'; bp.frequency.value = freq; bp.Q.value = Q;
+      gain.gain.setValueAtTime(vol * _sfxVol, ctx.currentTime);
       src.buffer = buf;
       src.connect(bp).connect(gain).connect(ctx.destination);
       src.start();
     }
 
-    const playClick = () => playTick(1100, 0.038, 0.22, 0.9);
-    const playHover = () => playTick(2200, 0.018, 0.06, 1.2);
+    /* ── Tone (oscillator with envelope) ── */
+    function tone(ctx, freq, type, dur, vol, freqEnd, attack = 0.005) {
+      const osc  = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      if (freqEnd !== undefined) {
+        osc.frequency.exponentialRampToValueAtTime(freqEnd, ctx.currentTime + dur);
+      }
+      gain.gain.setValueAtTime(0, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(vol * _sfxVol, ctx.currentTime + attack);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + dur + 0.01);
+    }
+
+    /* ═══ Named sounds ═══ */
+
+    // Soft high whisper — hover over interactive elements
+    function sfxHover() {
+      const ctx = prep(); if (!ctx) return;
+      noiseBurst(ctx, 3200, 2.5, 0.014, 0.04, 6);
+    }
+
+    // Warm mid tap — generic button / link click
+    function sfxClick() {
+      const ctx = prep(); if (!ctx) return;
+      noiseBurst(ctx, 1100, 1.2, 0.034, 0.18, 5);
+    }
+
+    // Deeper navigation thud — hub cards, page links
+    function sfxNav() {
+      const ctx = prep(); if (!ctx) return;
+      noiseBurst(ctx, 600, 0.9, 0.055, 0.22, 3);
+      tone(ctx, 280, 'sine', 0.07, 0.06, 180);
+    }
+
+    // Bright ascending chime — open panel / modal
+    function sfxOpen() {
+      const ctx = prep(); if (!ctx) return;
+      tone(ctx, 700, 'triangle', 0.14, 0.12, 1050);
+      setTimeout(() => {
+        const c = prep(); if (!c) return;
+        tone(c, 1050, 'sine', 0.10, 0.07);
+      }, 55);
+    }
+
+    // Descending soft close — close / dismiss
+    function sfxClose() {
+      const ctx = prep(); if (!ctx) return;
+      tone(ctx, 900, 'triangle', 0.12, 0.10, 480);
+    }
+
+    // Two-tone success ding — password enter, confirm
+    function sfxSuccess() {
+      const ctx = prep(); if (!ctx) return;
+      tone(ctx, 880, 'sine', 0.14, 0.14);
+      setTimeout(() => {
+        const c = prep(); if (!c) return;
+        tone(c, 1320, 'sine', 0.18, 0.12);
+      }, 80);
+    }
+
+    // Low buzz — wrong password / error
+    function sfxError() {
+      const ctx = prep(); if (!ctx) return;
+      tone(ctx, 140, 'sawtooth', 0.18, 0.15, 100);
+      noiseBurst(ctx, 220, 0.7, 0.18, 0.10, 2);
+    }
+
+    // Gentle frequency sweep — slider drag
+    function sfxSlider(pct) {
+      const ctx = prep(); if (!ctx) return;
+      const f   = 300 + pct * 12; // pitch tracks value
+      tone(ctx, f, 'sine', 0.04, 0.06 * _sfxVol);
+    }
+
+    // Soft water-drop blip — episode card hover
+    function sfxCardEnter() {
+      const ctx = prep(); if (!ctx) return;
+      tone(ctx, 660, 'sine', 0.07, 0.07, 740);
+      noiseBurst(ctx, 2000, 3, 0.018, 0.04);
+    }
+
+    // Sparkle shimmer — star rating click
+    function sfxStar() {
+      const ctx = prep(); if (!ctx) return;
+      [0, 40, 90].forEach((delay, i) => {
+        setTimeout(() => {
+          const c = prep(); if (!c) return;
+          tone(c, 900 + i * 280, 'sine', 0.10, 0.09);
+        }, delay);
+      });
+    }
+
+    // Theme switch — soft colour-shift tone
+    function sfxTheme() {
+      const ctx = prep(); if (!ctx) return;
+      tone(ctx, 520, 'triangle', 0.16, 0.10, 780);
+      noiseBurst(ctx, 1600, 2, 0.02, 0.05);
+    }
+
+    // Era accordion open — deep rumble + ascending two-tone (timeline)
+    function sfxEraOpen() {
+      const ctx = prep(); if (!ctx) return;
+      noiseBurst(ctx, 420, 0.8, 0.09, 0.20, 3);
+      tone(ctx, 260, 'sine', 0.12, 0.08, 420);
+      setTimeout(() => { const c = prep(); if (!c) return; tone(c, 520, 'triangle', 0.10, 0.06); }, 60);
+    }
+
+    // Era accordion close — descending (timeline)
+    function sfxEraClose() {
+      const ctx = prep(); if (!ctx) return;
+      tone(ctx, 480, 'triangle', 0.10, 0.09, 280);
+      noiseBurst(ctx, 500, 0.7, 0.06, 0.10, 5);
+    }
+
+    // Subfolder open — lighter chime (timeline / family trees)
+    function sfxSubOpen() {
+      const ctx = prep(); if (!ctx) return;
+      tone(ctx, 700, 'triangle', 0.10, 0.08, 980);
+      noiseBurst(ctx, 1400, 1.8, 0.022, 0.07);
+    }
+
+    // Subfolder close — soft descend (timeline / family trees)
+    function sfxSubClose() {
+      const ctx = prep(); if (!ctx) return;
+      tone(ctx, 820, 'triangle', 0.09, 0.07, 520);
+    }
+
+    // Search keystroke — tiny tick (timeline search, hub search)
+    let _searchThrottle = 0;
+    function sfxSearch() {
+      const now = Date.now();
+      if (now - _searchThrottle < 70) return;
+      _searchThrottle = now;
+      noiseBurst(ctx() || prep(), 3000, 2.2, 0.012, 0.04, 6);
+    }
+
+    /* ═══ Routing ═══ */
+
+    const NAV_SEL = [
+      '.hub-card', '.card-cta', '.card-poster',
+      'a[href]:not([href^="#"]):not([href^="mailto"])'
+    ].join(',');
 
     const CLICK_SEL = [
-      'a', 'button', '[role="button"]', '.hub-card', '.card-cta', '.ep-card',
-      '.ep-thumb', '.book-tab', '.season-tab', '.pill-btn', '.pill-tab',
-      '.theme-opt', '.sp-ambient-row', '.sp-install-row', '.star-btn',
-      '.ctrl-btn', '.card-poster', '.merch-card', '.comic-btn', '.nav-btn',
-      '.modal-close', '.page-btn', '[data-ep]', '[data-book]'
+      'button', '[role="button"]', '.pill-btn', '.pill-tab', '.book-tab',
+      '.season-tab', '.ctrl-btn', '.comic-btn', '.nav-btn', '.modal-close',
+      '.page-btn', '.vcbtn', '[data-ep]', '[data-book]', '.sp-install-row',
+      '.back-link', '.ev-btn', '.dp-close', '#dpClose', '#dpHandle',
+      '.ft-node', '[data-node]', '.pn'
+    ].join(',');
+
+    const CARD_HOVER_SEL = [
+      '.ep-card', '.ep-thumb', '.merch-card', '.book-card', '.game-card',
+      '.ft-node', '.pn', '[data-node]'
     ].join(',');
 
     const HOVER_SEL = [
-      'a', 'button', '[role="button"]', '.hub-card', '.ep-card', '.ep-thumb',
-      '.pill-btn', '.pill-tab', '.theme-opt', '.card-cta', '.merch-card',
-      '.comic-btn', '.nav-btn', '.ctrl-btn', '.star-btn', '[data-ep]', '[data-book]'
+      'button', '[role="button"]', '.pill-btn', '.pill-tab', '.theme-opt',
+      '.ctrl-btn', '.star-btn', '.era-hd', '.sub-hd', '.ev', '.ev-btn',
+      '.dp-close', '#dpClose'
     ].join(',');
 
+    // ── Click routing ──
     document.addEventListener('click', e => {
-      if (e.target.closest(CLICK_SEL)) playClick();
+      if (_sfxVol <= 0) return;
+      const t = e.target;
+
+      // Star rating
+      if (t.closest('.star-btn'))                          { sfxStar();    return; }
+      // Theme switch
+      if (t.closest('.theme-opt'))                         { sfxTheme();   return; }
+      // Settings gear — open/close handled below
+      if (t.closest('#settingsBtn'))                       { return; }
+      // Ambient toggle
+      if (t.closest('.sp-ambient-row'))                    { sfxOpen();    return; }
+      // Detail panel / modal close
+      if (t.closest('.modal-close, #installClose, [data-close], #dpClose, #dpHandle, .dp-close')) {
+        sfxClose(); return;
+      }
+      // Timeline era accordion — read state BEFORE the class toggles
+      if (t.closest('.era-hd')) {
+        const era = t.closest('.era');
+        era?.classList.contains('open') ? sfxEraClose() : sfxEraOpen();
+        return;
+      }
+      // Timeline subfolder accordion
+      if (t.closest('.sub-hd')) {
+        const sf = t.closest('.subfolder');
+        sf?.classList.contains('open') ? sfxSubClose() : sfxSubOpen();
+        return;
+      }
+      // Timeline event row
+      if (t.closest('.ev'))                                { sfxEvent();   return; }
+      // Nav (hub cards, links)
+      if (t.closest(NAV_SEL))                             { sfxNav();     return; }
+      // Generic buttons / everything else
+      if (t.closest(CLICK_SEL))                           { sfxClick();   return; }
     }, { passive: true });
 
-    // Throttle hover ticks to at most one every 80 ms
-    let hoverThrottle = false;
+    // Settings gear — open vs close sound
+    document.getElementById('settingsBtn')?.addEventListener('click', () => {
+      const isOpen = document.getElementById('settingsPanel')?.classList.contains('open');
+      isOpen ? sfxClose() : sfxOpen();
+    }, { passive: true });
+
+    // ── Hover ticks — throttled ──
+    let hoverThrottle = 0;
     document.addEventListener('mouseover', e => {
-      if (hoverThrottle) return;
-      if (e.target.closest(HOVER_SEL)) {
-        playHover();
-        hoverThrottle = true;
-        setTimeout(() => { hoverThrottle = false; }, 80);
+      if (_sfxVol <= 0) return;
+      const now = Date.now();
+      if (now - hoverThrottle < 80) return;
+      const t = e.target;
+      if (t.closest(CARD_HOVER_SEL)) {
+        sfxCardEnter(); hoverThrottle = now;
+      } else if (t.closest('.ev')) {
+        sfxHover(); hoverThrottle = now;
+      } else if (t.closest(HOVER_SEL)) {
+        sfxHover(); hoverThrottle = now;
+      }
+    }, { passive: true });
+
+    // ── Slider drag — throttled ──
+    let sliderThrottle = 0;
+    document.addEventListener('input', e => {
+      if (_sfxVol <= 0) return;
+      const el = e.target;
+      if (!el.classList.contains('sp-vol-slider') && el.type !== 'range') return;
+      const now = Date.now();
+      if (now - sliderThrottle < 60) return;
+      sliderThrottle = now;
+      sfxSlider(parseFloat(el.value));
+    }, { passive: true });
+
+    // ── Search inputs (hub search, timeline search) ──
+    document.addEventListener('input', e => {
+      if (_sfxVol <= 0) return;
+      const el = e.target;
+      if (el.type === 'search' || el.id === 'tlSearch' || el.id === 'hubSearch' ||
+          el.classList.contains('search-input')) {
+        sfxSearch();
+      }
+    }, { passive: true });
+
+    // Hook into gate: success / error
+    const _tryEnterOrig = window._avatarGateTryEnter;
+    // Intercept gate form submit via event delegation
+    document.addEventListener('click', e => {
+      if (!e.target.closest('#gateSubmit')) return;
+      setTimeout(() => {
+        const errEl = document.getElementById('gateErr');
+        if (errEl?.classList.contains('show')) {
+          sfxError();
+        } else if (localStorage.getItem('avatarhub_auth') === '1') {
+          sfxSuccess();
+        }
+      }, 30);
+    }, { passive: true });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && document.getElementById('gateInput') === document.activeElement) {
+        setTimeout(() => {
+          const errEl = document.getElementById('gateErr');
+          if (errEl?.classList.contains('show')) sfxError();
+          else if (localStorage.getItem('avatarhub_auth') === '1') sfxSuccess();
+        }, 30);
       }
     }, { passive: true });
   };
