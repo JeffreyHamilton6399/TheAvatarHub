@@ -497,7 +497,7 @@
     .search-bar-wrap {
       width: 100%; max-width: 600px;
       position: relative; margin: 0 auto 0;
-      opacity: 0;
+      opacity: 0; z-index: 10;
     }
     body.page-ready .search-bar-wrap { animation: slideUp .8s cubic-bezier(.22,1,.36,1) .20s both; }
     #mainSearchWrap { margin: 0 auto 1.8rem; }
@@ -608,7 +608,10 @@
     #feedbackPill:hover { color: var(--gold); border-color: rgba(201,168,76,.5); background: rgba(201,168,76,.09); opacity: 1; }
     body.theme-parchment #feedbackPill,
     body.theme-water    #feedbackPill,
-    body.theme-earth    #feedbackPill { background: rgba(255,255,255,.7); color: var(--gold); border-color: rgba(201,168,76,.3); }
+    body.theme-earth    #feedbackPill { background: rgba(255,255,255,.85); color: var(--gold); border-color: rgba(201,168,76,.4); opacity: 1; }
+    body.theme-parchment #feedbackPill:hover,
+    body.theme-water    #feedbackPill:hover,
+    body.theme-earth    #feedbackPill:hover { background: rgba(201,168,76,.15); }
 
     /* ── Continue Watching — compact inline banner ── */
     .cw-banner {
@@ -1238,20 +1241,8 @@ body.theme-earth    .install-banner-title { color: var(--white); }
   <!-- Sound -->
   <div class="sp-section">
     <div class="sp-section-label">Sound</div>
-    <div class="sp-ambient-row" id="ambientRow" title="Toggle ambient sound">
-      <div class="sp-ambient-label">
-        <div class="ambient-wave">
-          <span style="height:5px"></span>
-          <span style="height:9px"></span>
-          <span style="height:7px"></span>
-          <span style="height:11px"></span>
-        </div>
-        Ambient
-      </div>
-      <div class="sp-toggle"></div>
-    </div>
     <div class="sp-vol-row">
-      <span class="sp-vol-label">Volume</span>
+      <span class="sp-vol-label">Music</span>
       <input class="sp-vol-slider" id="ambientVolSlider" type="range" min="0" max="100" value="55" title="Ambient volume">
     </div>
     <div class="sp-vol-row">
@@ -1277,13 +1268,6 @@ body.theme-earth    .install-banner-title { color: var(--white); }
     </button>
   </div>
   <div class="sp-divider"></div>
-  <!-- Feedback -->
-  <div class="sp-section">
-    <button class="sp-install-row" id="feedbackBtn" title="Send feedback">
-      <svg viewBox="0 0 24 24" fill="currentColor" style="width:11px;height:11px;flex-shrink:0;opacity:.6"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
-      Give Feedback
-    </button>
-  </div>
 </div>
 
 <!-- Feedback floating pill -->
@@ -1312,7 +1296,7 @@ body.theme-earth    .install-banner-title { color: var(--white); }
       <option value="Content" style="background:#0d1826;color:#f0f4ff;">Missing Content</option>
       <option value="Other"   style="background:#0d1826;color:#f0f4ff;">Other</option>
     </select>
-    <textarea id="fbText" rows="4" placeholder="Describe your feedback..." style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:.7em .9em;color:var(--white);font-family:'Philosopher',serif;font-size:.65rem;resize:vertical;outline:none;line-height:1.5;"></textarea>
+    <textarea id="fbText" rows="4" placeholder="Describe your feedback..." style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:.7em .9em;color:#f0f4ff;font-family:'Philosopher',serif;font-size:.65rem;resize:vertical;outline:none;line-height:1.5;"></textarea>
     <div style="display:flex;gap:.7rem;justify-content:flex-end;">
       <button id="fbCancel" style="background:none;border:1px solid rgba(255,255,255,.1);color:var(--muted);border-radius:10px;padding:.5em 1.2em;font-family:'Cinzel',serif;font-size:.42rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;">Cancel</button>
       <button id="fbSend" style="background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.35);color:var(--gold);border-radius:10px;padding:.5em 1.4em;font-family:'Cinzel',serif;font-size:.42rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;">Send</button>
@@ -2180,7 +2164,7 @@ self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>
   const fbText   = document.getElementById('fbText');
   const fbType   = document.getElementById('fbType');
   const fbSuccess = document.getElementById('fbSuccess');
-  if(!fbBtn||!fbModal) return;
+  if(!fbModal) return;
 
   function openFb(){
     fbModal.style.display='flex';
@@ -2213,7 +2197,7 @@ self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>
     setTimeout(()=>{ t.style.opacity='0'; setTimeout(()=>t.remove(),500); }, 3200);
   }
 
-  fbBtn.addEventListener('click', openFb);
+  if(fbBtn) fbBtn.addEventListener('click', openFb);
   document.getElementById('feedbackPill')?.addEventListener('click', openFb);
   fbCancel.addEventListener('click', closeFb);
   fbModal.addEventListener('click', e=>{ if(e.target===fbModal) closeFb(); });

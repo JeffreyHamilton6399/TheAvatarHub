@@ -506,7 +506,7 @@ function loadEpisode(book,epNum){
   const title = epNum===0 ? (bData.pilot||'Unaired Pilot') : bData.episodes[epNum-1];
   currentEp={book,num:epNum,title}; hideNextPanel(); panelShown=false; skipBtn.style.display='none';
   srtCues=[];lastCueText=null;hideCaption();
-  vid.pause(); vid.src=epUrl(book,epNum)+'#t=0.001'; vid.load();
+  vid.pause(); const _vs=document.getElementById('videoSource'); _vs.src=epUrl(book,epNum)+'#t=0.001'; vid.removeAttribute('src'); vid.load();
   vid.addEventListener('loadedmetadata',function restorePos(){
     const saved=parseFloat(localStorage.getItem(`atlaepisodes_b${book}_e${epNum}`)||0);
     if(saved>5&&saved<vid.duration-10) vid.currentTime=saved;
