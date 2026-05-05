@@ -1476,7 +1476,7 @@ body.theme-earth    .install-banner-title { color: var(--white); }
     src.connect(gain).connect(audioCtx.destination);
     src.start(0, offset || 0);
     ambientSrc = src; ambientGain = gain; ambientActive = true;
-    ambientBtn.classList.add('active');
+    if (ambientBtn) ambientBtn.classList.add('active');
     hideSoundNudge();
     localStorage.setItem('avatarhub_ambient_off', '0');
     sessionStorage.setItem('avatarhub_ambient_active', '1');
@@ -1498,7 +1498,7 @@ body.theme-earth    .install-banner-title { color: var(--white); }
     if (!ambientActive) return;
     const g = ambientGain, s = ambientSrc;
     ambientActive = false;
-    ambientBtn.classList.remove('active');
+    if (ambientBtn) ambientBtn.classList.remove('active');
     hideSoundNudge();
     localStorage.setItem('avatarhub_ambient_off', '1');
     sessionStorage.setItem('avatarhub_ambient_active', '0');
@@ -1542,19 +1542,19 @@ body.theme-earth    .install-banner-title { color: var(--white); }
   }
 
   // ── Ambient toggle ───────────────────────────────────────────────────────
-  ambientBtn.addEventListener('click', async () => {
+  if (ambientBtn) ambientBtn.addEventListener('click', async () => {
     if (ambientActive) {
       // Turn off: immediate — no async needed
       ambientFadeOut();
       return;
     }
     // Turn on: show active state instantly so toggle feels immediate
-    ambientBtn.classList.add('active');
+    if (ambientBtn) ambientBtn.classList.add('active');
     const ok = await ensureCtx();
-    if (!ok) { ambientBtn.classList.remove('active'); showSoundNudge(); return; }
+    if (!ok) { if (ambientBtn) ambientBtn.classList.remove('active'); showSoundNudge(); return; }
     await decodeBuffers();
     if (_ambientDecoded) { ambientFadeIn(); }
-    else { ambientBtn.classList.remove('active'); showSoundNudge(); }
+    else { if (ambientBtn) ambientBtn.classList.remove('active'); showSoundNudge(); }
   });
 
   soundNudge && soundNudge.addEventListener('click', async () => {
